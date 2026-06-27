@@ -6,12 +6,13 @@ on:
       - "v*"
 
 permissions:
-  contents: write
-  id-token: write
+  contents: read
 
 jobs:
-  release:
-    runs-on: ubuntu-latest
+  goreleaser:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -21,15 +22,7 @@ jobs:
         with:
           go-version: "1.23"
 
-      - uses: actions/setup-node@v5
-        with:
-          node-version: "22"
-          registry-url: "https://registry.npmjs.org"
-
-      - name: Run tests
-        run: make test
-
-      - name: GoReleaser
+      - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:
           version: "~> v2"
@@ -37,10 +30,27 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Copy checksums.txt to project root
-        run: cp dist/checksums.txt .
+  publish-npm:
+    needs: goreleaser
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
 
-      - name: npm publish (Trusted Publishing via OIDC)
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Download checksums from release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          npm --version
-          npm publish --access public --provenance
+          set -euo pipefail
+          TAG="${GITHUB_REF_NAME}"
+          gh release download "${TAG}" --pattern checksums.txt --dir .
+          test -s checksums.txt || { echo "checksums.txt missing or empty for ${TAG}"; exit 1; }
+
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public
