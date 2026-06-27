@@ -47,21 +47,19 @@ jobs:
         run: |
           set -euo pipefail
           TAG="${GITHUB_REF_NAME}"
-          curl -fsSL -H "Authorization: Bearer ${GH_TOKEN}" \
-            -H "Accept: application/octet-stream" \
+          # Get the asset download URL from the release API
+          ASSET_URL=$(curl -fsSL -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/tags/${TAG}" \
-            -o release.json
-          ASSET_URL=$(python3 -c "
+            | python3 -c "
           import json,sys
-          r=json.load(open('release.json'))
+          r=json.load(sys.stdin)
           for a in r.get('assets',[]):
             if a['name']=='checksums.txt':
-              print(a['url']); sys.exit(0)
-          print('NOT_FOUND'); sys.exit(1)
+              print(a['browser_download_url']); sys.exit(0)
+          sys.exit(1)
           ")
-          curl -fsSL -H "Authorization: Bearer ${GH_TOKEN}" \
-            -H "Accept: application/octet-stream" \
-            "${ASSET_URL}" -o checksums.txt
+          curl -fsSL -o checksums.txt "${ASSET_URL}"
           test -s checksums.txt || { echo "checksums.txt missing or empty for ${TAG}"; exit 1; }
 
       - name: Publish to npm
