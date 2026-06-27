@@ -49,7 +49,7 @@ jobs:
         run: |
           set -euo pipefail
           TAG="${GITHUB_REF_NAME}"
-          gh release download "${TAG}" --pattern checksums.txt --dir . --clobber
+          gh release download "${TAG}" --pattern checksums.txt --dir .
           test -s checksums.txt || { echo "checksums.txt missing or empty for ${TAG}"; exit 1; }
 
       - name: Publish to npm

@@ -42,3 +42,6 @@ node_modules/
 
 # goreleaser build output
 dist/
+
+# goreleaser checksums (downloaded from GitHub Release during publish)
+checksums.txt
