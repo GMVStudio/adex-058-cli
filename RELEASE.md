@@ -26,7 +26,7 @@
            └─ Job 2: publish-npm (needs: goreleaser)
                 ├─ checkout
                 ├─ setup Node 20 + registry
-                ├─ gh release download checksums.txt --clobber
+                ├─ gh release download checksums.txt
                 │    从 GitHub Release 下载校验和文件
                 └─ npm publish --access public
                      使用 NPM_TOKEN (Granular Access Token)
@@ -199,11 +199,6 @@ npm config set registry https://registry.npmjs.org/
 `checksums.txt` 是 goreleaser 构建产物，应加入 `.gitignore`，不要提交到 git。
 `publish-npm` job 会从 GitHub Release 下载最新的 `checksums.txt`。
 如果仓库中存在该文件，`gh release download` 会因文件已存在而失败。
-
-### ⚠️ publish-npm job 需要 contents:write 权限
-
-`publish-npm` job 使用 `gh release download` 从 GitHub Release 下载文件，需要 `contents: write` 权限。
-如果只给 `contents: read`，`gh` CLI 会因权限不足而失败。
 
 ### ⚠️ repository.url 必须与 GitHub 仓库匹配
 

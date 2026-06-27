@@ -39,4 +39,4 @@ clean:
 	rm -f $(BINARY)
 
 npm-publish:
-	npm publish
+	npm publish --access public
