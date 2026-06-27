@@ -1,0 +1,35 @@
+version: 2
+
+builds:
+  - binary: adex
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w -X github.com/gmvstudio/adex-cli/internal/build.Version={{ .Version }} -X github.com/gmvstudio/adex-cli/internal/build.Date={{ .Date }}
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - amd64
+      - arm64
+
+archives:
+  - name_template: "adex-{{ .Version }}-{{ .Os }}-{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - README.md
+      - LICENSE
+
+checksum:
+  name_template: checksums.txt
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^chore:'

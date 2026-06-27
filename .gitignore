@@ -28,5 +28,14 @@ go.work.sum
 .env
 
 # Editor/IDE
-# .idea/
-# .vscode/
+.idea/
+.vscode/
+
+# npm binary download directory
+bin/
+
+# Node dependencies
+node_modules/
+
+# Built binary
+/adex
