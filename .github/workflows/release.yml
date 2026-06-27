@@ -42,4 +42,4 @@ jobs:
         run: cp dist/checksums.txt .
 
       - name: npm publish (Trusted Publishing via OIDC)
-        run: npm publish
+        run: npm publish --access public
