@@ -5,7 +5,7 @@ const os = require("os");
 const crypto = require("crypto");
 
 const VERSION = require("../package.json").version.replace(/-.*$/, "");
-const REPO = "gmvstudio/adex-cli";
+const REPO = "GMVStudio/adex-058-cli";
 const NAME = "adex";
 const DEFAULT_MIRROR_HOST = "https://registry.npmmirror.com";
 const ALLOWED_HOSTS = new Set([

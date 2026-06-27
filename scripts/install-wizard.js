@@ -7,7 +7,7 @@ const p = require("@clack/prompts");
 
 const PKG = "@gmvstudio/adex-cli";
 const SKILLS_REPO = "https://open.feishu.cn";
-const SKILLS_REPO_FALLBACK = "gmvstudio/adex-cli";
+const SKILLS_REPO_FALLBACK = "GMVStudio/adex-058-cli";
 const isWindows = process.platform === "win32";
 
 const messages = {
