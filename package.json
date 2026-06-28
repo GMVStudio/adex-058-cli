@@ -1,6 +1,6 @@
 {
   "name": "@gmvstudio/adex-cli",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "ADEX CLI tool for querying campaign reports and advertising data",
   "bin": {
     "adex": "scripts/run.js"

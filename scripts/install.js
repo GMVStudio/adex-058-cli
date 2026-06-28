@@ -274,16 +274,17 @@ if (require.main === module) {
   try {
     install();
   } catch (err) {
-    console.error(`Failed to install ${NAME}:`, err.message);
+    console.error(`Failed to install ${NAME} binary:`, err.message);
     console.error(
-      `\nIf you are behind a firewall or in a restricted network, try one of:\n` +
+      `\nThe binary will be auto-downloaded on first run.\n` +
+      `If you prefer to install manually:\n` +
       `  # 1. Use a proxy:\n` +
       `  export https_proxy=http://your-proxy:port\n` +
       `  npm install -g @gmvstudio/adex-cli\n\n` +
       `  # 2. Point to a corporate npm mirror that proxies /-/binary/adex/...:\n` +
       `  npm install -g @gmvstudio/adex-cli --registry=https://your-corp-mirror/`
     );
-    process.exit(1);
+    process.exit(0);
   }
 }
 

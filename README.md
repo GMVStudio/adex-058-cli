@@ -26,8 +26,8 @@ npx @gmvstudio/adex-cli@latest install
 **Option 2 — From source:**
 
 ```bash
-git clone https://github.com/gmvstudio/adex-cli.git
-cd adex-cli
+git clone https://github.com/GMVStudio/adex-058-cli.git
+cd adex-058-cli
 make install
 ```
 
