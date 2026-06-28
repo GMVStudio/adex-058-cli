@@ -29,6 +29,9 @@ const messages = {
     step3Default:   "http://47.99.131.55:8000",
     step3Done:      "API 端点已配置",
     step3Skip:      "跳过 API 配置",
+    step4:          "正在验证二进制...",
+    step4Fail:      "二进制下载失败。你的网络可能无法直连 GitHub。",
+    step4ProxyHint: "请设置代理后重试：\n  export https_proxy=http://your-proxy:port http_proxy=http://your-proxy:port all_proxy=http://your-proxy:port\n  adex raw campaign daily --tenant 6 --range 1d",
     done:           "安装完成！\n现在可以运行: adex raw campaign daily --tenant 6 --range 1d",
     cancelled:      "安装已取消",
     nonTtyHint:     "要完成配置，请在终端中运行：\n  export ADEX_API_BASE_URL=http://your-api-host:8000",
@@ -51,6 +54,9 @@ const messages = {
     step3Default:   "http://47.99.131.55:8000",
     step3Done:      "API endpoint configured",
     step3Skip:      "Skipped API configuration",
+    step4:          "Verifying binary...",
+    step4Fail:      "Binary download failed. Your network may not be able to reach GitHub directly.",
+    step4ProxyHint: "Please set proxy and retry:\n  export https_proxy=http://your-proxy:port http_proxy=http://your-proxy:port all_proxy=http://your-proxy:port\n  adex raw campaign daily --tenant 6 --range 1d",
     done:           "You are all set!\nNow try: adex raw campaign daily --tenant 6 --range 1d",
     cancelled:      "Installation cancelled",
     nonTtyHint:     "To complete setup, run:\n  export ADEX_API_BASE_URL=http://your-api-host:8000",
@@ -267,6 +273,24 @@ async function stepConfigApi(msg) {
   }
 }
 
+async function stepVerifyBinary(msg) {
+  const s = p.spinner();
+  s.start(msg.step4);
+  try {
+    const adexBin = whichAdex();
+    if (!adexBin) {
+      s.stop(msg.step4Fail);
+      p.log.warn(msg.step4ProxyHint);
+      return;
+    }
+    runSilent(adexBin, ["--help"], { timeout: 30000 });
+    s.stop();
+  } catch (_) {
+    s.stop(msg.step4Fail);
+    p.log.warn(msg.step4ProxyHint);
+  }
+}
+
 async function main() {
   const isInteractive = !!process.stdin.isTTY;
   const lang = isInteractive ? await stepSelectLang() : (parseLangArg() || "en");
@@ -277,6 +301,7 @@ async function main() {
     await stepInstallGlobally(msg);
     await stepInstallSkills(msg);
     await stepConfigApi(msg);
+    await stepVerifyBinary(msg);
     p.outro(msg.done);
   } else {
     console.log(msg.setup);
