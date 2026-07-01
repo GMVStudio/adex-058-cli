@@ -9,7 +9,7 @@ import (
 	"github.com/gmvstudio/adex-cli/cmd"
 )
 
-//go:embed skills/*/SKILL.md
+//go:embed skills/*/SKILL.md skills/*/references
 var skillsEmbedFS embed.FS
 
 func init() {

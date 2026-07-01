@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.3.0] - 2026-07-01
+
+### Added
+- `adex tenant` command — list tenants with name/status filters and pagination
+- `adex user` command — get current authenticated user info
+- `adex init` command — bind API credentials (one-time setup)
+- `adex oe` command group — Oceanengine (巨量) advertising data: accounts, projects, units, reports, metric meta, dashboard, budget-vs-actual
+- Embedded skills expanded: `adex-ks`, `adex-oe`, `adex-tenant-user` (full command coverage)
+- `--jq` flag for jq expression filtering on all commands
+- `--page-all` flag for automatic multi-page aggregation
+- `--range` / `--begin` / `--end` flexible date range specification
+- `--dry-run` flag for request inspection without API calls
+- Config file persistence (`~/.adex/config.json`) with `ADEX_AUTHORIZATION` env override
+- `daterange` package for relative (7d/4w/1m) and explicit date parsing
+- `paginate` package for page-all aggregation
+- `output/jq.go` for gojq-based JSON filtering
+- Shared command builders (`report_shared.go`) for KS and OE reuse
+
+### Changed
+- `adex-shared` skill updated with full command tree, init flow, shared flags reference, and skill routing
+- `skills_embed.go` now embeds `skills/*/references` directories
+- README updated with complete command tree, skills table, and architecture diagram
+- `runSingle` extended to accept table columns for single-object commands
+
 ## [0.2.0] - 2026-06-27
 
 ### Added
