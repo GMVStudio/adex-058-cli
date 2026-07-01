@@ -42,8 +42,8 @@ Examples:
 			}
 
 			if err := config.Save(f.Config); err != nil {
-				return errs.NewInternalError(errs.SubtypeFileIO,
-					"failed to save config: %v", err).WithCause(err)
+				// config.Save already returns a typed *errs.* error.
+				return err
 			}
 
 			printJSON(f.Out, map[string]interface{}{

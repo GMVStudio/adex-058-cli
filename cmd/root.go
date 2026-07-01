@@ -19,8 +19,6 @@ type Factory struct {
 	ErrOut io.Writer
 }
 
-var globalFactory *Factory
-
 const rootLong = `adex — ADEX CLI tool.
 
 USAGE:
@@ -61,7 +59,6 @@ func Execute() int {
 		Out:    os.Stdout,
 		ErrOut: os.Stderr,
 	}
-	globalFactory = f
 
 	root := NewRootCmd(f)
 

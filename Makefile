@@ -5,7 +5,7 @@ DATE     := $(shell date +%Y-%m-%d)
 LDFLAGS  := -s -w -X $(MODULE)/internal/build.Version=$(VERSION) -X $(MODULE)/internal/build.Date=$(DATE)
 PREFIX   ?= /usr/local
 
-.PHONY: all build vet fmt-check test install uninstall clean npm-publish
+.PHONY: all build vet fmt-check test unit-test lint tidy-check install uninstall clean npm-publish
 
 all: test
 
@@ -24,8 +24,20 @@ fmt-check:
 		exit 1; \
 	fi
 
-test: vet fmt-check
-	go test -count=1 ./...
+# unit-test runs the suite with the race detector, matching the CI gate.
+unit-test:
+	go test -race -count=1 ./...
+
+# tidy-check fails if go.mod/go.sum are not tidy.
+tidy-check:
+	go mod tidy
+	git diff --exit-code go.mod go.sum
+
+# lint runs golangci-lint pinned to the CI version.
+lint:
+	go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.1.6 run
+
+test: vet fmt-check unit-test
 
 install: build
 	install -d $(PREFIX)/bin

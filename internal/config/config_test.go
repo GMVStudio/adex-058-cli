@@ -1,6 +1,34 @@
 package config
 
-import "testing"
+import (
+	"errors"
+	"io/fs"
+	"testing"
+
+	"github.com/gmvstudio/adex-cli/errs"
+	"github.com/gmvstudio/adex-cli/internal/vfs"
+)
+
+// failFS makes WriteFile fail so we can assert Save returns a typed error.
+type failFS struct{ vfs.OS }
+
+func (failFS) WriteFile(string, []byte, fs.FileMode) error { return errors.New("disk full") }
+
+func TestSaveReturnsTypedErrorOnWriteFailure(t *testing.T) {
+	t.Setenv("ADEX_CONFIG_DIR", t.TempDir())
+	orig := vfs.Default
+	vfs.Default = failFS{}
+	defer func() { vfs.Default = orig }()
+
+	err := Save(&Config{BaseURL: "http://x"})
+	var ie *errs.InternalError
+	if !errors.As(err, &ie) {
+		t.Fatalf("error type = %T, want *errs.InternalError", err)
+	}
+	if ie.Subtype != errs.SubtypeFileIO {
+		t.Errorf("subtype = %q, want file_io", ie.Subtype)
+	}
+}
 
 func TestNormalizeToken(t *testing.T) {
 	cases := map[string]string{

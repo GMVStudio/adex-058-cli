@@ -2,6 +2,7 @@ package errs
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 )
 
@@ -29,6 +30,16 @@ const (
 	SubtypeAuthRequired     Subtype = "auth_required"
 )
 
+// formatMessage applies fmt.Sprintf only when args are present, so a caller
+// passing a literal message containing a stray "%" (e.g. "disk 100% full") is
+// not rendered as "%!(NOVERB)".
+func formatMessage(format string, args []interface{}) string {
+	if len(args) == 0 {
+		return format
+	}
+	return fmt.Sprintf(format, args...)
+}
+
 // Problem is the typed error embedded in every CLI error.
 type Problem struct {
 	Category Category `json:"type"`
@@ -43,6 +54,11 @@ func (p *Problem) Error() string {
 	return p.Message
 }
 
+// Unwrap exposes the wrapped cause so errors.Is / errors.As traverse the chain.
+func (p *Problem) Unwrap() error {
+	return p.Cause
+}
+
 // ValidationError is for user-facing input failures.
 type ValidationError struct {
 	Problem
@@ -54,7 +70,7 @@ func NewValidationError(subtype Subtype, format string, args ...interface{}) *Va
 		Problem: Problem{
 			Category: CategoryValidation,
 			Subtype:  subtype,
-			Message:  fmt.Sprintf(format, args...),
+			Message:  formatMessage(format, args),
 		},
 	}
 }
@@ -84,7 +100,7 @@ func NewNetworkError(subtype Subtype, format string, args ...interface{}) *Netwo
 		Problem: Problem{
 			Category: CategoryNetwork,
 			Subtype:  subtype,
-			Message:  fmt.Sprintf(format, args...),
+			Message:  formatMessage(format, args),
 		},
 	}
 }
@@ -109,7 +125,7 @@ func NewInternalError(subtype Subtype, format string, args ...interface{}) *Inte
 		Problem: Problem{
 			Category: CategoryInternal,
 			Subtype:  subtype,
-			Message:  fmt.Sprintf(format, args...),
+			Message:  formatMessage(format, args),
 		},
 	}
 }
@@ -135,13 +151,18 @@ func NewAPIError(code int, format string, args ...interface{}) *APIError {
 			Category: CategoryAPI,
 			Subtype:  SubtypeAPIError,
 			Code:     code,
-			Message:  fmt.Sprintf(format, args...),
+			Message:  formatMessage(format, args),
 		},
 	}
 }
 
 func (e *APIError) WithHint(hint string) *APIError {
 	e.Hint = hint
+	return e
+}
+
+func (e *APIError) WithCause(cause error) *APIError {
+	e.Cause = cause
 	return e
 }
 
@@ -155,7 +176,7 @@ func NewAuthError(subtype Subtype, format string, args ...interface{}) *AuthErro
 		Problem: Problem{
 			Category: CategoryUnauthorized,
 			Subtype:  subtype,
-			Message:  fmt.Sprintf(format, args...),
+			Message:  formatMessage(format, args),
 		},
 	}
 }
@@ -165,28 +186,39 @@ func (e *AuthError) WithHint(hint string) *AuthError {
 	return e
 }
 
-// IsTyped returns true if err is one of the typed *errs.* errors.
-func IsTyped(err error) bool {
-	switch err.(type) {
-	case *ValidationError, *NetworkError, *InternalError, *APIError, *AuthError:
-		return true
-	}
-	return false
+func (e *AuthError) WithCause(cause error) *AuthError {
+	e.Cause = cause
+	return e
 }
 
-// ProblemOf extracts the Problem from a typed error, if any.
+// IsTyped returns true if err is (or wraps) one of the typed *errs.* errors.
+func IsTyped(err error) bool {
+	_, ok := ProblemOf(err)
+	return ok
+}
+
+// ProblemOf extracts the Problem from a typed error anywhere in the chain,
+// using errors.As so it works through wrapped errors.
 func ProblemOf(err error) (*Problem, bool) {
-	switch e := err.(type) {
-	case *ValidationError:
-		return &e.Problem, true
-	case *NetworkError:
-		return &e.Problem, true
-	case *InternalError:
-		return &e.Problem, true
-	case *APIError:
-		return &e.Problem, true
-	case *AuthError:
-		return &e.Problem, true
+	var ve *ValidationError
+	if errors.As(err, &ve) {
+		return &ve.Problem, true
+	}
+	var ne *NetworkError
+	if errors.As(err, &ne) {
+		return &ne.Problem, true
+	}
+	var ie *InternalError
+	if errors.As(err, &ie) {
+		return &ie.Problem, true
+	}
+	var apiErr *APIError
+	if errors.As(err, &apiErr) {
+		return &apiErr.Problem, true
+	}
+	var authErr *AuthError
+	if errors.As(err, &authErr) {
+		return &authErr.Problem, true
 	}
 	return nil, false
 }

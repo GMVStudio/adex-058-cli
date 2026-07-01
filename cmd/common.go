@@ -145,7 +145,7 @@ func (f *Factory) output(cmd *cobra.Command, result interface{}, columns []strin
 		return output.JqFilter(f.Out, result, jqExpr)
 	}
 	format := output.ParseFormat(f.resolveFormat(cmd))
-	return output.Print(f.Out, result, format, columns)
+	return output.Print(f.Out, f.ErrOut, result, format, columns)
 }
 
 // runList executes a list/report query: it validates jq, handles --dry-run,
@@ -214,8 +214,10 @@ func (f *Factory) runSingle(cmd *cobra.Command, path string, params map[string]i
 	}
 	var result interface{}
 	if err := json.Unmarshal(data, &result); err != nil {
+		// Non-JSON responses are emitted verbatim rather than erroring, so a
+		// plain-text endpoint reply still reaches the caller on stdout.
 		fmt.Fprintln(f.Out, string(data))
-		return nil
+		return nil //nolint:nilerr // intentional fallback: print raw body, not an error
 	}
 	return f.output(cmd, result, columns)
 }

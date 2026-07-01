@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"os"
+	"sort"
 	"strings"
 	"unicode/utf8"
 )
@@ -30,14 +30,16 @@ func ParseFormat(s string) Format {
 	}
 }
 
-// Print writes data to stdout in the specified format.
-// For table format, columns specifies which keys to extract from each item.
-func Print(w io.Writer, data interface{}, format Format, columns []string) error {
+// Print writes data to w in the specified format. For table format, columns
+// specifies which keys to extract from each item, and the summary line (total /
+// page) is written to errOut so it never corrupts the stdout data stream.
+// A nil errOut suppresses the summary line.
+func Print(w io.Writer, errOut io.Writer, data interface{}, format Format, columns []string) error {
 	switch format {
 	case FormatPretty:
 		return printPretty(w, data)
 	case FormatTable:
-		return printTable(w, data, columns)
+		return printTable(w, errOut, data, columns)
 	default:
 		return printJSON(w, data)
 	}
@@ -62,8 +64,9 @@ func printPretty(w io.Writer, data interface{}) error {
 }
 
 // printTable renders a list response as a text table.
-// It expects data to be a map with "items" being a slice of maps.
-func printTable(w io.Writer, data interface{}, columns []string) error {
+// It expects data to be a map with "items" being a slice of maps. The summary
+// line goes to errOut so stdout stays a clean, pipeable table.
+func printTable(w io.Writer, errOut io.Writer, data interface{}, columns []string) error {
 	raw, ok := data.(map[string]interface{})
 	if !ok {
 		return printPretty(w, data)
@@ -78,12 +81,12 @@ func printTable(w io.Writer, data interface{}, columns []string) error {
 		columns = autoColumns(items)
 	}
 
-	// Print summary line to stderr
+	// Print summary line to errOut (stderr) so it never pollutes stdout data.
 	total, _ := raw["total"].(string)
 	page, _ := raw["page"].(float64)
 	pageSize, _ := raw["pageSize"].(float64)
-	if total != "" {
-		fmt.Fprintf(os.Stderr, "total: %s, page: %.0f, page_size: %.0f\n", total, page, pageSize)
+	if total != "" && errOut != nil {
+		fmt.Fprintf(errOut, "total: %s, page: %.0f, page_size: %.0f\n", total, page, pageSize)
 	}
 
 	// Calculate column widths
@@ -153,6 +156,7 @@ func autoColumns(items []interface{}) []string {
 	for k := range m {
 		cols = append(cols, k)
 	}
+	sort.Strings(cols)
 	return cols
 }
 

@@ -6,6 +6,9 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	"github.com/gmvstudio/adex-cli/errs"
+	"github.com/gmvstudio/adex-cli/internal/vfs"
 )
 
 const (
@@ -30,7 +33,7 @@ func Dir() string {
 	if v := os.Getenv("ADEX_CONFIG_DIR"); v != "" {
 		return v
 	}
-	home, err := os.UserHomeDir()
+	home, err := vfs.Default.UserHomeDir()
 	if err != nil {
 		return ".adex"
 	}
@@ -49,7 +52,7 @@ func Load() *Config {
 		BaseURL: DefaultBaseURL,
 	}
 
-	if data, err := os.ReadFile(Path()); err == nil {
+	if data, err := vfs.Default.ReadFile(Path()); err == nil {
 		var fromFile Config
 		if json.Unmarshal(data, &fromFile) == nil {
 			if fromFile.BaseURL != "" {
@@ -71,17 +74,23 @@ func Load() *Config {
 }
 
 // Save persists the config to the config file (0600), creating the
-// directory if needed.
+// directory if needed. Failures are returned as typed *errs.InternalError.
 func Save(cfg *Config) error {
 	dir := Dir()
-	if err := os.MkdirAll(dir, 0o700); err != nil {
-		return err
+	if err := vfs.Default.MkdirAll(dir, 0o700); err != nil {
+		return errs.NewInternalError(errs.SubtypeFileIO,
+			"failed to create config dir %q: %v", dir, err).WithCause(err)
 	}
 	data, err := json.MarshalIndent(cfg, "", "  ")
 	if err != nil {
-		return err
+		return errs.NewInternalError(errs.SubtypeUnknown,
+			"failed to marshal config: %v", err).WithCause(err)
 	}
-	return os.WriteFile(Path(), data, 0o600)
+	if err := vfs.Default.WriteFile(Path(), data, 0o600); err != nil {
+		return errs.NewInternalError(errs.SubtypeFileIO,
+			"failed to write config %q: %v", Path(), err).WithCause(err)
+	}
+	return nil
 }
 
 // NormalizeToken strips an optional "Bearer " prefix and surrounding

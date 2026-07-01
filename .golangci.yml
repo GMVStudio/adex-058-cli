@@ -1,0 +1,42 @@
+version: "2"
+
+run:
+  timeout: 5m
+
+linters:
+  default: none
+  enable:
+    - asasalint       # detects passing []any as any to variadic func(...any)
+    - asciicheck      # rejects non-ASCII identifiers
+    - bidichk         # catches dangerous unicode bidi sequences
+    - bodyclose       # ensures HTTP response bodies are closed
+    - copyloopvar     # detects unnecessary loop-variable copies
+    - durationcheck   # catches suspicious time.Duration multiplication
+    - errorlint       # enforces %w wrapping and errors.Is/As over == / type asserts
+    - gocheckcompilerdirectives # validates //go: directives
+    - goprintffuncname # printf-like helpers must end in f
+    - govet           # standard suspicious-construct checks
+    - ineffassign     # flags ineffective assignments
+    - nilerr          # flags returning nil when err is non-nil
+    - nolintlint      # rejects malformed //nolint directives
+    - nosprintfhostport # catches Sprintf host:port misuse
+    - reassign        # forbids reassigning package-level variables
+    - unconvert       # removes redundant type conversions
+    - unused          # reports unused code
+
+    # Enable after clearing existing findings:
+    # - errcheck
+    # - gosec
+    # - misspell
+    # - staticcheck
+
+  exclusions:
+    rules:
+      - path: _test\.go$
+        linters:
+          - bodyclose
+          - bidichk
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
