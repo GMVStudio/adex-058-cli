@@ -26,7 +26,7 @@ Examples:
 				return err
 			}
 
-			return f.runSingle(cmd, "/v1/oe/dashboard", params)
+			return f.runSingle(cmd, "/v1/oe/dashboard", params, nil)
 		},
 	}
 

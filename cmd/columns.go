@@ -74,4 +74,14 @@ var (
 		"advertiserId", "accountName", "budgetMode", "budget",
 		"totalCharge", "days", "avgDailyCharge", "budgetUsageRate", "balance",
 	}
+
+	// Tenant column set.
+	colTenants = []string{
+		"id", "name", "status", "createdBy", "createdAt", "updatedAt",
+	}
+
+	// User column set.
+	colUser = []string{
+		"id", "username", "name", "status", "currentTenantId", "createdAt", "updatedAt",
+	}
 )

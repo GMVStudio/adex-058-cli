@@ -82,7 +82,7 @@ Examples:
 				return err
 			}
 			params := map[string]interface{}{"tenant_id": tenant}
-			return f.runSingle(cmd, pathFn(id), params)
+			return f.runSingle(cmd, pathFn(id), params, nil)
 		},
 	}
 

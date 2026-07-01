@@ -57,6 +57,8 @@ func NewRootCmd(f *Factory) *cobra.Command {
 	root.AddCommand(newRawCmd(f))
 	root.AddCommand(newKsCmd(f))
 	root.AddCommand(newOeCmd(f))
+	root.AddCommand(newTenantCmd(f))
+	root.AddCommand(newUserCmd(f))
 	root.AddCommand(newSkillCmd(f))
 
 	return root

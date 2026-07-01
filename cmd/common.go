@@ -197,7 +197,7 @@ func (f *Factory) runList(cmd *cobra.Command, path string, params map[string]int
 
 // runSingle executes a single-object query (get/dashboard). Table columns do
 // not apply, so it renders JSON/pretty or a jq projection.
-func (f *Factory) runSingle(cmd *cobra.Command, path string, params map[string]interface{}) error {
+func (f *Factory) runSingle(cmd *cobra.Command, path string, params map[string]interface{}, columns []string) error {
 	if jqExpr, _ := cmd.Flags().GetString("jq"); jqExpr != "" {
 		if err := output.ValidateJqExpression(jqExpr); err != nil {
 			return err
@@ -217,7 +217,7 @@ func (f *Factory) runSingle(cmd *cobra.Command, path string, params map[string]i
 		fmt.Fprintln(f.Out, string(data))
 		return nil
 	}
-	return f.output(cmd, result, nil)
+	return f.output(cmd, result, columns)
 }
 
 // cloneParams shallow-copies a params map so per-page mutation is isolated.

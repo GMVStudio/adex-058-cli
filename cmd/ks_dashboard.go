@@ -31,7 +31,7 @@ Examples:
 			setString(params, "source", source)
 			setInt(params, "ranking_limit", rankingLimit, 0)
 
-			return f.runSingle(cmd, "/v1/ks/dashboard", params)
+			return f.runSingle(cmd, "/v1/ks/dashboard", params, nil)
 		},
 	}
 
