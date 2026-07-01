@@ -1,0 +1,3161 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: ""
+    version: 0.0.1
+paths:
+    /v1/ks/account-reports/daily:
+        get:
+            tags:
+                - Kuaishou
+            description: ListKsAccountReportDaily 分页查询账户维度日粒度报表。
+            operationId: Kuaishou_ListKsAccountReportDaily
+            parameters:
+                - name: tenantId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: advertiserId
+                  in: query
+                  schema:
+                    type: string
+                - name: accountName
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateBegin
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateEnd
+                  in: query
+                  schema:
+                    type: string
+                - name: statHour
+                  in: query
+                  description: stat_hour 小时粒度; -1 表示不过滤。
+                  schema:
+                    type: integer
+                    format: int32
+                - name: source
+                  in: query
+                  schema:
+                    type: string
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: orderBy
+                  in: query
+                  description: order_by 排序字段, 支持 charge / stat_date, 默认 stat_date。
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  schema:
+                    type: boolean
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ks.v1.ListKsAccountReportDailyReply'
+    /v1/ks/account-reports/summary:
+        get:
+            tags:
+                - Kuaishou
+            description: SumKsAccountReport 按日期范围聚合账户维度报表, 可按 advertiser_id 分组。
+            operationId: Kuaishou_SumKsAccountReport
+            parameters:
+                - name: tenantId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: advertiserId
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateBegin
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateEnd
+                  in: query
+                  schema:
+                    type: string
+                - name: groupBy
+                  in: query
+                  description: group_by 分组维度, 支持 advertiser_id; 留空则返回区间总计单行。
+                  schema:
+                    type: string
+                - name: orderBy
+                  in: query
+                  description: order_by 排序字段, 支持 charge / 任意 sum 或 ratio 指标字段, 默认 charge。
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  description: order_desc 是否降序, 默认 true(花费从高到低)。
+                  schema:
+                    type: boolean
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: source
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ks.v1.SumKsReportReply'
+    /v1/ks/ad-accounts:
+        get:
+            tags:
+                - Kuaishou
+            description: ListKsAdAccounts 分页查询快手广告账户。
+            operationId: Kuaishou_ListKsAdAccounts
+            parameters:
+                - name: tenantId
+                  in: query
+                  description: tenant_id 租户ID, 必填。
+                  schema:
+                    type: integer
+                    format: int32
+                - name: advertiserId
+                  in: query
+                  schema:
+                    type: string
+                - name: accountName
+                  in: query
+                  description: account_name 账户名称模糊匹配。
+                  schema:
+                    type: string
+                - name: accountType
+                  in: query
+                  schema:
+                    type: string
+                - name: authStatus
+                  in: query
+                  schema:
+                    type: string
+                - name: deliveryStatus
+                  in: query
+                  schema:
+                    type: string
+                - name: activeStatus
+                  in: query
+                  schema:
+                    type: string
+                - name: ownerUserId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: orderBy
+                  in: query
+                  description: order_by 排序字段, 支持 balance / advertiser_id / created_at / id, 默认 id。
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  description: order_desc 是否降序, 默认 true。
+                  schema:
+                    type: boolean
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ks.v1.ListKsAdAccountsReply'
+    /v1/ks/campaign-reports/daily:
+        get:
+            tags:
+                - Kuaishou
+            description: ListKsCampaignReportDaily 分页查询广告计划维度日粒度报表。
+            operationId: Kuaishou_ListKsCampaignReportDaily
+            parameters:
+                - name: tenantId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: advertiserId
+                  in: query
+                  schema:
+                    type: string
+                - name: campaignId
+                  in: query
+                  schema:
+                    type: string
+                - name: campaignName
+                  in: query
+                  schema:
+                    type: string
+                - name: status
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: statDateBegin
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateEnd
+                  in: query
+                  schema:
+                    type: string
+                - name: statHour
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: source
+                  in: query
+                  schema:
+                    type: string
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: orderBy
+                  in: query
+                  description: order_by 排序字段, 支持 charge / stat_date / campaign_id, 默认 stat_date。
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  schema:
+                    type: boolean
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ks.v1.ListKsCampaignReportDailyReply'
+    /v1/ks/campaign-reports/summary:
+        get:
+            tags:
+                - Kuaishou
+            description: SumKsCampaignReport 按日期范围聚合广告计划维度报表, 可按 campaign_id 分组。
+            operationId: Kuaishou_SumKsCampaignReport
+            parameters:
+                - name: tenantId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: advertiserId
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateBegin
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateEnd
+                  in: query
+                  schema:
+                    type: string
+                - name: groupBy
+                  in: query
+                  description: group_by 分组维度, 支持 campaign_id; 留空则返回区间总计单行。
+                  schema:
+                    type: string
+                - name: orderBy
+                  in: query
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  schema:
+                    type: boolean
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: source
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ks.v1.SumKsReportReply'
+    /v1/ks/campaigns:
+        get:
+            tags:
+                - Kuaishou
+            description: ListKsCampaignEntity 分页查询广告计划列表快照。
+            operationId: Kuaishou_ListKsCampaignEntity
+            parameters:
+                - name: tenantId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: advertiserId
+                  in: query
+                  schema:
+                    type: string
+                - name: campaignId
+                  in: query
+                  schema:
+                    type: string
+                - name: campaignName
+                  in: query
+                  schema:
+                    type: string
+                - name: putStatus
+                  in: query
+                  description: put_status 投放状态 1投放/2暂停/3删除; 0 表示不过滤。
+                  schema:
+                    type: integer
+                    format: int32
+                - name: status
+                  in: query
+                  description: status 计划状态; 0 表示不过滤。
+                  schema:
+                    type: integer
+                    format: int32
+                - name: campaignType
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: orderBy
+                  in: query
+                  description: order_by 排序字段, 支持 create_time / update_time / campaign_id / id, 默认 id。
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  schema:
+                    type: boolean
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ks.v1.ListKsCampaignEntityReply'
+    /v1/ks/campaigns/top:
+        get:
+            tags:
+                - Kuaishou
+            description: TopKsCampaigns 按指定指标返回花费/转化/ROI 等 Top-N 广告计划。
+            operationId: Kuaishou_TopKsCampaigns
+            parameters:
+                - name: tenantId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: advertiserId
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateBegin
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateEnd
+                  in: query
+                  schema:
+                    type: string
+                - name: metric
+                  in: query
+                  description: metric 排序指标, 如 charge / conversion_num / activation; 默认 charge。
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  description: order_desc 是否降序, 不传默认 true(取值最高的 N 个)。
+                  schema:
+                    type: boolean
+                - name: limit
+                  in: query
+                  description: limit 返回条数, 默认 20, 最大 100。
+                  schema:
+                    type: integer
+                    format: int32
+                - name: source
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ks.v1.SumKsReportReply'
+    /v1/ks/campaigns/{campaignId}:
+        get:
+            tags:
+                - Kuaishou
+            description: GetKsCampaign 获取单个广告计划详情(含 detail JSON 全字段)。
+            operationId: Kuaishou_GetKsCampaign
+            parameters:
+                - name: campaignId
+                  in: path
+                  description: campaign_id 广告计划ID, 路径参数。
+                  required: true
+                  schema:
+                    type: string
+                - name: tenantId
+                  in: query
+                  description: tenant_id 租户ID, 必填。
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ks.v1.KsCampaignEntity'
+    /v1/ks/creative-reports/daily:
+        get:
+            tags:
+                - Kuaishou
+            description: ListKsCreativeReportDaily 分页查询创意维度日粒度报表。
+            operationId: Kuaishou_ListKsCreativeReportDaily
+            parameters:
+                - name: tenantId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: advertiserId
+                  in: query
+                  schema:
+                    type: string
+                - name: creativeId
+                  in: query
+                  schema:
+                    type: string
+                - name: unitId
+                  in: query
+                  schema:
+                    type: string
+                - name: campaignId
+                  in: query
+                  schema:
+                    type: string
+                - name: creativeName
+                  in: query
+                  schema:
+                    type: string
+                - name: status
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: statDateBegin
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateEnd
+                  in: query
+                  schema:
+                    type: string
+                - name: statHour
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: source
+                  in: query
+                  schema:
+                    type: string
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: orderBy
+                  in: query
+                  description: order_by 排序字段, 支持 charge / stat_date / creative_id, 默认 stat_date。
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  schema:
+                    type: boolean
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ks.v1.ListKsCreativeReportDailyReply'
+    /v1/ks/creative-reports/summary:
+        get:
+            tags:
+                - Kuaishou
+            description: SumKsCreativeReport 按日期范围聚合创意维度报表, 可按 creative_id 分组。
+            operationId: Kuaishou_SumKsCreativeReport
+            parameters:
+                - name: tenantId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: advertiserId
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateBegin
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateEnd
+                  in: query
+                  schema:
+                    type: string
+                - name: groupBy
+                  in: query
+                  description: group_by 分组维度, 支持 creative_id; 留空则返回区间总计单行。
+                  schema:
+                    type: string
+                - name: orderBy
+                  in: query
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  schema:
+                    type: boolean
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: source
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ks.v1.SumKsReportReply'
+    /v1/ks/creatives:
+        get:
+            tags:
+                - Kuaishou
+            description: ListKsCreativeEntity 分页查询创意列表快照。
+            operationId: Kuaishou_ListKsCreativeEntity
+            parameters:
+                - name: tenantId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: advertiserId
+                  in: query
+                  schema:
+                    type: string
+                - name: unitId
+                  in: query
+                  schema:
+                    type: string
+                - name: campaignId
+                  in: query
+                  schema:
+                    type: string
+                - name: creativeId
+                  in: query
+                  schema:
+                    type: string
+                - name: creativeName
+                  in: query
+                  schema:
+                    type: string
+                - name: creativeType
+                  in: query
+                  schema:
+                    type: string
+                - name: putStatus
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: status
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: orderBy
+                  in: query
+                  description: order_by 排序字段, 支持 create_time / update_time / creative_id / id, 默认 id。
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  schema:
+                    type: boolean
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ks.v1.ListKsCreativeEntityReply'
+    /v1/ks/creatives/top:
+        get:
+            tags:
+                - Kuaishou
+            description: TopKsCreatives 按指定指标返回 Top-N 创意。
+            operationId: Kuaishou_TopKsCreatives
+            parameters:
+                - name: tenantId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: advertiserId
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateBegin
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateEnd
+                  in: query
+                  schema:
+                    type: string
+                - name: metric
+                  in: query
+                  description: metric 排序指标, 如 charge / conversion_num / activation; 默认 charge。
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  description: order_desc 是否降序, 不传默认 true(取值最高的 N 个)。
+                  schema:
+                    type: boolean
+                - name: limit
+                  in: query
+                  description: limit 返回条数, 默认 20, 最大 100。
+                  schema:
+                    type: integer
+                    format: int32
+                - name: source
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ks.v1.SumKsReportReply'
+    /v1/ks/creatives/{bizKey}:
+        get:
+            tags:
+                - Kuaishou
+            description: GetKsCreative 获取单个创意详情(含 detail JSON 全字段)。
+            operationId: Kuaishou_GetKsCreative
+            parameters:
+                - name: bizKey
+                  in: path
+                  description: biz_key 创意业务主键, 路径参数。
+                  required: true
+                  schema:
+                    type: string
+                - name: tenantId
+                  in: query
+                  description: tenant_id 租户ID, 必填。
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ks.v1.KsCreativeEntity'
+    /v1/ks/dashboard:
+        get:
+            tags:
+                - Kuaishou
+            description: 'GetKsDashboard 租户级总览: 账户统计 + 指定日期范围汇总指标 + 按账户排名。'
+            operationId: Kuaishou_GetKsDashboard
+            parameters:
+                - name: tenantId
+                  in: query
+                  description: tenant_id 租户ID, 必填。
+                  schema:
+                    type: integer
+                    format: int32
+                - name: statDateBegin
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateEnd
+                  in: query
+                  schema:
+                    type: string
+                - name: source
+                  in: query
+                  schema:
+                    type: string
+                - name: rankingLimit
+                  in: query
+                  description: ranking_limit 账户排名返回条数, 默认 10, 最大 100。
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ks.v1.GetKsDashboardReply'
+    /v1/ks/report-metric-meta:
+        get:
+            tags:
+                - Kuaishou
+            description: ListKsReportMetricMeta 分页查询报表指标元数据。
+            operationId: Kuaishou_ListKsReportMetricMeta
+            parameters:
+                - name: level
+                  in: query
+                  description: 'level 维度: account/campaign/unit/creative。'
+                  schema:
+                    type: string
+                - name: groupName
+                  in: query
+                  schema:
+                    type: string
+                - name: field
+                  in: query
+                  description: field 字段名模糊匹配。
+                  schema:
+                    type: string
+                - name: enabled
+                  in: query
+                  description: enabled 是否启用过滤; 0 不过滤 / 1 仅启用 / 2 仅停用。
+                  schema:
+                    type: integer
+                    format: int32
+                - name: sortable
+                  in: query
+                  description: sortable 是否可排序过滤; 0 不过滤 / 1 仅可排序 / 2 仅不可排序。
+                  schema:
+                    type: integer
+                    format: int32
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: orderBy
+                  in: query
+                  description: order_by 排序字段, 支持 sort_order / id, 默认 sort_order。
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  schema:
+                    type: boolean
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ks.v1.ListKsReportMetricMetaReply'
+    /v1/ks/unit-reports/daily:
+        get:
+            tags:
+                - Kuaishou
+            description: ListKsUnitReportDaily 分页查询广告组维度日粒度报表。
+            operationId: Kuaishou_ListKsUnitReportDaily
+            parameters:
+                - name: tenantId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: advertiserId
+                  in: query
+                  schema:
+                    type: string
+                - name: unitId
+                  in: query
+                  schema:
+                    type: string
+                - name: campaignId
+                  in: query
+                  schema:
+                    type: string
+                - name: unitName
+                  in: query
+                  schema:
+                    type: string
+                - name: status
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: statDateBegin
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateEnd
+                  in: query
+                  schema:
+                    type: string
+                - name: statHour
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: source
+                  in: query
+                  schema:
+                    type: string
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: orderBy
+                  in: query
+                  description: order_by 排序字段, 支持 charge / stat_date / unit_id, 默认 stat_date。
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  schema:
+                    type: boolean
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ks.v1.ListKsUnitReportDailyReply'
+    /v1/ks/unit-reports/summary:
+        get:
+            tags:
+                - Kuaishou
+            description: SumKsUnitReport 按日期范围聚合广告组维度报表, 可按 unit_id 分组。
+            operationId: Kuaishou_SumKsUnitReport
+            parameters:
+                - name: tenantId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: advertiserId
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateBegin
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateEnd
+                  in: query
+                  schema:
+                    type: string
+                - name: groupBy
+                  in: query
+                  description: group_by 分组维度, 支持 unit_id; 留空则返回区间总计单行。
+                  schema:
+                    type: string
+                - name: orderBy
+                  in: query
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  schema:
+                    type: boolean
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: source
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ks.v1.SumKsReportReply'
+    /v1/ks/units:
+        get:
+            tags:
+                - Kuaishou
+            description: ListKsUnitEntity 分页查询广告组列表快照。
+            operationId: Kuaishou_ListKsUnitEntity
+            parameters:
+                - name: tenantId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: advertiserId
+                  in: query
+                  schema:
+                    type: string
+                - name: unitId
+                  in: query
+                  schema:
+                    type: string
+                - name: campaignId
+                  in: query
+                  schema:
+                    type: string
+                - name: unitName
+                  in: query
+                  schema:
+                    type: string
+                - name: putStatus
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: status
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: orderBy
+                  in: query
+                  description: order_by 排序字段, 支持 create_time / update_time / unit_id / id, 默认 id。
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  schema:
+                    type: boolean
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ks.v1.ListKsUnitEntityReply'
+    /v1/ks/units/top:
+        get:
+            tags:
+                - Kuaishou
+            description: TopKsUnits 按指定指标返回 Top-N 广告组。
+            operationId: Kuaishou_TopKsUnits
+            parameters:
+                - name: tenantId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: advertiserId
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateBegin
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateEnd
+                  in: query
+                  schema:
+                    type: string
+                - name: metric
+                  in: query
+                  description: metric 排序指标, 如 charge / conversion_num / activation; 默认 charge。
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  description: order_desc 是否降序, 不传默认 true(取值最高的 N 个)。
+                  schema:
+                    type: boolean
+                - name: limit
+                  in: query
+                  description: limit 返回条数, 默认 20, 最大 100。
+                  schema:
+                    type: integer
+                    format: int32
+                - name: source
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ks.v1.SumKsReportReply'
+    /v1/ks/units/{unitId}:
+        get:
+            tags:
+                - Kuaishou
+            description: GetKsUnit 获取单个广告组详情(含 detail JSON 全字段)。
+            operationId: Kuaishou_GetKsUnit
+            parameters:
+                - name: unitId
+                  in: path
+                  description: unit_id 广告组ID, 路径参数。
+                  required: true
+                  schema:
+                    type: string
+                - name: tenantId
+                  in: query
+                  description: tenant_id 租户ID, 必填。
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ks.v1.KsUnitEntity'
+    /v1/oe/account-budget-vs-actual:
+        get:
+            tags:
+                - Oceanengine
+            description: ListOeAccountBudgetVsActual 各账户日预算 vs 区间日均实际消耗对比(含 budget_mode / 预算消耗率 / 余额明细)。
+            operationId: Oceanengine_ListOeAccountBudgetVsActual
+            parameters:
+                - name: tenantId
+                  in: query
+                  description: tenant_id 租户ID, 必填。
+                  schema:
+                    type: integer
+                    format: int32
+                - name: advertiserId
+                  in: query
+                  description: advertiser_id 可选, 指定则只返回该账户。
+                  schema:
+                    type: string
+                - name: statDateBegin
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateEnd
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/oe.v1.ListOeAccountBudgetVsActualReply'
+    /v1/oe/account-reports/daily:
+        get:
+            tags:
+                - Oceanengine
+            description: ListOeAccountReportDaily 分页查询账户维度日粒度报表。
+            operationId: Oceanengine_ListOeAccountReportDaily
+            parameters:
+                - name: tenantId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: advertiserId
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateBegin
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateEnd
+                  in: query
+                  schema:
+                    type: string
+                - name: statHour
+                  in: query
+                  description: stat_hour 小时粒度; -1 表示不过滤。
+                  schema:
+                    type: integer
+                    format: int32
+                - name: source
+                  in: query
+                  schema:
+                    type: string
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: orderBy
+                  in: query
+                  description: order_by 排序字段, 支持 charge / stat_date, 默认 stat_date。
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  schema:
+                    type: boolean
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/oe.v1.ListOeAccountReportDailyReply'
+    /v1/oe/account-reports/summary:
+        get:
+            tags:
+                - Oceanengine
+            description: SumOeAccountReport 按日期范围聚合账户维度报表, 可按 advertiser_id 分组。
+            operationId: Oceanengine_SumOeAccountReport
+            parameters:
+                - name: tenantId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: advertiserId
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateBegin
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateEnd
+                  in: query
+                  schema:
+                    type: string
+                - name: groupBy
+                  in: query
+                  description: group_by 分组维度, 支持 advertiser_id; 留空则返回区间总计单行。
+                  schema:
+                    type: string
+                - name: orderBy
+                  in: query
+                  description: order_by 排序字段, 支持 charge / 任意 sum 或 ratio 指标字段, 默认 charge。
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  description: order_desc 是否降序, 默认 true(花费从高到低)。
+                  schema:
+                    type: boolean
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: source
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/oe.v1.SumOeReportReply'
+    /v1/oe/ad-accounts:
+        get:
+            tags:
+                - Oceanengine
+            description: ListOeAdAccounts 分页查询巨量广告账户。
+            operationId: Oceanengine_ListOeAdAccounts
+            parameters:
+                - name: tenantId
+                  in: query
+                  description: tenant_id 租户ID, 必填。
+                  schema:
+                    type: integer
+                    format: int32
+                - name: advertiserId
+                  in: query
+                  schema:
+                    type: string
+                - name: accountName
+                  in: query
+                  description: account_name 账户名称模糊匹配。
+                  schema:
+                    type: string
+                - name: accountType
+                  in: query
+                  schema:
+                    type: string
+                - name: authStatus
+                  in: query
+                  schema:
+                    type: string
+                - name: deliveryStatus
+                  in: query
+                  schema:
+                    type: string
+                - name: activeStatus
+                  in: query
+                  schema:
+                    type: string
+                - name: ownerUserId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: orderBy
+                  in: query
+                  description: order_by 排序字段, 支持 balance / budget / advertiser_id / created_at / updated_at / id, 默认 id。
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  description: order_desc 是否降序, 默认 true。
+                  schema:
+                    type: boolean
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/oe.v1.ListOeAdAccountsReply'
+    /v1/oe/dashboard:
+        get:
+            tags:
+                - Oceanengine
+            description: 'GetOeDashboard 租户级总览: 账户数/余额明细 + 区间汇总指标 + 账户简要排名。'
+            operationId: Oceanengine_GetOeDashboard
+            parameters:
+                - name: tenantId
+                  in: query
+                  description: tenant_id 租户ID, 必填。
+                  schema:
+                    type: integer
+                    format: int32
+                - name: statDateBegin
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateEnd
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/oe.v1.GetOeDashboardReply'
+    /v1/oe/project-reports/daily:
+        get:
+            tags:
+                - Oceanengine
+            description: ListOeProjectReportDaily 分页查询项目维度日粒度报表。
+            operationId: Oceanengine_ListOeProjectReportDaily
+            parameters:
+                - name: tenantId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: advertiserId
+                  in: query
+                  schema:
+                    type: string
+                - name: projectId
+                  in: query
+                  schema:
+                    type: string
+                - name: projectName
+                  in: query
+                  description: project_name 项目名称模糊匹配。
+                  schema:
+                    type: string
+                - name: statDateBegin
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateEnd
+                  in: query
+                  schema:
+                    type: string
+                - name: statHour
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: source
+                  in: query
+                  schema:
+                    type: string
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: orderBy
+                  in: query
+                  description: order_by 排序字段, 支持 charge / stat_date / project_id, 默认 stat_date。
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  schema:
+                    type: boolean
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/oe.v1.ListOeProjectReportDailyReply'
+    /v1/oe/project-reports/summary:
+        get:
+            tags:
+                - Oceanengine
+            description: SumOeProjectReport 按日期范围聚合项目维度报表, 可按 project_id 分组。
+            operationId: Oceanengine_SumOeProjectReport
+            parameters:
+                - name: tenantId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: advertiserId
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateBegin
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateEnd
+                  in: query
+                  schema:
+                    type: string
+                - name: groupBy
+                  in: query
+                  description: group_by 分组维度, 支持 project_id; 留空则返回区间总计单行。
+                  schema:
+                    type: string
+                - name: orderBy
+                  in: query
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  schema:
+                    type: boolean
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: source
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/oe.v1.SumOeReportReply'
+    /v1/oe/projects:
+        get:
+            tags:
+                - Oceanengine
+            description: ListOeProjects 分页查询巨量项目列表。
+            operationId: Oceanengine_ListOeProjects
+            parameters:
+                - name: tenantId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: advertiserId
+                  in: query
+                  schema:
+                    type: string
+                - name: projectId
+                  in: query
+                  schema:
+                    type: string
+                - name: name
+                  in: query
+                  description: name 项目名称模糊匹配。
+                  schema:
+                    type: string
+                - name: optStatus
+                  in: query
+                  description: opt_status 操作状态 ENABLE/DISABLE。
+                  schema:
+                    type: string
+                - name: statusFirst
+                  in: query
+                  description: status_first 项目一级状态。
+                  schema:
+                    type: string
+                - name: deliveryMode
+                  in: query
+                  schema:
+                    type: string
+                - name: landingType
+                  in: query
+                  schema:
+                    type: string
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: orderBy
+                  in: query
+                  description: order_by 排序字段, 支持 project_id / project_create_time / project_modify_time / created_at / updated_at / id, 默认 id。
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  schema:
+                    type: boolean
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/oe.v1.ListOeProjectsReply'
+    /v1/oe/projects/top:
+        get:
+            tags:
+                - Oceanengine
+            description: TopOeProjects 按指定指标返回花费/转化/ROI 等 Top-N 项目。
+            operationId: Oceanengine_TopOeProjects
+            parameters:
+                - name: tenantId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: advertiserId
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateBegin
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateEnd
+                  in: query
+                  schema:
+                    type: string
+                - name: metric
+                  in: query
+                  description: metric 排序指标, 如 charge / stat_cost / convert_cnt / active; 默认 charge。
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  description: order_desc 是否降序, 不传默认 true(取值最高的 N 个)。
+                  schema:
+                    type: boolean
+                - name: limit
+                  in: query
+                  description: limit 返回条数, 默认 20, 最大 100。
+                  schema:
+                    type: integer
+                    format: int32
+                - name: source
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/oe.v1.SumOeReportReply'
+    /v1/oe/projects/{projectId}:
+        get:
+            tags:
+                - Oceanengine
+            description: 'GetOeProject 获取单个项目详情(含 meta JSON 全字段: 定向/出价/预算等)。'
+            operationId: Oceanengine_GetOeProject
+            parameters:
+                - name: projectId
+                  in: path
+                  description: project_id 项目ID, 路径参数。
+                  required: true
+                  schema:
+                    type: string
+                - name: tenantId
+                  in: query
+                  description: tenant_id 租户ID, 必填。
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/oe.v1.OeProject'
+    /v1/oe/report-metric-meta:
+        get:
+            tags:
+                - Oceanengine
+            description: ListOeReportMetricMeta 分页查询报表指标元数据。
+            operationId: Oceanengine_ListOeReportMetricMeta
+            parameters:
+                - name: level
+                  in: query
+                  description: 'level 维度: account/project/unit。'
+                  schema:
+                    type: string
+                - name: groupName
+                  in: query
+                  schema:
+                    type: string
+                - name: field
+                  in: query
+                  description: field 字段名模糊匹配。
+                  schema:
+                    type: string
+                - name: enabled
+                  in: query
+                  description: enabled 是否启用过滤; 0 不过滤 / 1 仅启用 / 2 仅停用。
+                  schema:
+                    type: integer
+                    format: int32
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: orderBy
+                  in: query
+                  description: order_by 排序字段, 支持 sort_order / id, 默认 sort_order。
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  schema:
+                    type: boolean
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/oe.v1.ListOeReportMetricMetaReply'
+    /v1/oe/unit-reports/daily:
+        get:
+            tags:
+                - Oceanengine
+            description: ListOeUnitReportDaily 分页查询单元维度日粒度报表。
+            operationId: Oceanengine_ListOeUnitReportDaily
+            parameters:
+                - name: tenantId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: advertiserId
+                  in: query
+                  schema:
+                    type: string
+                - name: projectId
+                  in: query
+                  schema:
+                    type: string
+                - name: promotionId
+                  in: query
+                  schema:
+                    type: string
+                - name: promotionName
+                  in: query
+                  description: promotion_name 单元名称模糊匹配。
+                  schema:
+                    type: string
+                - name: statDateBegin
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateEnd
+                  in: query
+                  schema:
+                    type: string
+                - name: statHour
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: source
+                  in: query
+                  schema:
+                    type: string
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: orderBy
+                  in: query
+                  description: order_by 排序字段, 支持 charge / stat_date / promotion_id / project_id, 默认 stat_date。
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  schema:
+                    type: boolean
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/oe.v1.ListOeUnitReportDailyReply'
+    /v1/oe/unit-reports/summary:
+        get:
+            tags:
+                - Oceanengine
+            description: SumOeUnitReport 按日期范围聚合单元维度报表, 可按 promotion_id 分组。
+            operationId: Oceanengine_SumOeUnitReport
+            parameters:
+                - name: tenantId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: advertiserId
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateBegin
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateEnd
+                  in: query
+                  schema:
+                    type: string
+                - name: groupBy
+                  in: query
+                  description: group_by 分组维度, 支持 promotion_id; 留空则返回区间总计单行。
+                  schema:
+                    type: string
+                - name: orderBy
+                  in: query
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  schema:
+                    type: boolean
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: source
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/oe.v1.SumOeReportReply'
+    /v1/oe/units:
+        get:
+            tags:
+                - Oceanengine
+            description: ListOeUnits 分页查询巨量单元列表。
+            operationId: Oceanengine_ListOeUnits
+            parameters:
+                - name: tenantId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: advertiserId
+                  in: query
+                  schema:
+                    type: string
+                - name: promotionId
+                  in: query
+                  schema:
+                    type: string
+                - name: projectId
+                  in: query
+                  schema:
+                    type: string
+                - name: name
+                  in: query
+                  description: name 单元名称模糊匹配。
+                  schema:
+                    type: string
+                - name: optStatus
+                  in: query
+                  schema:
+                    type: string
+                - name: statusFirst
+                  in: query
+                  schema:
+                    type: string
+                - name: learningPhase
+                  in: query
+                  schema:
+                    type: string
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: orderBy
+                  in: query
+                  description: order_by 排序字段, 支持 promotion_id / promotion_create_time / promotion_modify_time / created_at / updated_at / id, 默认 id。
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  schema:
+                    type: boolean
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/oe.v1.ListOeUnitsReply'
+    /v1/oe/units/top:
+        get:
+            tags:
+                - Oceanengine
+            description: TopOeUnits 按指定指标返回 Top-N 单元。
+            operationId: Oceanengine_TopOeUnits
+            parameters:
+                - name: tenantId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: advertiserId
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateBegin
+                  in: query
+                  schema:
+                    type: string
+                - name: statDateEnd
+                  in: query
+                  schema:
+                    type: string
+                - name: metric
+                  in: query
+                  description: metric 排序指标, 如 charge / stat_cost / convert_cnt / active; 默认 charge。
+                  schema:
+                    type: string
+                - name: orderDesc
+                  in: query
+                  description: order_desc 是否降序, 不传默认 true(取值最高的 N 个)。
+                  schema:
+                    type: boolean
+                - name: limit
+                  in: query
+                  description: limit 返回条数, 默认 20, 最大 100。
+                  schema:
+                    type: integer
+                    format: int32
+                - name: source
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/oe.v1.SumOeReportReply'
+    /v1/oe/units/{promotionId}:
+        get:
+            tags:
+                - Oceanengine
+            description: 'GetOeUnit 获取单个单元详情(含 meta JSON: learning_phase/opt_status/出价等)。'
+            operationId: Oceanengine_GetOeUnit
+            parameters:
+                - name: promotionId
+                  in: path
+                  description: promotion_id 单元ID, 路径参数。
+                  required: true
+                  schema:
+                    type: string
+                - name: tenantId
+                  in: query
+                  description: tenant_id 租户ID, 必填。
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/oe.v1.OeUnit'
+    /v1/tenants:
+        get:
+            tags:
+                - Tenant
+            description: ListTenants 批量查询租户, 支持按名称模糊过滤和状态过滤。
+            operationId: Tenant_ListTenants
+            parameters:
+                - name: name
+                  in: query
+                  description: name 按租户名称模糊匹配; 留空表示不过滤。
+                  schema:
+                    type: string
+                - name: status
+                  in: query
+                  description: status 按状态精确匹配(active / disabled); 留空表示不过滤。
+                  schema:
+                    type: string
+                - name: pageToken
+                  in: query
+                  description: page_token 游标分页令牌, 透传上一次响应的 next_page_token; 首页留空。
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  description: page_size 每页条数, 默认 20, 最大 200。
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/tenant.v1.ListTenantsReply'
+    /v1/users/me:
+        get:
+            tags:
+                - User
+            description: GetCurrentUser 获取当前登录用户(由 Bearer api_key 解析)。
+            operationId: User_GetCurrentUser
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/user.v1.UserInfo'
+components:
+    schemas:
+        ks.v1.GetKsDashboardReply:
+            type: object
+            properties:
+                accountTotal:
+                    type: string
+                    description: account_total 租户账户总数。
+                activeAccountTotal:
+                    type: string
+                    description: active_account_total 活跃账户数(active_status=active)。
+                totalBalance:
+                    type: string
+                    description: total_balance 所有账户余额合计, 字符串返回避免精度丢失。
+                summary:
+                    allOf:
+                        - $ref: '#/components/schemas/ks.v1.KsReportSummaryRow'
+                    description: summary 指定日期范围的区间总计(总花费/曝光/转化及整体 CPA/CTR 等比率)。
+                accountRankings:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ks.v1.KsReportSummaryRow'
+                    description: account_rankings 按账户(advertiser_id)分组的花费排名, 默认按花费降序。
+        ks.v1.KsAccountReportDaily:
+            type: object
+            properties:
+                id:
+                    type: string
+                tenantId:
+                    type: integer
+                    format: int32
+                advertiserId:
+                    type: string
+                statDate:
+                    type: string
+                statHour:
+                    type: integer
+                    format: int32
+                source:
+                    type: string
+                accountName:
+                    type: string
+                charge:
+                    type: string
+                metrics:
+                    type: object
+                createdAt:
+                    type: string
+                updatedAt:
+                    type: string
+            description: |-
+                ---------------------------------------------------------------------------
+                 ks_account_report_daily 账户维度日粒度报表
+                 ---------------------------------------------------------------------------
+        ks.v1.KsAdAccount:
+            type: object
+            properties:
+                id:
+                    type: string
+                tenantId:
+                    type: integer
+                    format: int32
+                tokenId:
+                    type: integer
+                    format: int32
+                accountType:
+                    type: string
+                advertiserId:
+                    type: string
+                accountName:
+                    type: string
+                accountSubject:
+                    type: string
+                entryId:
+                    type: string
+                remark:
+                    type: string
+                authSource:
+                    type: string
+                authStatus:
+                    type: string
+                deliveryStatus:
+                    type: string
+                activeStatus:
+                    type: string
+                partner:
+                    type: string
+                balance:
+                    type: string
+                    description: balance 账户余额, 以字符串返回避免精度丢失。
+                balanceUpdatedAt:
+                    type: string
+                dayBudget:
+                    type: string
+                project:
+                    type: string
+                createdBy:
+                    type: integer
+                    format: int32
+                ownerUserId:
+                    type: integer
+                    format: int32
+                createdAt:
+                    type: string
+                updatedAt:
+                    type: string
+            description: |-
+                ---------------------------------------------------------------------------
+                 ks_ad_accounts 广告账户
+                 ---------------------------------------------------------------------------
+        ks.v1.KsCampaignEntity:
+            type: object
+            properties:
+                id:
+                    type: string
+                tenantId:
+                    type: integer
+                    format: int32
+                advertiserId:
+                    type: string
+                campaignId:
+                    type: string
+                campaignName:
+                    type: string
+                putStatus:
+                    type: integer
+                    format: int32
+                status:
+                    type: integer
+                    format: int32
+                campaignType:
+                    type: integer
+                    format: int32
+                adType:
+                    type: integer
+                    format: int32
+                createTime:
+                    type: string
+                updateTime:
+                    type: string
+                detail:
+                    type: object
+                syncedAt:
+                    type: string
+                createdAt:
+                    type: string
+                updatedAt:
+                    type: string
+            description: |-
+                ---------------------------------------------------------------------------
+                 ks_campaign_entity 广告计划列表快照
+                 ---------------------------------------------------------------------------
+        ks.v1.KsCampaignReportDaily:
+            type: object
+            properties:
+                id:
+                    type: string
+                tenantId:
+                    type: integer
+                    format: int32
+                advertiserId:
+                    type: string
+                campaignId:
+                    type: string
+                campaignName:
+                    type: string
+                status:
+                    type: integer
+                    format: int32
+                statDate:
+                    type: string
+                statHour:
+                    type: integer
+                    format: int32
+                source:
+                    type: string
+                charge:
+                    type: string
+                metrics:
+                    type: object
+                createdAt:
+                    type: string
+                updatedAt:
+                    type: string
+            description: |-
+                ---------------------------------------------------------------------------
+                 ks_campaign_report_daily 广告计划维度日粒度报表
+                 ---------------------------------------------------------------------------
+        ks.v1.KsCreativeEntity:
+            type: object
+            properties:
+                id:
+                    type: string
+                tenantId:
+                    type: integer
+                    format: int32
+                advertiserId:
+                    type: string
+                bizKey:
+                    type: string
+                creativeType:
+                    type: string
+                creativeId:
+                    type: string
+                unitId:
+                    type: string
+                campaignId:
+                    type: string
+                creativeName:
+                    type: string
+                putStatus:
+                    type: integer
+                    format: int32
+                status:
+                    type: integer
+                    format: int32
+                createTime:
+                    type: string
+                updateTime:
+                    type: string
+                detail:
+                    type: object
+                syncedAt:
+                    type: string
+                createdAt:
+                    type: string
+                updatedAt:
+                    type: string
+            description: |-
+                ---------------------------------------------------------------------------
+                 ks_creative_entity 创意列表快照
+                 ---------------------------------------------------------------------------
+        ks.v1.KsCreativeReportDaily:
+            type: object
+            properties:
+                id:
+                    type: string
+                tenantId:
+                    type: integer
+                    format: int32
+                advertiserId:
+                    type: string
+                creativeId:
+                    type: string
+                creativeName:
+                    type: string
+                status:
+                    type: integer
+                    format: int32
+                unitId:
+                    type: string
+                unitName:
+                    type: string
+                campaignId:
+                    type: string
+                campaignName:
+                    type: string
+                photoId:
+                    type: string
+                photoMd5:
+                    type: string
+                photoUrl:
+                    type: string
+                coverUrl:
+                    type: string
+                imageToken:
+                    type: string
+                statDate:
+                    type: string
+                statHour:
+                    type: integer
+                    format: int32
+                source:
+                    type: string
+                charge:
+                    type: string
+                metrics:
+                    type: object
+                createdAt:
+                    type: string
+                updatedAt:
+                    type: string
+            description: |-
+                ---------------------------------------------------------------------------
+                 ks_creative_report_daily 创意维度日粒度报表
+                 ---------------------------------------------------------------------------
+        ks.v1.KsReportMetricMeta:
+            type: object
+            properties:
+                id:
+                    type: string
+                level:
+                    type: string
+                field:
+                    type: string
+                label:
+                    type: string
+                groupName:
+                    type: string
+                agg:
+                    type: string
+                valueType:
+                    type: string
+                numerator:
+                    type: string
+                denominator:
+                    type: string
+                scale:
+                    type: number
+                    format: double
+                tooltip:
+                    type: string
+                isDefault:
+                    type: boolean
+                sortOrder:
+                    type: integer
+                    format: int32
+                enabled:
+                    type: boolean
+                sortable:
+                    type: boolean
+                createdAt:
+                    type: string
+                updatedAt:
+                    type: string
+            description: |-
+                ---------------------------------------------------------------------------
+                 ks_report_metric_meta 报表指标元数据
+                 ---------------------------------------------------------------------------
+        ks.v1.KsReportSummaryRow:
+            type: object
+            properties:
+                groupKey:
+                    type: string
+                    description: group_key 维度ID; group_by 为空(总计)时为 0。
+                groupName:
+                    type: string
+                    description: group_name 维度名称(账户/计划/广告组/创意名称); 总计时为空。
+                charge:
+                    type: string
+                    description: charge 区间累计花费。
+                rowCount:
+                    type: string
+                    description: row_count 参与聚合的明细行数。
+                metrics:
+                    type: object
+                    description: metrics 累加(sum)后的原始指标。
+                ratios:
+                    type: object
+                    description: ratios 依据 ks_report_metric_meta 计算的比率类指标(CPA/CTR/完播率等)。
+            description: KsReportSummaryRow 单个维度分组的聚合结果。
+        ks.v1.KsUnitEntity:
+            type: object
+            properties:
+                id:
+                    type: string
+                tenantId:
+                    type: integer
+                    format: int32
+                advertiserId:
+                    type: string
+                unitId:
+                    type: string
+                unitName:
+                    type: string
+                campaignId:
+                    type: string
+                putStatus:
+                    type: integer
+                    format: int32
+                status:
+                    type: integer
+                    format: int32
+                unitType:
+                    type: integer
+                    format: int32
+                bidType:
+                    type: integer
+                    format: int32
+                ocpxActionType:
+                    type: integer
+                    format: int32
+                createTime:
+                    type: string
+                updateTime:
+                    type: string
+                detail:
+                    type: object
+                syncedAt:
+                    type: string
+                createdAt:
+                    type: string
+                updatedAt:
+                    type: string
+            description: |-
+                ---------------------------------------------------------------------------
+                 ks_unit_entity 广告组列表快照
+                 ---------------------------------------------------------------------------
+        ks.v1.KsUnitReportDaily:
+            type: object
+            properties:
+                id:
+                    type: string
+                tenantId:
+                    type: integer
+                    format: int32
+                advertiserId:
+                    type: string
+                unitId:
+                    type: string
+                unitName:
+                    type: string
+                unitSource:
+                    type: integer
+                    format: int32
+                campaignId:
+                    type: string
+                campaignName:
+                    type: string
+                status:
+                    type: integer
+                    format: int32
+                statDate:
+                    type: string
+                statHour:
+                    type: integer
+                    format: int32
+                source:
+                    type: string
+                charge:
+                    type: string
+                metrics:
+                    type: object
+                createdAt:
+                    type: string
+                updatedAt:
+                    type: string
+            description: |-
+                ---------------------------------------------------------------------------
+                 ks_unit_report_daily 广告组维度日粒度报表
+                 ---------------------------------------------------------------------------
+        ks.v1.ListKsAccountReportDailyReply:
+            type: object
+            properties:
+                hasMore:
+                    type: boolean
+                nextPageToken:
+                    type: string
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ks.v1.KsAccountReportDaily'
+        ks.v1.ListKsAdAccountsReply:
+            type: object
+            properties:
+                hasMore:
+                    type: boolean
+                nextPageToken:
+                    type: string
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ks.v1.KsAdAccount'
+        ks.v1.ListKsCampaignEntityReply:
+            type: object
+            properties:
+                hasMore:
+                    type: boolean
+                nextPageToken:
+                    type: string
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ks.v1.KsCampaignEntity'
+        ks.v1.ListKsCampaignReportDailyReply:
+            type: object
+            properties:
+                hasMore:
+                    type: boolean
+                nextPageToken:
+                    type: string
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ks.v1.KsCampaignReportDaily'
+        ks.v1.ListKsCreativeEntityReply:
+            type: object
+            properties:
+                hasMore:
+                    type: boolean
+                nextPageToken:
+                    type: string
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ks.v1.KsCreativeEntity'
+        ks.v1.ListKsCreativeReportDailyReply:
+            type: object
+            properties:
+                hasMore:
+                    type: boolean
+                nextPageToken:
+                    type: string
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ks.v1.KsCreativeReportDaily'
+        ks.v1.ListKsReportMetricMetaReply:
+            type: object
+            properties:
+                hasMore:
+                    type: boolean
+                nextPageToken:
+                    type: string
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ks.v1.KsReportMetricMeta'
+        ks.v1.ListKsUnitEntityReply:
+            type: object
+            properties:
+                hasMore:
+                    type: boolean
+                nextPageToken:
+                    type: string
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ks.v1.KsUnitEntity'
+        ks.v1.ListKsUnitReportDailyReply:
+            type: object
+            properties:
+                hasMore:
+                    type: boolean
+                nextPageToken:
+                    type: string
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ks.v1.KsUnitReportDaily'
+        ks.v1.SumKsReportReply:
+            type: object
+            properties:
+                hasMore:
+                    type: boolean
+                nextPageToken:
+                    type: string
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ks.v1.KsReportSummaryRow'
+            description: SumKsReportReply 聚合汇总通用响应。
+        oe.v1.GetOeDashboardReply:
+            type: object
+            properties:
+                accountTotal:
+                    type: integer
+                    description: account_total 账户总数(租户下 oe_ad_accounts 条数)。
+                    format: int32
+                activeAccountCount:
+                    type: integer
+                    description: active_account_count 活跃账户数(区间内有消耗>0 的账户数)。
+                    format: int32
+                balance:
+                    $ref: '#/components/schemas/oe.v1.OeDashboardBalance'
+                metrics:
+                    $ref: '#/components/schemas/oe.v1.OeDashboardMetrics'
+                accountRanking:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/oe.v1.OeDashboardAccountRank'
+                    description: account_ranking 按区间消耗降序的账户排名(默认前10)。
+        oe.v1.ListOeAccountBudgetVsActualReply:
+            type: object
+            properties:
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/oe.v1.OeAccountBudgetVsActualRow'
+        oe.v1.ListOeAccountReportDailyReply:
+            type: object
+            properties:
+                hasMore:
+                    type: boolean
+                nextPageToken:
+                    type: string
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/oe.v1.OeAccountReportDaily'
+        oe.v1.ListOeAdAccountsReply:
+            type: object
+            properties:
+                hasMore:
+                    type: boolean
+                nextPageToken:
+                    type: string
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/oe.v1.OeAdAccount'
+        oe.v1.ListOeProjectReportDailyReply:
+            type: object
+            properties:
+                hasMore:
+                    type: boolean
+                nextPageToken:
+                    type: string
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/oe.v1.OeProjectReportDaily'
+        oe.v1.ListOeProjectsReply:
+            type: object
+            properties:
+                hasMore:
+                    type: boolean
+                nextPageToken:
+                    type: string
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/oe.v1.OeProject'
+        oe.v1.ListOeReportMetricMetaReply:
+            type: object
+            properties:
+                hasMore:
+                    type: boolean
+                nextPageToken:
+                    type: string
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/oe.v1.OeReportMetricMeta'
+        oe.v1.ListOeUnitReportDailyReply:
+            type: object
+            properties:
+                hasMore:
+                    type: boolean
+                nextPageToken:
+                    type: string
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/oe.v1.OeUnitReportDaily'
+        oe.v1.ListOeUnitsReply:
+            type: object
+            properties:
+                hasMore:
+                    type: boolean
+                nextPageToken:
+                    type: string
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/oe.v1.OeUnit'
+        oe.v1.OeAccountBudgetVsActualRow:
+            type: object
+            properties:
+                advertiserId:
+                    type: string
+                accountName:
+                    type: string
+                budget:
+                    type: string
+                    description: budget 日预算(元); budget_mode 非 BUDGET_MODE_DAY 时可能为空。
+                budgetMode:
+                    type: string
+                    description: budget_mode BUDGET_MODE_DAY(日预算) / BUDGET_MODE_INFINITE(不限)。
+                totalCharge:
+                    type: string
+                    description: total_charge 区间总消耗。
+                days:
+                    type: string
+                    description: days 区间内有报表数据的天数(日均分母)。
+                avgDailyCharge:
+                    type: string
+                    description: avg_daily_charge 日均实际消耗 = total_charge / days。
+                budgetUsageRate:
+                    type: number
+                    description: budget_usage_rate 预算消耗率 = avg_daily_charge / budget(仅 BUDGET_MODE_DAY 且 budget>0 时有意义, 否则为0)。
+                    format: double
+                balance:
+                    type: string
+                sharedBalance:
+                    type: string
+                grantBalance:
+                    type: string
+                nonGrantBalance:
+                    type: string
+            description: OeAccountBudgetVsActualRow 单账户日预算 vs 实际消耗对比。
+        oe.v1.OeAccountReportDaily:
+            type: object
+            properties:
+                id:
+                    type: string
+                tenantId:
+                    type: integer
+                    format: int32
+                advertiserId:
+                    type: string
+                statDate:
+                    type: string
+                statHour:
+                    type: integer
+                    format: int32
+                source:
+                    type: string
+                isFinal:
+                    type: boolean
+                charge:
+                    type: string
+                metrics:
+                    type: object
+                createdAt:
+                    type: string
+                updatedAt:
+                    type: string
+            description: |-
+                ---------------------------------------------------------------------------
+                 oe_account_report_daily 账户维度日粒度报表
+                 ---------------------------------------------------------------------------
+        oe.v1.OeAdAccount:
+            type: object
+            properties:
+                id:
+                    type: string
+                tenantId:
+                    type: integer
+                    format: int32
+                tokenId:
+                    type: integer
+                    format: int32
+                accountType:
+                    type: string
+                advertiserId:
+                    type: string
+                accountName:
+                    type: string
+                accountSubject:
+                    type: string
+                entryId:
+                    type: string
+                accountRole:
+                    type: string
+                remark:
+                    type: string
+                authSource:
+                    type: string
+                authStatus:
+                    type: string
+                deliveryStatus:
+                    type: string
+                activeStatus:
+                    type: string
+                partner:
+                    type: string
+                balance:
+                    type: string
+                    description: balance 账户余额, 以字符串返回避免精度丢失。
+                sharedBalance:
+                    type: string
+                nonGrantBalance:
+                    type: string
+                grantBalance:
+                    type: string
+                balanceUpdatedAt:
+                    type: string
+                budget:
+                    type: string
+                budgetMode:
+                    type: string
+                project:
+                    type: string
+                createdBy:
+                    type: integer
+                    format: int32
+                ownerUserId:
+                    type: integer
+                    format: int32
+                createdAt:
+                    type: string
+                updatedAt:
+                    type: string
+            description: |-
+                ---------------------------------------------------------------------------
+                 oe_ad_accounts 巨量广告账户
+                 ---------------------------------------------------------------------------
+        oe.v1.OeDashboardAccountRank:
+            type: object
+            properties:
+                advertiserId:
+                    type: string
+                accountName:
+                    type: string
+                charge:
+                    type: string
+                convert:
+                    type: string
+                cpa:
+                    type: number
+                    format: double
+            description: OeDashboardAccountRank 按消耗降序的账户简要排名条目。
+        oe.v1.OeDashboardBalance:
+            type: object
+            properties:
+                totalBalance:
+                    type: string
+                    description: total_balance sum(balance) 账户余额合计。
+                totalSharedBalance:
+                    type: string
+                    description: total_shared_balance sum(shared_balance) 共享钱包余额合计。
+                totalGrantBalance:
+                    type: string
+                    description: total_grant_balance sum(grant_balance) 赠款余额合计。
+                totalNonGrantBalance:
+                    type: string
+                    description: total_non_grant_balance sum(non_grant_balance) 非赠款(现金)余额合计。
+                grantBalanceRatio:
+                    type: number
+                    description: grant_balance_ratio 赠款余额占比 = grant / (grant + non_grant), 0~1。
+                    format: double
+            description: OeDashboardBalance 租户级余额汇总(各口径独立求和, 字符串返回避免精度丢失)。
+        oe.v1.OeDashboardMetrics:
+            type: object
+            properties:
+                totalCharge:
+                    type: string
+                    description: total_charge 区间总消耗, 字符串返回避免精度丢失。
+                totalShow:
+                    type: string
+                    description: total_show 总展示 sum(show_cnt)。
+                totalClick:
+                    type: string
+                    description: total_click 总点击 sum(click_cnt)。
+                totalConvert:
+                    type: string
+                    description: total_convert 总转化 sum(convert_cnt)。
+                overallCpa:
+                    type: number
+                    description: overall_cpa 整体CPA = total_charge / total_convert。
+                    format: double
+                overallCtr:
+                    type: number
+                    description: overall_ctr 整体CTR(%) = total_click / total_show * 100。
+                    format: double
+                overallConversionRate:
+                    type: number
+                    description: overall_conversion_rate 整体转化率(%) = total_convert / total_click * 100。
+                    format: double
+            description: OeDashboardMetrics 区间汇总指标与整体比率。
+        oe.v1.OeProject:
+            type: object
+            properties:
+                id:
+                    type: string
+                tenantId:
+                    type: integer
+                    format: int32
+                advertiserId:
+                    type: string
+                projectId:
+                    type: string
+                name:
+                    type: string
+                deliveryMode:
+                    type: string
+                deliveryType:
+                    type: string
+                landingType:
+                    type: string
+                adType:
+                    type: string
+                optStatus:
+                    type: string
+                statusFirst:
+                    type: string
+                pricing:
+                    type: string
+                budgetMode:
+                    type: string
+                projectCreateTime:
+                    type: string
+                projectModifyTime:
+                    type: string
+                meta:
+                    type: object
+                syncedAt:
+                    type: string
+                createdAt:
+                    type: string
+                updatedAt:
+                    type: string
+            description: |-
+                ---------------------------------------------------------------------------
+                 oe_projects 巨量项目
+                 ---------------------------------------------------------------------------
+        oe.v1.OeProjectReportDaily:
+            type: object
+            properties:
+                id:
+                    type: string
+                tenantId:
+                    type: integer
+                    format: int32
+                advertiserId:
+                    type: string
+                projectId:
+                    type: string
+                projectName:
+                    type: string
+                statDate:
+                    type: string
+                statHour:
+                    type: integer
+                    format: int32
+                source:
+                    type: string
+                isFinal:
+                    type: boolean
+                charge:
+                    type: string
+                metrics:
+                    type: object
+                createdAt:
+                    type: string
+                updatedAt:
+                    type: string
+            description: |-
+                ---------------------------------------------------------------------------
+                 oe_project_report_daily 项目维度日粒度报表
+                 ---------------------------------------------------------------------------
+        oe.v1.OeReportMetricMeta:
+            type: object
+            properties:
+                id:
+                    type: string
+                level:
+                    type: string
+                field:
+                    type: string
+                label:
+                    type: string
+                groupName:
+                    type: string
+                agg:
+                    type: string
+                valueType:
+                    type: string
+                numerator:
+                    type: string
+                denominator:
+                    type: string
+                scale:
+                    type: number
+                    format: double
+                tooltip:
+                    type: string
+                isDefault:
+                    type: boolean
+                sortOrder:
+                    type: integer
+                    format: int32
+                enabled:
+                    type: boolean
+                createdAt:
+                    type: string
+                updatedAt:
+                    type: string
+            description: |-
+                ---------------------------------------------------------------------------
+                 oe_report_metric_meta 报表指标元数据
+                 ---------------------------------------------------------------------------
+        oe.v1.OeReportSummaryRow:
+            type: object
+            properties:
+                groupKey:
+                    type: string
+                    description: group_key 维度ID; group_by 为空(总计)时为 0。
+                groupName:
+                    type: string
+                    description: group_name 维度名称(账户/项目/单元名称); 总计时为空。
+                charge:
+                    type: string
+                    description: charge 区间累计花费, 字符串返回避免精度丢失。
+                rowCount:
+                    type: string
+                    description: row_count 参与聚合的明细行数。
+                metrics:
+                    type: object
+                    description: metrics 累加(sum)后的原始指标。
+                ratios:
+                    type: object
+                    description: ratios 依据 oe_report_metric_meta 计算的比率类指标(cpc_platform/ctr/conversion_cost 等)。
+            description: OeReportSummaryRow 单个维度分组的聚合结果。
+        oe.v1.OeUnit:
+            type: object
+            properties:
+                id:
+                    type: string
+                tenantId:
+                    type: integer
+                    format: int32
+                advertiserId:
+                    type: string
+                promotionId:
+                    type: string
+                projectId:
+                    type: string
+                name:
+                    type: string
+                optStatus:
+                    type: string
+                statusFirst:
+                    type: string
+                learningPhase:
+                    type: string
+                promotionCreateTime:
+                    type: string
+                promotionModifyTime:
+                    type: string
+                meta:
+                    type: object
+                syncedAt:
+                    type: string
+                createdAt:
+                    type: string
+                updatedAt:
+                    type: string
+            description: |-
+                ---------------------------------------------------------------------------
+                 oe_units 巨量单元
+                 ---------------------------------------------------------------------------
+        oe.v1.OeUnitReportDaily:
+            type: object
+            properties:
+                id:
+                    type: string
+                tenantId:
+                    type: integer
+                    format: int32
+                advertiserId:
+                    type: string
+                projectId:
+                    type: string
+                promotionId:
+                    type: string
+                promotionName:
+                    type: string
+                statDate:
+                    type: string
+                statHour:
+                    type: integer
+                    format: int32
+                source:
+                    type: string
+                isFinal:
+                    type: boolean
+                charge:
+                    type: string
+                metrics:
+                    type: object
+                createdAt:
+                    type: string
+                updatedAt:
+                    type: string
+            description: |-
+                ---------------------------------------------------------------------------
+                 oe_unit_report_daily 单元维度日粒度报表
+                 ---------------------------------------------------------------------------
+        oe.v1.SumOeReportReply:
+            type: object
+            properties:
+                hasMore:
+                    type: boolean
+                nextPageToken:
+                    type: string
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/oe.v1.OeReportSummaryRow'
+            description: SumOeReportReply 聚合汇总通用响应。
+        tenant.v1.ListTenantsReply:
+            type: object
+            properties:
+                hasMore:
+                    type: boolean
+                    description: has_more 是否还有下一页。
+                nextPageToken:
+                    type: string
+                    description: next_page_token 下一页游标; has_more 为 false 时为空。
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/tenant.v1.TenantInfo'
+            description: ListTenantsReply 批量查询租户响应。
+        tenant.v1.TenantInfo:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int32
+                name:
+                    type: string
+                status:
+                    type: string
+                    description: 'status 状态: active / disabled。'
+                createdBy:
+                    type: integer
+                    description: created_by 创建者用户ID; 0 表示未设置。
+                    format: int32
+                createdAt:
+                    type: string
+                updatedAt:
+                    type: string
+            description: TenantInfo 租户信息。
+        user.v1.UserInfo:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int32
+                username:
+                    type: string
+                name:
+                    type: string
+                status:
+                    type: string
+                    description: 'status 状态: active / disabled。'
+                currentTenantId:
+                    type: integer
+                    description: current_tenant_id 当前所在租户ID; 0 表示未设置。
+                    format: int32
+                createdAt:
+                    type: string
+                updatedAt:
+                    type: string
+            description: UserInfo 用户公开信息(不含 password_hash / api_key)。
+tags:
+    - name: Kuaishou
+      description: |-
+        Kuaishou 快手广告实体与报表批量查询服务。
+         所有列表接口统一采用基于 page_token 的游标分页, 支持名称/状态等过滤与按金额排序。
+    - name: Oceanengine
+      description: |-
+        Oceanengine 巨量广告实体与报表批量查询服务。
+         所有列表接口统一采用基于 page_token 的游标分页, 支持名称/状态等过滤与按金额/时间排序。
+    - name: Tenant
+      description: Tenant 租户(组织)服务。
+    - name: User
+      description: User 系统用户服务, 仅提供当前用户查询。

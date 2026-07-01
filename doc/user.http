@@ -1,0 +1,10 @@
+### User 用户 HTTP API Tests
+### Base URL: http://localhost:8000
+### Auth: Bearer adex_c93462599a6246a89f55a11b024b1a1a
+
+@baseUrl = http://localhost:8000
+@token = adex_c93462599a6246a89f55a11b024b1a1a
+
+### GetCurrentUser - 获取当前登录用户
+GET {{baseUrl}}/v1/users/me
+Authorization: Bearer {{token}}

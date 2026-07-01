@@ -53,7 +53,9 @@ func NewRootCmd(f *Factory) *cobra.Command {
 	root.PersistentFlags().String("format", "json", "output format: json (default) | pretty | table")
 	root.PersistentFlags().Bool("dry-run", false, "print request without executing")
 
+	root.AddCommand(newInitCmd(f))
 	root.AddCommand(newRawCmd(f))
+	root.AddCommand(newKsCmd(f))
 	root.AddCommand(newSkillCmd(f))
 
 	return root
@@ -103,7 +105,10 @@ func (f *Factory) resolveClient(cmd *cobra.Command) *client.Client {
 	if v, _ := cmd.Flags().GetString("base-url"); v != "" {
 		baseURL = v
 	}
-	f.Client = client.New(baseURL, client.WithErrOut(f.ErrOut))
+	f.Client = client.New(baseURL,
+		client.WithErrOut(f.ErrOut),
+		client.WithAPIKey(f.Config.Authorization),
+	)
 	return f.Client
 }
 

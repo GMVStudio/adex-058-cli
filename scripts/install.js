@@ -175,16 +175,21 @@ function install() {
   try {
     let lastErr;
     let downloaded = false;
+    const failedUrls = [];
     for (const url of downloadUrls) {
       try {
         download(url, archivePath);
         downloaded = true;
         break;
       } catch (e) {
+        failedUrls.push({ url, error: e.message });
         lastErr = e;
       }
     }
-    if (!downloaded) throw lastErr;
+    if (!downloaded) {
+      const details = failedUrls.map(f => `  ${f.url}\n    → ${f.error}`).join("\n");
+      throw new Error(`All download sources failed:\n${details}`);
+    }
 
     const expectedHash = getExpectedChecksum(archiveName);
     verifyChecksum(archivePath, expectedHash);

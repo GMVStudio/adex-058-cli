@@ -1,0 +1,14 @@
+### Tenant 租户 HTTP API Tests
+### Base URL: http://localhost:8000
+### Auth: Bearer adex_c93462599a6246a89f55a11b024b1a1a
+
+@baseUrl = http://localhost:8000
+@token = adex_c93462599a6246a89f55a11b024b1a1a
+
+### ListTenants - 批量查询租户
+GET {{baseUrl}}/v1/tenants?name=&status=active&page_size=20
+Authorization: Bearer {{token}}
+
+### ListTenants - 分页(透传 next_page_token)
+GET {{baseUrl}}/v1/tenants?page_token=&page_size=20
+Authorization: Bearer {{token}}

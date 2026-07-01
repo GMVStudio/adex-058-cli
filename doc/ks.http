@@ -1,0 +1,106 @@
+### Kuaishou 快手广告 HTTP API Tests
+### Base URL: http://localhost:8000
+### Auth: Bearer adex_c93462599a6246a89f55a11b024b1a1a
+
+@baseUrl = http://47.99.131.55:8000
+@token = adex_c93462599a6246a89f55a11b024b1a1a
+
+### ListKsAdAccounts - 分页查询快手广告账户
+GET {{baseUrl}}/v1/ks/ad-accounts?tenant_id=6&page_size=20
+Authorization: Bearer {{token}}
+
+### ListKsAdAccounts - 按余额降序
+GET {{baseUrl}}/v1/ks/ad-accounts?tenant_id=6&order_by=balance&order_desc=true&page_size=20
+Authorization: Bearer {{token}}
+
+### ListKsAccountReportDaily - 分页查询账户维度日粒度报表
+GET {{baseUrl}}/v1/ks/account-reports/daily?tenant_id=6&stat_date_begin=2026-07-01&stat_date_end=2026-07-31&page_size=20
+Authorization: Bearer {{token}}
+
+### ListKsCampaignEntity - 分页查询广告计划列表快照
+GET {{baseUrl}}/v1/ks/campaigns?tenant_id=6&page_size=20
+Authorization: Bearer {{token}}
+
+### ListKsCampaignReportDaily - 分页查询广告计划维度日粒度报表
+GET {{baseUrl}}/v1/ks/campaign-reports/daily?tenant_id=6&stat_date_begin=2026-07-01&stat_date_end=2026-07-31&page_size=20
+Authorization: Bearer {{token}}
+
+### ListKsUnitEntity - 分页查询广告组列表快照
+GET {{baseUrl}}/v1/ks/units?tenant_id=6&page_size=20
+Authorization: Bearer {{token}}
+
+### ListKsUnitReportDaily - 分页查询广告组维度日粒度报表
+GET {{baseUrl}}/v1/ks/unit-reports/daily?tenant_id=6&stat_date_begin=2026-07-01&stat_date_end=2026-07-31&page_size=20
+Authorization: Bearer {{token}}
+
+### ListKsCreativeEntity - 分页查询创意列表快照
+GET {{baseUrl}}/v1/ks/creatives?tenant_id=6&page_size=20
+Authorization: Bearer {{token}}
+
+### ListKsCreativeReportDaily - 分页查询创意维度日粒度报表
+GET {{baseUrl}}/v1/ks/creative-reports/daily?tenant_id=6&stat_date_begin=2026-07-01&stat_date_end=2026-07-31&page_size=20
+Authorization: Bearer {{token}}
+
+### ListKsReportMetricMeta - 分页查询报表指标元数据
+GET {{baseUrl}}/v1/ks/report-metric-meta?level=account&page_size=50
+Authorization: Bearer {{token}}
+
+### ListKsReportMetricMeta - 仅启用指标
+GET {{baseUrl}}/v1/ks/report-metric-meta?level=campaign&enabled=1&page_size=50
+Authorization: Bearer {{token}}
+
+### SumKsAccountReport - 账户维度区间总计(不分组)
+GET {{baseUrl}}/v1/ks/account-reports/summary?tenant_id=6&stat_date_begin=2026-06-01&stat_date_end=2026-06-30
+Authorization: Bearer {{token}}
+
+### SumKsAccountReport - 按 advertiser_id 分组, 花费降序
+GET {{baseUrl}}/v1/ks/account-reports/summary?tenant_id=6&stat_date_begin=2026-06-01&stat_date_end=2026-06-30&group_by=advertiser_id&order_by=charge&order_desc=true&page_size=20
+Authorization: Bearer {{token}}
+
+### SumKsCampaignReport - 按 campaign_id 分组, 近30天花费排名
+GET {{baseUrl}}/v1/ks/campaign-reports/summary?tenant_id=6&stat_date_begin=2026-06-01&stat_date_end=2026-06-30&group_by=campaign_id&order_by=charge&order_desc=true&page_size=20
+Authorization: Bearer {{token}}
+
+### SumKsUnitReport - 按 unit_id 分组, 花费降序
+GET {{baseUrl}}/v1/ks/unit-reports/summary?tenant_id=6&stat_date_begin=2026-06-01&stat_date_end=2026-06-30&group_by=unit_id&order_by=charge&order_desc=true&page_size=20
+Authorization: Bearer {{token}}
+
+### SumKsCreativeReport - 按 creative_id 分组, 花费降序
+GET {{baseUrl}}/v1/ks/creative-reports/summary?tenant_id=6&stat_date_begin=2026-06-01&stat_date_end=2026-06-30&group_by=creative_id&order_by=charge&order_desc=true&page_size=20
+Authorization: Bearer {{token}}
+
+### SumKsCampaignReport - 指定账户下按计划分组
+GET {{baseUrl}}/v1/ks/campaign-reports/summary?tenant_id=6&advertiser_id=111378075&stat_date_begin=2026-06-01&stat_date_end=2026-06-30&group_by=campaign_id&order_desc=true&page_size=20
+Authorization: Bearer {{token}}
+
+### TopKsCampaigns - 花费最高的 Top-10 广告计划(order_desc 默认 true)
+GET {{baseUrl}}/v1/ks/campaigns/top?tenant_id=6&stat_date_begin=2026-06-01&stat_date_end=2026-06-30&metric=charge&limit=10
+Authorization: Bearer {{token}}
+
+### TopKsUnits - 转化数最高的 Top-20 广告组
+GET {{baseUrl}}/v1/ks/units/top?tenant_id=6&stat_date_begin=2026-06-01&stat_date_end=2026-06-30&metric=conversion_num&limit=20
+Authorization: Bearer {{token}}
+
+### TopKsCreatives - 花费最高的 Top-10 创意
+GET {{baseUrl}}/v1/ks/creatives/top?tenant_id=6&stat_date_begin=2026-06-01&stat_date_end=2026-06-30&metric=charge&limit=10
+Authorization: Bearer {{token}}
+
+### TopKsCampaigns - 花费最低的 Top-5 计划(显式 order_desc=false)
+GET {{baseUrl}}/v1/ks/campaigns/top?tenant_id=6&stat_date_begin=2026-06-01&stat_date_end=2026-06-30&metric=charge&order_desc=false&limit=5
+Authorization: Bearer {{token}}
+
+### GetKsCampaign - 获取单个广告计划详情(含 detail 全字段)
+GET {{baseUrl}}/v1/ks/campaigns/9899931248?tenant_id=6
+Authorization: Bearer {{token}}
+
+### GetKsUnit - 获取单个广告组详情
+GET {{baseUrl}}/v1/ks/units/29638466721?tenant_id=6
+Authorization: Bearer {{token}}
+
+### GetKsCreative - 获取单个创意详情(biz_key 路径参数)
+GET {{baseUrl}}/v1/ks/creatives/p:29637782154?tenant_id=6
+Authorization: Bearer {{token}}
+
+### GetKsDashboard - 租户级总览(账户统计 + 区间汇总 + 账户排名)
+GET {{baseUrl}}/v1/ks/dashboard?tenant_id=6&stat_date_begin=2026-06-01&stat_date_end=2026-06-30&ranking_limit=10
+Authorization: Bearer {{token}}

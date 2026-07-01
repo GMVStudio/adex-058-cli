@@ -1,0 +1,94 @@
+### Oceanengine 巨量广告 HTTP API Tests
+### Base URL: http://localhost:8000
+### Auth: Bearer adex_c93462599a6246a89f55a11b024b1a1a
+
+@baseUrl = http://localhost:8000
+@token = adex_c93462599a6246a89f55a11b024b1a1a
+
+### ListOeAdAccounts - 分页查询巨量广告账户
+GET {{baseUrl}}/v1/oe/ad-accounts?tenant_id=6&page_size=20
+Authorization: Bearer {{token}}
+
+### ListOeAdAccounts - 按余额降序
+GET {{baseUrl}}/v1/oe/ad-accounts?tenant_id=6&order_by=balance&order_desc=true&page_size=20
+Authorization: Bearer {{token}}
+
+### ListOeAccountReportDaily - 分页查询账户维度日粒度报表
+GET {{baseUrl}}/v1/oe/account-reports/daily?tenant_id=6&stat_date_begin=2026-07-01&stat_date_end=2026-07-31&page_size=20
+Authorization: Bearer {{token}}
+
+### ListOeProjects - 分页查询巨量项目列表
+GET {{baseUrl}}/v1/oe/projects?tenant_id=6&page_size=20
+Authorization: Bearer {{token}}
+
+### ListOeProjectReportDaily - 分页查询项目维度日粒度报表
+GET {{baseUrl}}/v1/oe/project-reports/daily?tenant_id=6&stat_date_begin=2026-07-01&stat_date_end=2026-07-31&page_size=20
+Authorization: Bearer {{token}}
+
+### ListOeUnits - 分页查询巨量单元列表
+GET {{baseUrl}}/v1/oe/units?tenant_id=6&page_size=20
+Authorization: Bearer {{token}}
+
+### ListOeUnitReportDaily - 分页查询单元维度日粒度报表
+GET {{baseUrl}}/v1/oe/unit-reports/daily?tenant_id=6&stat_date_begin=2026-07-01&stat_date_end=2026-07-31&page_size=20
+Authorization: Bearer {{token}}
+
+### ListOeReportMetricMeta - 分页查询报表指标元数据
+GET {{baseUrl}}/v1/oe/report-metric-meta?level=account&page_size=50
+Authorization: Bearer {{token}}
+
+### ListOeReportMetricMeta - 仅启用指标
+GET {{baseUrl}}/v1/oe/report-metric-meta?level=project&enabled=1&page_size=50
+Authorization: Bearer {{token}}
+
+### SumOeAccountReport - 账户维度区间聚合(总计单行)
+GET {{baseUrl}}/v1/oe/account-reports/summary?tenant_id=6&stat_date_begin=2026-06-01&stat_date_end=2026-06-30
+Authorization: Bearer {{token}}
+
+### SumOeAccountReport - 按 advertiser_id 分组, 按花费降序
+GET {{baseUrl}}/v1/oe/account-reports/summary?tenant_id=6&stat_date_begin=2026-06-01&stat_date_end=2026-06-30&group_by=advertiser_id&order_by=charge&order_desc=true&page_size=20
+Authorization: Bearer {{token}}
+
+### SumOeProjectReport - 近30天各项目花费排名 + CPA + CTR
+GET {{baseUrl}}/v1/oe/project-reports/summary?tenant_id=6&stat_date_begin=2026-06-01&stat_date_end=2026-06-30&group_by=project_id&order_by=charge&order_desc=true&page_size=20
+Authorization: Bearer {{token}}
+
+### SumOeUnitReport - 按 promotion_id 分组, 按转化数降序
+GET {{baseUrl}}/v1/oe/unit-reports/summary?tenant_id=6&stat_date_begin=2026-06-01&stat_date_end=2026-06-30&group_by=promotion_id&order_by=convert_cnt&order_desc=true&page_size=20
+Authorization: Bearer {{token}}
+
+### TopOeProjects - 消耗最高的 10 个项目(默认按 charge 降序)
+GET {{baseUrl}}/v1/oe/projects/top?tenant_id=6&stat_date_begin=2026-06-01&stat_date_end=2026-06-30&limit=10
+Authorization: Bearer {{token}}
+
+### TopOeProjects - 转化最好的 5 个项目
+GET {{baseUrl}}/v1/oe/projects/top?tenant_id=6&stat_date_begin=2026-06-01&stat_date_end=2026-06-30&metric=convert_cnt&order_desc=true&limit=5
+Authorization: Bearer {{token}}
+
+### TopOeUnits - 消耗最高的 10 个单元
+GET {{baseUrl}}/v1/oe/units/top?tenant_id=6&stat_date_begin=2026-06-01&stat_date_end=2026-06-30&metric=charge&limit=10
+Authorization: Bearer {{token}}
+
+### TopOeUnits - 激活数最高的单元(限定 advertiser_id)
+GET {{baseUrl}}/v1/oe/units/top?tenant_id=6&advertiser_id=0&stat_date_begin=2026-06-01&stat_date_end=2026-06-30&metric=active&order_desc=true&limit=20
+Authorization: Bearer {{token}}
+
+### GetOeProject - 获取单个项目详情(含 meta JSON: 定向/出价/预算)
+GET {{baseUrl}}/v1/oe/projects/7650479670059647030?tenant_id=6
+Authorization: Bearer {{token}}
+
+### GetOeUnit - 获取单个单元详情(含 meta JSON: learning_phase/opt_status/出价)
+GET {{baseUrl}}/v1/oe/units/7650483929670156288?tenant_id=6
+Authorization: Bearer {{token}}
+
+### GetOeDashboard - 租户级总览(账户数/余额明细 + 区间汇总指标 + 账户排名)
+GET {{baseUrl}}/v1/oe/dashboard?tenant_id=6&stat_date_begin=2026-06-01&stat_date_end=2026-06-30
+Authorization: Bearer {{token}}
+
+### ListOeAccountBudgetVsActual - 各账户日预算 vs 区间日均实际消耗对比
+GET {{baseUrl}}/v1/oe/account-budget-vs-actual?tenant_id=6&stat_date_begin=2026-06-01&stat_date_end=2026-06-30
+Authorization: Bearer {{token}}
+
+### ListOeAccountBudgetVsActual - 指定单个账户
+GET {{baseUrl}}/v1/oe/account-budget-vs-actual?tenant_id=6&advertiser_id=1866874042754522&stat_date_begin=2026-06-01&stat_date_end=2026-06-30
+Authorization: Bearer {{token}}
