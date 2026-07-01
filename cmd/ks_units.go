@@ -56,8 +56,8 @@ Examples:
 	addJQFlag(cmd)
 
 	cmd.AddCommand(
-		newKsTopCmd(f, "units", "/v1/ks/units/top"),
-		newKsGetCmd(f, "unit", "unit_id", func(id string) string {
+		newTopCmd(f, "ks", "units", "/v1/ks/units/top"),
+		newGetCmd(f, "ks", "unit", "unit_id", func(id string) string {
 			return "/v1/ks/units/" + id
 		}),
 	)
