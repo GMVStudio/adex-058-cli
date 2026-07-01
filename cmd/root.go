@@ -26,16 +26,6 @@ const rootLong = `adex — ADEX CLI tool.
 USAGE:
     adex <command> [subcommand] [options]
 
-EXAMPLES:
-    # Query campaign daily report
-    adex raw campaign daily --tenant 6 --campaign C-618-001-619 --range 1d
-
-    # With pretty output
-    adex raw campaign daily --tenant 6 --range 1d --format pretty
-
-    # With table output
-    adex raw campaign daily --tenant 6 --range 1d --format table
-
 ENVIRONMENT:
     ADEX_API_BASE_URL  API base URL (default: http://localhost:8000)`
 
@@ -54,7 +44,6 @@ func NewRootCmd(f *Factory) *cobra.Command {
 	root.PersistentFlags().Bool("dry-run", false, "print request without executing")
 
 	root.AddCommand(newInitCmd(f))
-	root.AddCommand(newRawCmd(f))
 	root.AddCommand(newKsCmd(f))
 	root.AddCommand(newOeCmd(f))
 	root.AddCommand(newTenantCmd(f))

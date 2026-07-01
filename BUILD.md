@@ -165,7 +165,7 @@ npm view @gmvstudio/adex-cli version
 ```bash
 # npx 会跳过 postinstall 二进制下载
 # 首次执行命令时 run.js 会自动触发下载
-npx @gmvstudio/adex-cli raw campaign daily --tenant 6 --range 1d
+npx @gmvstudio/adex-cli --help
 
 # 交互式安装向导
 npx @gmvstudio/adex-cli install

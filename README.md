@@ -1,6 +1,6 @@
 # adex — ADEX CLI
 
-ADEX CLI tool for querying campaign reports and advertising data. Built for humans and AI Agents.
+ADEX CLI tool for querying advertising data. Built for humans and AI Agents.
 
 ## Installation & Quick Start
 
@@ -38,7 +38,7 @@ make install
 export ADEX_API_BASE_URL=http://your-api-host:8000
 
 # 2. Start using
-adex raw campaign daily --tenant 6 --range 1d
+adex ks dashboard --tenant 6
 ```
 
 ### Quick Start (AI Agent)
@@ -66,10 +66,10 @@ export ADEX_API_BASE_URL=http://your-api-host:8000
 **Step 3 — Verify**
 
 ```bash
-adex raw campaign daily --tenant 6 --range 1d --dry-run
+adex --help
 ```
 
-> `--dry-run` prints the request without executing, confirming the CLI is installed and configured correctly.
+> `--help` prints available commands, confirming the CLI is installed and configured correctly.
 
 ## Agent Skills
 
@@ -78,54 +78,34 @@ The CLI embeds AI Agent skills at build time, serving them via `adex skills` com
 | Skill | Description |
 |-------|-------------|
 | `adex-shared` | Setup, API endpoint configuration, output formats, error handling reference |
-| `adex-campaign` | Query campaign daily reports with filtering, sorting, and pagination |
 
 ```bash
 # List all skills
 adex skills list
 
 # Read a skill's SKILL.md
-adex skills read adex-campaign
+adex skills read adex-shared
 
 # Read as JSON envelope
-adex skills read adex-campaign --json
+adex skills read adex-shared --json
 ```
 
 ## Usage
 
 ```bash
-# Query campaign daily report
-adex raw campaign daily --tenant 6 --campaign C-618-001-619 --range 1d
+# Show available commands
+adex --help
 
-# With pretty JSON output
-adex raw campaign daily --tenant 6 --range 1d --format pretty
+# Query KS dashboard
+adex ks dashboard --tenant 6
 
-# With table output
-adex raw campaign daily --tenant 6 --range 1d --format table
-
-# Dry run (print request without executing)
-adex raw campaign daily --tenant 6 --range 1d --dry-run
-
-# Custom API base URL
-adex raw campaign daily --tenant 6 --range 1d --base-url http://api.example.com
+# Query OE dashboard
+adex oe dashboard --tenant 6
 ```
 
 ## Commands
 
-### `adex raw campaign daily`
-
-Query daily campaign reports.
-
-| Flag | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `--tenant` | int | yes | — | Tenant ID |
-| `--range` | string | yes | — | Time range: `1d`, `7d`, `1h`, `30m` |
-| `--campaign` | string | no | — | Campaign ID (numeric) or name pattern |
-| `--page` | int | no | 1 | Page number |
-| `--page-size` | int | no | 20 | Page size |
-| `--order-by` | string | no | charge | Sort field |
-| `--order-desc` | bool | no | true | Sort descending |
-| `--stat-hour` | int | no | -1 | Stat hour (-1 for latest) |
+Run `adex --help` to see all available commands and subcommands.
 
 ### Global Flags
 
@@ -157,14 +137,10 @@ adex-058-cli/
 │   ├── install-wizard.js           # interactive setup wizard (npx adex install)
 │   └── run.js                      # npm bin wrapper → delegates to binary
 ├── skills/
-│   ├── adex-shared/SKILL.md        # shared setup & config skill
-│   └── adex-campaign/SKILL.md      # campaign report query skill
+│   └── adex-shared/SKILL.md        # shared setup & config skill
 ├── cmd/
 │   ├── root.go                     # 根命令、全局 flags、类型化错误处理
 │   ├── skill.go                    # "skills" 命令组 (list/read)
-│   ├── raw.go                      # "raw" 命令组
-│   ├── raw_campaign.go             # "raw campaign" 子命令组
-│   └── raw_campaign_daily.go       # "raw campaign daily" 命令实现
 ├── errs/
 │   └── errs.go                     # 类型化错误分类体系 (RFC 7807 对齐)
 └── internal/

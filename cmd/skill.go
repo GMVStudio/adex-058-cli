@@ -60,7 +60,7 @@ func newSkillListCmd(f *Factory) *cobra.Command {
 		Use:   "list [name[/path]]",
 		Short: "List skills, or list one layer under a skill path (like ls)",
 		Example: `  adex skills list                      # all skills: name, description, version
-  adex skills list adex-campaign        # one layer under a skill (like ls)`,
+  adex skills list adex-shared          # one layer under a skill (like ls)`,
 		Args: cobra.ArbitraryArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) > 1 {
@@ -96,9 +96,9 @@ func newSkillReadCmd(f *Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "read <name>[/<path>] [path]",
 		Short: "Print a skill's SKILL.md, or a file under the skill (raw markdown by default)",
-		Example: `  adex skills read adex-campaign                             # the skill's SKILL.md
-  adex skills read adex-campaign/references/example.md        # a file under the skill
-  adex skills read adex-campaign --json                       # JSON envelope`,
+		Example: `  adex skills read adex-shared                             # the skill's SKILL.md
+  adex skills read adex-shared/references/example.md        # a file under the skill
+  adex skills read adex-shared --json                       # JSON envelope`,
 		Args: cobra.ArbitraryArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			name, relpath, err := parseSkillReadTarget(args)

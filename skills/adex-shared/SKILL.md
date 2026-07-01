@@ -40,14 +40,14 @@ export ADEX_API_BASE_URL=http://your-api-host:8000
 也可以在每条命令中通过 `--base-url` 标志覆盖：
 
 ```bash
-adex raw campaign daily --tenant 6 --range 1d --base-url http://your-api-host:8000
+adex ks dashboard --tenant 6 --base-url http://your-api-host:8000
 ```
 
 ## 验证
 
 ```bash
-# 使用 --dry-run 验证 CLI 是否正常工作（不会实际调用 API）
-adex raw campaign daily --tenant 6 --range 1d --dry-run
+# 使用 --help 验证 CLI 是否正常工作
+adex --help
 ```
 
 ## 输出格式
@@ -59,7 +59,7 @@ adex raw campaign daily --tenant 6 --range 1d --dry-run
 - `table`：表格输出
 
 ```bash
-adex raw campaign daily --tenant 6 --range 1d --format table
+adex ks dashboard --tenant 6 --format table
 ```
 
 ## 错误处理
