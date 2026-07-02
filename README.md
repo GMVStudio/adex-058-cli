@@ -80,7 +80,6 @@ The CLI embeds AI Agent skills at build time, serving them via `adex skills` com
 | `adex-shared` | Setup, API credentials, shared flags reference (pagination, jq, date range, output format, error handling) |
 | `adex-ks` | Kuaishou (快手) advertising data: accounts, campaigns, units, creatives, reports, top-N, metric meta, dashboard |
 | `adex-oe` | Oceanengine (巨量) advertising data: accounts, projects, units, reports, top-N, metric meta, dashboard, budget vs actual |
-| `adex-tenant-user` | Tenant listing with filters and current user info |
 
 ```bash
 # List all skills
@@ -90,7 +89,6 @@ adex skills list
 adex skills read adex-shared
 adex skills read adex-ks
 adex skills read adex-oe
-adex skills read adex-tenant-user
 
 # Read as JSON envelope
 adex skills read adex-shared --json
@@ -214,8 +212,7 @@ adex-058-cli/
 ├── skills/
 │   ├── adex-shared/SKILL.md        # shared setup, config & flags reference
 │   ├── adex-ks/SKILL.md            # Kuaishou advertising data skill
-│   ├── adex-oe/SKILL.md            # Oceanengine advertising data skill
-│   └── adex-tenant-user/SKILL.md   # tenant & user management skill
+│   └── adex-oe/SKILL.md            # Oceanengine advertising data skill
 ├── cmd/
 │   ├── root.go                     # 根命令、全局 flags、类型化错误处理
 │   ├── init.go                     # "init" 命令 — 绑定 API Key
