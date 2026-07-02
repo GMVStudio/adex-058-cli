@@ -8,6 +8,14 @@ import (
 	"github.com/gmvstudio/adex-cli/internal/vfs"
 )
 
+func (u *Updater) resolveExe() (string, error) {
+	exe, err := vfs.Default.Executable()
+	if err != nil {
+		return "", err
+	}
+	return vfs.Default.EvalSymlinks(exe)
+}
+
 func (u *Updater) PrepareSelfReplace() (restore func(), err error) {
 	noop := func() {}
 

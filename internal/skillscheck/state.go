@@ -41,12 +41,12 @@ func ReadState() (*SkillsState, bool, error) {
 
 	var raw map[string]interface{}
 	if err := json.Unmarshal(data, &raw); err != nil {
-		return nil, false, fmt.Errorf("%w: %v", ErrUnreadableState, err)
+		return nil, false, fmt.Errorf("%w: %w", ErrUnreadableState, err)
 	}
 
 	var state SkillsState
 	if err := json.Unmarshal(data, &state); err != nil {
-		return nil, false, fmt.Errorf("%w: %v", ErrUnreadableState, err)
+		return nil, false, fmt.Errorf("%w: %w", ErrUnreadableState, err)
 	}
 	return &state, true, nil
 }

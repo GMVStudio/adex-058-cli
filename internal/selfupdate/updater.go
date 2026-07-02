@@ -303,11 +303,3 @@ func Truncate(s string, maxLen int) string {
 	}
 	return string(r[len(r)-maxLen:])
 }
-
-func (u *Updater) resolveExe() (string, error) {
-	exe, err := vfs.Default.Executable()
-	if err != nil {
-		return "", err
-	}
-	return vfs.Default.EvalSymlinks(exe)
-}
