@@ -155,7 +155,7 @@ func doManualUpdate(f *Factory, jsonOut bool, cur, latest string, detect selfupd
 	fmt.Fprintf(f.ErrOut, "To update manually, download the latest release:\n")
 	fmt.Fprintf(f.ErrOut, "  Release:   %s\n", releaseURL(latest))
 	fmt.Fprintf(f.ErrOut, "  Changelog: %s\n", changelogURL())
-	fmt.Fprintf(f.ErrOut, "\nOr install via npm:\n  npm install -g %s@%s\n  npx skills add https://adex-skills.oss-cn-hangzhou.aliyuncs.com -y -g   # sync skills separately\n", selfupdate.NpmPackage, latest)
+	fmt.Fprintf(f.ErrOut, "\nOr install via npm:\n  npm install -g %s@%s\n  npx skills add https://adex-skills.oss-cn-hangzhou.aliyuncs.com -y   # sync skills separately\n", selfupdate.NpmPackage, latest)
 	emitSkillsTextHints(f, skillsResult)
 	return nil
 }

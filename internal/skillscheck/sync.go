@@ -377,7 +377,12 @@ func listLocalSkills(runner SkillsRunner) ([]string, bool) {
 }
 
 func fallbackFullInstall(opts SyncOptions, reason string, official []string) *SyncResult {
-	installResult := opts.Runner.InstallAllSkills()
+	var installResult *selfupdate.NpmResult
+	if len(official) > 0 {
+		installResult = opts.Runner.InstallSkill(official)
+	} else {
+		installResult = opts.Runner.InstallAllSkills()
+	}
 	if installResult == nil {
 		return &SyncResult{
 			Action: "fallback_failed",

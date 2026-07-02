@@ -3,6 +3,7 @@ package config
 import (
 	"errors"
 	"io/fs"
+	"strings"
 	"testing"
 
 	"github.com/gmvstudio/adex-cli/errs"
@@ -27,6 +28,28 @@ func TestSaveReturnsTypedErrorOnWriteFailure(t *testing.T) {
 	}
 	if ie.Subtype != errs.SubtypeFileIO {
 		t.Errorf("subtype = %q, want file_io", ie.Subtype)
+	}
+}
+
+func TestSaveReturnsHintOnWriteFailure(t *testing.T) {
+	t.Setenv("ADEX_CONFIG_DIR", t.TempDir())
+	orig := vfs.Default
+	vfs.Default = failFS{}
+	defer func() { vfs.Default = orig }()
+
+	err := Save(&Config{BaseURL: "http://x"})
+	var ie *errs.InternalError
+	if !errors.As(err, &ie) {
+		t.Fatalf("error type = %T, want *errs.InternalError", err)
+	}
+	if ie.Hint == "" {
+		t.Error("Hint is empty, expected actionable recovery hint")
+	}
+	if !strings.Contains(ie.Hint, "ADEX_CONFIG_DIR") {
+		t.Errorf("Hint = %q, expected to mention ADEX_CONFIG_DIR", ie.Hint)
+	}
+	if ie.Cause == nil {
+		t.Error("Cause is nil, expected underlying error to be preserved")
 	}
 }
 

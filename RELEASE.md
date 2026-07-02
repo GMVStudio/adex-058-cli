@@ -312,7 +312,7 @@ Skills 文件托管在阿里云 OSS 上，供 `npx skills add` 通过 well-known
            │
            ▼
     用户 / AI Agent 运行:
-    npx -y skills add https://adex-skills.oss-cn-hangzhou.aliyuncs.com -g -y
+    npx -y skills add https://adex-skills.oss-cn-hangzhou.aliyuncs.com -y
 ```
 
 ### 关键组件
@@ -363,7 +363,7 @@ curl -s https://adex-skills.oss-cn-hangzhou.aliyuncs.com/.well-known/skills/inde
 curl -s https://adex-skills.oss-cn-hangzhou.aliyuncs.com/.well-known/skills/adex-shared/SKILL.md | head -10
 
 # 完整安装测试
-npx -y skills add https://adex-skills.oss-cn-hangzhou.aliyuncs.com -g -y
+npx -y skills add https://adex-skills.oss-cn-hangzhou.aliyuncs.com -y
 ```
 
 ### 前置条件

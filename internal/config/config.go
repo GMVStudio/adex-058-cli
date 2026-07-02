@@ -34,7 +34,7 @@ func Dir() string {
 		return v
 	}
 	home, err := vfs.Default.UserHomeDir()
-	if err != nil {
+	if err != nil || home == "" {
 		return ".adex"
 	}
 	return filepath.Join(home, ".adex")
@@ -79,7 +79,10 @@ func Save(cfg *Config) error {
 	dir := Dir()
 	if err := vfs.Default.MkdirAll(dir, 0o700); err != nil {
 		return errs.NewInternalError(errs.SubtypeFileIO,
-			"failed to create config dir %q: %v", dir, err).WithCause(err)
+			"failed to create config dir %q: %v", dir, err).
+			WithCause(err).
+			WithHint("set ADEX_CONFIG_DIR to a writable directory (e.g. /tmp/adex), " +
+				"or skip adex init and use env vars: ADEX_AUTHORIZATION and ADEX_API_BASE_URL")
 	}
 	data, err := json.MarshalIndent(cfg, "", "  ")
 	if err != nil {
@@ -88,7 +91,10 @@ func Save(cfg *Config) error {
 	}
 	if err := vfs.Default.WriteFile(Path(), data, 0o600); err != nil {
 		return errs.NewInternalError(errs.SubtypeFileIO,
-			"failed to write config %q: %v", Path(), err).WithCause(err)
+			"failed to write config %q: %v", Path(), err).
+			WithCause(err).
+			WithHint("set ADEX_CONFIG_DIR to a writable directory (e.g. /tmp/adex), " +
+				"or skip adex init and use env vars: ADEX_AUTHORIZATION and ADEX_API_BASE_URL")
 	}
 	return nil
 }

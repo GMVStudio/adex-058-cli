@@ -127,7 +127,8 @@ func (f *Factory) requireAuth() error {
 	if f.Config.Authorization == "" {
 		return errs.NewValidationError(errs.SubtypeMissingConfig,
 			"no API key configured").
-			WithHint(`run 'adex init --authorization "Bearer <key>"' to bind your API key`)
+			WithHint(`run 'adex init --authorization "Bearer <key>"' to bind your API key, ` +
+				`or set env var ADEX_AUTHORIZATION to skip file-based config`)
 	}
 	return nil
 }

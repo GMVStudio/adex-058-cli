@@ -3,6 +3,7 @@ package cmd
 import (
 	"bytes"
 	"errors"
+	"strings"
 	"testing"
 
 	"github.com/gmvstudio/adex-cli/errs"
@@ -156,6 +157,7 @@ func TestInvalidJqRejected(t *testing.T) {
 
 // TestMissingConfigError asserts that running a command without --dry-run and
 // no API key returns a missing_config validation error, not a network error.
+// It also verifies the hint mentions the env var alternative for sandbox agents.
 func TestMissingConfigError(t *testing.T) {
 	var out, errOut bytes.Buffer
 	f := &Factory{
@@ -178,5 +180,8 @@ func TestMissingConfigError(t *testing.T) {
 	}
 	if ve.Subtype != errs.SubtypeMissingConfig {
 		t.Errorf("subtype = %q, want %q", ve.Subtype, errs.SubtypeMissingConfig)
+	}
+	if !strings.Contains(ve.Hint, "ADEX_AUTHORIZATION") {
+		t.Errorf("hint = %q, expected to mention ADEX_AUTHORIZATION for sandbox recovery", ve.Hint)
 	}
 }

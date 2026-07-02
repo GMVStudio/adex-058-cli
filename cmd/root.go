@@ -29,7 +29,9 @@ USAGE:
     adex <command> [subcommand] [options]
 
 ENVIRONMENT:
-    ADEX_API_BASE_URL  API base URL (default: http://localhost:8000)`
+    ADEX_API_BASE_URL     API base URL (default: http://localhost:8000)
+    ADEX_AUTHORIZATION    API key (skips adex init; useful in sandboxes)
+    ADEX_CONFIG_DIR       Config directory (default: ~/.adex; override for sandbox/CI)`
 
 // NewRootCmd creates the root cobra command.
 func NewRootCmd(f *Factory) *cobra.Command {
