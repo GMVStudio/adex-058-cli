@@ -122,6 +122,16 @@ func setInt(params map[string]interface{}, key string, val, skip int) {
 	}
 }
 
+// requireAuth returns a missing_config error when no API key is configured.
+func (f *Factory) requireAuth() error {
+	if f.Config.Authorization == "" {
+		return errs.NewValidationError(errs.SubtypeMissingConfig,
+			"no API key configured").
+			WithHint(`run 'adex init --authorization "Bearer <key>"' to bind your API key`)
+	}
+	return nil
+}
+
 // ---------------------------------------------------------------------------
 // Request execution
 // ---------------------------------------------------------------------------
@@ -158,6 +168,9 @@ func (f *Factory) runList(cmd *cobra.Command, path string, params map[string]int
 	}
 	if f.dryRun(cmd, path, params) {
 		return nil
+	}
+	if err := f.requireAuth(); err != nil {
+		return err
 	}
 
 	c := f.resolveClient(cmd)
@@ -205,6 +218,9 @@ func (f *Factory) runSingle(cmd *cobra.Command, path string, params map[string]i
 	}
 	if f.dryRun(cmd, path, params) {
 		return nil
+	}
+	if err := f.requireAuth(); err != nil {
+		return err
 	}
 
 	c := f.resolveClient(cmd)

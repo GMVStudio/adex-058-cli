@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/gmvstudio/adex-cli/errs"
+	"github.com/gmvstudio/adex-cli/internal/config"
 )
 
 // TestDryRunPaths asserts that each command builds the expected request path
@@ -150,5 +151,32 @@ func TestInvalidJqRejected(t *testing.T) {
 	var ve *errs.ValidationError
 	if !errors.As(res.ExecErr, &ve) {
 		t.Fatalf("error type = %T, want *errs.ValidationError", res.ExecErr)
+	}
+}
+
+// TestMissingConfigError asserts that running a command without --dry-run and
+// no API key returns a missing_config validation error, not a network error.
+func TestMissingConfigError(t *testing.T) {
+	var out, errOut bytes.Buffer
+	f := &Factory{
+		Config: &config.Config{BaseURL: "http://test.local", Authorization: ""},
+		Out:    &out,
+		ErrOut: &errOut,
+	}
+	root := NewRootCmd(f)
+	root.SetOut(&out)
+	root.SetErr(&errOut)
+	root.SetArgs([]string{"tenant"})
+
+	err := root.Execute()
+	if err == nil {
+		t.Fatal("expected missing_config error when Authorization is empty")
+	}
+	var ve *errs.ValidationError
+	if !errors.As(err, &ve) {
+		t.Fatalf("error type = %T, want *errs.ValidationError", err)
+	}
+	if ve.Subtype != errs.SubtypeMissingConfig {
+		t.Errorf("subtype = %q, want %q", ve.Subtype, errs.SubtypeMissingConfig)
 	}
 }

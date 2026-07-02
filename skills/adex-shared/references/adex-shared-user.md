@@ -23,6 +23,9 @@ adex user --jq '.username'
 
 # pretty 格式输出
 adex user --format pretty
+
+# 预览请求但不执行
+adex user --dry-run
 ```
 
 ## Flags
@@ -31,6 +34,7 @@ adex user --format pretty
 |------|------|--------|------|
 | `--jq` | string | — | jq 表达式过滤输出 |
 | `--format` | enum | `json` | `json` / `pretty` / `table` |
+| `--dry-run` | bool | false | 打印请求但不执行 |
 
 > 此命令**没有** `--tenant`、`--page-size`、`--page-token`、`--page-all`、`--order-by`、`--order-desc` flags。它返回单个对象，不是列表。
 

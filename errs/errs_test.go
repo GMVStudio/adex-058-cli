@@ -61,6 +61,7 @@ func TestRenderEnvelopeTyped(t *testing.T) {
 			Subtype string `json:"subtype"`
 			Message string `json:"message"`
 			Hint    string `json:"hint"`
+			Param   string `json:"param"`
 		} `json:"error"`
 	}
 	if e := json.Unmarshal(RenderEnvelope(err), &env); e != nil {
@@ -77,6 +78,9 @@ func TestRenderEnvelopeTyped(t *testing.T) {
 	}
 	if env.Error.Hint != "try again" {
 		t.Errorf("hint = %q", env.Error.Hint)
+	}
+	if env.Error.Param != "--tenant" {
+		t.Errorf("param = %q, want --tenant", env.Error.Param)
 	}
 }
 

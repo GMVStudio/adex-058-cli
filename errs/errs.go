@@ -225,12 +225,24 @@ func ProblemOf(err error) (*Problem, bool) {
 
 // Envelope is the JSON error envelope written to stderr.
 type Envelope struct {
-	OK    bool     `json:"ok"`
-	Error *Problem `json:"error"`
+	OK    bool        `json:"ok"`
+	Error interface{} `json:"error"`
 }
 
 // RenderEnvelope serializes a typed error into the JSON stderr envelope.
+// It preserves type-specific fields (e.g. ValidationError.Param) by marshaling
+// the concrete typed error when possible, instead of just the embedded Problem.
 func RenderEnvelope(err error) []byte {
+	// ValidationError has a Param field not present on Problem; marshal the
+	// full struct so param reaches the JSON output.
+	var ve *ValidationError
+	if errors.As(err, &ve) {
+		b, _ := json.Marshal(Envelope{OK: false, Error: ve})
+		return b
+	}
+
+	// Other typed errors (NetworkError, InternalError, APIError, AuthError) have
+	// no fields beyond Problem, so ProblemOf is sufficient.
 	prob, ok := ProblemOf(err)
 	if !ok {
 		prob = &Problem{
@@ -239,8 +251,7 @@ func RenderEnvelope(err error) []byte {
 			Message:  err.Error(),
 		}
 	}
-	env := Envelope{OK: false, Error: prob}
-	b, _ := json.Marshal(env)
+	b, _ := json.Marshal(Envelope{OK: false, Error: prob})
 	return b
 }
 

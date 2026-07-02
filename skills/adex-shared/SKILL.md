@@ -37,14 +37,14 @@ metadata:
 npm install -g @gmvstudio/adex-cli
 
 # 安装 CLI SKILL（必需）
-npx -y skills add https://adex-skills.oss-cn-hangzhou.aliyuncs.com -g -y
+npx skills add https://adex-skills.oss-cn-hangzhou.aliyuncs.com -y -g
 ```
 
 ### 从源码安装
 
 ```bash
-git clone https://github.com/gmvstudio/adex-cli.git
-cd adex-cli
+git clone https://github.com/GMVStudio/adex-058-cli.git
+cd adex-058-cli
 make install
 ```
 
@@ -109,6 +109,7 @@ adex
 │   └── account-budget-vs-actual # 预算 vs 实际消耗
 ├── tenant                    # 租户列表 → 本 Skill
 ├── user                      # 当前用户信息 → 本 Skill
+├── update                    # 更新 CLI 和 Skill
 └── skills                    # 嵌入式 Skill 内容
     ├── list                  # 列出所有 Skill
     └── read                  # 读取 Skill 内容
