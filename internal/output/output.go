@@ -46,6 +46,7 @@ func Print(w io.Writer, errOut io.Writer, data interface{}, format Format, colum
 }
 
 func printJSON(w io.Writer, data interface{}) error {
+	InjectNotice(data)
 	b, err := json.Marshal(data)
 	if err != nil {
 		return err
@@ -55,6 +56,7 @@ func printJSON(w io.Writer, data interface{}) error {
 }
 
 func printPretty(w io.Writer, data interface{}) error {
+	InjectNotice(data)
 	b, err := json.MarshalIndent(data, "", "  ")
 	if err != nil {
 		return err
@@ -142,6 +144,39 @@ func printTable(w io.Writer, errOut io.Writer, data interface{}, columns []strin
 	}
 
 	return nil
+}
+
+// PendingNotice, if set, returns system-level notices to inject as the
+// "_notice" field in JSON output envelopes. Set by cmd/root.go.
+var PendingNotice func() map[string]interface{}
+
+// GetNotice returns the current pending notice, or nil.
+func GetNotice() map[string]interface{} {
+	if PendingNotice == nil {
+		return nil
+	}
+	return PendingNotice()
+}
+
+// injectNotice adds a "_notice" field into map[string]interface{} data that
+// has an "ok" key (envelope-style responses). Non-map data or maps without
+// "ok" are left untouched.
+func InjectNotice(data interface{}) {
+	if PendingNotice == nil {
+		return
+	}
+	m, ok := data.(map[string]interface{})
+	if !ok {
+		return
+	}
+	if _, isEnvelope := m["ok"]; !isEnvelope {
+		return
+	}
+	notice := PendingNotice()
+	if notice == nil {
+		return
+	}
+	m["_notice"] = notice
 }
 
 func autoColumns(items []interface{}) []string {

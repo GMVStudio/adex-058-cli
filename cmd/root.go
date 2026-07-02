@@ -9,7 +9,9 @@ import (
 	"github.com/gmvstudio/adex-cli/internal/build"
 	"github.com/gmvstudio/adex-cli/internal/client"
 	"github.com/gmvstudio/adex-cli/internal/config"
+	"github.com/gmvstudio/adex-cli/internal/output"
 	"github.com/gmvstudio/adex-cli/internal/skillscheck"
+	"github.com/gmvstudio/adex-cli/internal/update"
 	"github.com/spf13/cobra"
 )
 
@@ -63,7 +65,7 @@ func Execute() int {
 		ErrOut: os.Stderr,
 	}
 
-	skillscheck.Init(build.Version)
+	setupNotices()
 
 	root := NewRootCmd(f)
 
@@ -72,6 +74,62 @@ func Execute() int {
 		return handleError(f, err)
 	}
 	return 0
+}
+
+// setupNotices wires both the binary update notice and the skills
+// staleness notice into output.PendingNotice as a composed function.
+func setupNotices() {
+	// Binary update — synchronous cache check + async refresh
+	if info := update.CheckCached(build.Version); info != nil {
+		update.SetPending(info)
+	}
+	ver := build.Version
+	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				fmt.Fprintf(os.Stderr, "update check panic: %v\n", r)
+			}
+		}()
+		update.RefreshCache(ver)
+		if update.GetPending() == nil {
+			if info := update.CheckCached(ver); info != nil {
+				update.SetPending(info)
+			}
+		}
+	}()
+
+	// Skills check — synchronous, local-only (no network, no goroutine).
+	skillscheck.Init(build.Version)
+
+	// Composed notice provider — emits keys only when each pending is set.
+	output.PendingNotice = composePendingNotice
+}
+
+// composePendingNotice merges all process-level pending notices (available
+// update, skills/binary drift) into the map surfaced as the JSON "_notice"
+// envelope field. Returns nil when nothing is pending.
+func composePendingNotice() map[string]interface{} {
+	notice := map[string]interface{}{}
+	if info := update.GetPending(); info != nil {
+		notice["update"] = map[string]interface{}{
+			"current": info.Current,
+			"latest":  info.Latest,
+			"message": info.Message(),
+			"command": "adex update",
+		}
+	}
+	if stale := skillscheck.GetPending(); stale != nil {
+		notice["skills"] = map[string]interface{}{
+			"current": stale.Current,
+			"target":  stale.Target,
+			"message": stale.Message(),
+			"command": "adex update",
+		}
+	}
+	if len(notice) == 0 {
+		return nil
+	}
+	return notice
 }
 
 // handleError dispatches a command error to the typed envelope writer

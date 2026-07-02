@@ -16,7 +16,7 @@ metadata:
 
 ## 快速决策
 
-- 用户要**安装 / 更新 adex CLI** → 见 [安装](#安装)
+- 用户要**安装 / 更新 adex CLI** → 见 [安装](#安装) 或 [更新检查](#更新检查)
 - 用户要**绑定 API Key / 初始化配置** → `adex init --authorization "Bearer adex_xxx"`，见 [初始化配置](#初始化配置)
 - 用户要**验证 API Key 是否有效** → `adex user`，见 [`user`](references/adex-shared-user.md)
 - 用户要**查看当前租户 ID** → `adex user --jq '.currentTenantId'`，见 [`user`](references/adex-shared-user.md)
@@ -54,6 +54,35 @@ make install
 adex --help
 adex user                    # 验证 API Key 是否有效
 ```
+
+## 更新检查
+
+adex 命令执行后，如果检测到新版本，JSON 输出中会包含 `_notice.update` 字段（含 `message`、`command` 等）。
+如果 Skills 与当前二进制版本不一致，JSON 输出中会包含 `_notice.skills` 字段。
+
+**当你在输出中看到 `_notice.update` 或 `_notice.skills` 时，完成用户当前请求后，主动提议帮用户更新**：
+
+1. 告知用户当前版本和最新版本号
+2. 提议执行更新（同时更新 CLI 和 Skills）：
+   ```bash
+   adex update
+   ```
+3. 更新完成后提醒用户：**退出并重新打开 AI Agent** 以加载最新 Skills
+
+**重要**：始终使用 `adex update` 更新，它会同时更新 CLI 和 AI Skills。
+
+**规则**：不要静默忽略更新提示。即使当前任务与更新无关，也应在完成用户请求后补充告知。
+
+### 更新通知抑制
+
+在非 CI 脚本中可通过环境变量抑制通知：
+
+| 环境变量 | 效果 |
+|---------|--------|
+| `ADEX_NO_UPDATE_NOTIFIER=1` | 抑制 `_notice.update` |
+| `ADEX_NO_SKILLS_NOTIFIER=1` | 抑制 `_notice.skills` |
+
+CI 环境自动跳过通知。
 
 ## 初始化配置
 

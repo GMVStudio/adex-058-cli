@@ -7,6 +7,7 @@ import (
 	"io/fs"
 
 	"github.com/gmvstudio/adex-cli/errs"
+	"github.com/gmvstudio/adex-cli/internal/output"
 	"github.com/gmvstudio/adex-cli/internal/skillcontent"
 	"github.com/spf13/cobra"
 )
@@ -153,5 +154,12 @@ func parseSkillReadTarget(args []string) (name, relpath string, err error) {
 
 func printJSON(w io.Writer, v interface{}) {
 	b, _ := json.Marshal(v)
+	if output.GetNotice() != nil {
+		var m map[string]interface{}
+		if json.Unmarshal(b, &m) == nil {
+			output.InjectNotice(m)
+			b, _ = json.Marshal(m)
+		}
+	}
 	fmt.Fprintln(w, string(b))
 }

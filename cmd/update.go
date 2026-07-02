@@ -1,19 +1,16 @@
 package cmd
 
 import (
-	"context"
-	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
 	"runtime"
 	"strings"
-	"time"
 
 	"github.com/gmvstudio/adex-cli/errs"
 	"github.com/gmvstudio/adex-cli/internal/build"
+	"github.com/gmvstudio/adex-cli/internal/output"
 	"github.com/gmvstudio/adex-cli/internal/selfupdate"
 	"github.com/gmvstudio/adex-cli/internal/skillscheck"
+	"github.com/gmvstudio/adex-cli/internal/update"
 	"github.com/spf13/cobra"
 )
 
@@ -24,7 +21,7 @@ const (
 )
 
 var (
-	fetchLatest    = fetchLatestVersion
+	fetchLatest    = update.FetchLatest
 	currentVersion = func() string { return build.Version }
 	currentOS      = runtime.GOOS
 	newUpdater     = func() *selfupdate.Updater { return selfupdate.New() }
@@ -73,55 +70,6 @@ func symArrow() string {
 	return "→"
 }
 
-func fetchLatestVersion() (string, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
-	defer cancel()
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet,
-		"https://registry.npmjs.org/"+selfupdate.NpmPackage+"/latest", nil)
-	if err != nil {
-		return "", err
-	}
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return "", err
-	}
-	defer resp.Body.Close()
-	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("npm registry returned HTTP %d", resp.StatusCode)
-	}
-	body, err := io.ReadAll(io.LimitReader(resp.Body, 1<<20))
-	if err != nil {
-		return "", err
-	}
-	var info struct {
-		Version string `json:"version"`
-	}
-	if err := json.Unmarshal(body, &info); err != nil {
-		return "", err
-	}
-	if info.Version == "" {
-		return "", fmt.Errorf("no version in registry response")
-	}
-	return info.Version, nil
-}
-
-func isNewer(latest, current string) bool {
-	latest = normalizeVersion(latest)
-	current = normalizeVersion(current)
-	var la, cu [3]int
-	fmt.Sscanf(latest, "%d.%d.%d", &la[0], &la[1], &la[2])
-	fmt.Sscanf(current, "%d.%d.%d", &cu[0], &cu[1], &cu[2])
-	for i := 0; i < 3; i++ {
-		if la[i] > cu[i] {
-			return true
-		}
-		if la[i] < cu[i] {
-			return false
-		}
-	}
-	return false
-}
-
 func newUpdateCmd(f *Factory) *cobra.Command {
 	var jsonOut bool
 	var force bool
@@ -155,6 +103,7 @@ func updateRun(f *Factory, jsonOut, force, check bool) error {
 	if !check {
 		updater.CleanupStaleFiles()
 	}
+	output.PendingNotice = nil
 
 	latest, err := fetchLatest()
 	if err != nil {
@@ -162,7 +111,12 @@ func updateRun(f *Factory, jsonOut, force, check bool) error {
 			"failed to check latest version: %s", err).WithCause(err)
 	}
 
-	if !force && !isNewer(latest, cur) {
+	if update.ParseVersion(latest) == nil {
+		return errs.NewInternalError(errs.SubtypeInvalidResponse,
+			"invalid version from registry: %s", latest)
+	}
+
+	if !force && !update.IsNewer(latest, cur) {
 		var skillsResult *skillscheck.SyncResult
 		if !check {
 			skillsResult = runSkillsAndState(updater, f, cur, force)

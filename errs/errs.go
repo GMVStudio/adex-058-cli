@@ -28,6 +28,7 @@ const (
 	SubtypeUnknown          Subtype = "unknown"
 	SubtypeAPIError         Subtype = "api_error"
 	SubtypeAuthRequired     Subtype = "auth_required"
+	SubtypeInvalidResponse  Subtype = "invalid_response"
 )
 
 // formatMessage applies fmt.Sprintf only when args are present, so a caller
