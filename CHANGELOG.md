@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.2.5] - 2026-07-02
+
+### Added
+- `adex update` command — self-update CLI binary via npm and sync embedded skills
+- `internal/update` package with full update lifecycle (npm update, skills sync, binary replacement)
+- Update notice (`_notice.update`) in JSON output when a newer version is available
+- Skills sync notice (`_notice.skills`) when locally installed skills are out of sync
+- `internal/output` support for notice fields in JSON envelope
+- Error taxonomy extended with new subtypes for update-related failures
+- `adex-shared` skill updated with `adex update` command documentation
+
+### Fixed
+- Bug in `runList` / `runSingle` check logic causing incorrect error handling
+- CI workflow adjustment for test execution
+
 ## [0.2.4] - 2026-07-01
 
 ### Added
