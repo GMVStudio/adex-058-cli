@@ -1,6 +1,6 @@
 ---
 name: adex-shared
-version: 0.3.0
+version: 0.4.0
 description: "Use when first setting up adex CLI, configuring API credentials, or needing shared flags reference (pagination, jq, date range, output format, error handling). Also covers tenant listing with filters and current user info query."
 metadata:
   requires:
@@ -10,7 +10,23 @@ metadata:
 
 # adex CLI 共享规则
 
-本技能指导你如何通过 adex CLI 查询广告投放数据。开始前必读。
+**CRITICAL — 本 Skill 是 adex-ks 和 adex-oe 的前置必读。** 安装、认证、共享 flags（分页、日期范围、jq、输出格式、错误处理）全部在此文档中。ks/oe Skill 不重复这些内容。
+
+> **大多数命令需要 `--tenant`。** 如果不知道租户 ID，先执行 `adex user --jq '.currentTenantId'` 或 `adex tenant --format table` 查询。
+
+## 快速决策
+
+- 用户要**安装 / 更新 adex CLI** → 见 [安装](#安装)
+- 用户要**绑定 API Key / 初始化配置** → `adex init --authorization "Bearer adex_xxx"`，见 [初始化配置](#初始化配置)
+- 用户要**验证 API Key 是否有效** → `adex user`，见 [`user`](references/adex-shared-user.md)
+- 用户要**查看当前租户 ID** → `adex user --jq '.currentTenantId'`，见 [`user`](references/adex-shared-user.md)
+- 用户要**列出 / 搜索租户** → `adex tenant --name "关键词" --format table`，见 [`tenant`](references/adex-shared-tenant.md)
+- 用户要**查看所有可用命令** → `adex --help` 或见 [命令树总览](#命令树总览)
+- 用户要**了解某个命令的 flags** → `adex <command> --help` 或见 [共享 Flags](#共享-flags)
+- 用户要**调试请求** → 加 `--dry-run` 打印请求路径和参数，见 [Dry-Run](#dry-run)
+- 用户遇到**报错** → 见 [错误处理](#错误处理)，根据 `type` / `subtype` 判断原因
+- 用户要**查快手广告数据** → 路由到 [`adex-ks`](../adex-ks/SKILL.md)
+- 用户要**查巨量引擎广告数据** → 路由到 [`adex-oe`](../adex-oe/SKILL.md)
 
 ## 安装
 
@@ -30,6 +46,13 @@ npx -y skills add https://adex-skills.oss-cn-hangzhou.aliyuncs.com -g -y
 git clone https://github.com/gmvstudio/adex-cli.git
 cd adex-cli
 make install
+```
+
+### 验证安装
+
+```bash
+adex --help
+adex user                    # 验证 API Key 是否有效
 ```
 
 ## 初始化配置
@@ -56,21 +79,14 @@ adex init --authorization adex_c93462599a6246a89f55a11b024b1a1a --base-url http:
 | `ADEX_AUTHORIZATION` | — | API key（自动去 Bearer 前缀） |
 | `ADEX_CONFIG_DIR` | `~/.adex` | 配置目录（测试用） |
 
-环境变量优先于配置文件；`--base-url` 标志优先于环境变量。
-
-## 验证
-
-```bash
-adex --help
-adex user                    # 验证 API Key 是否有效
-```
+优先级：`--base-url` 标志 > 环境变量 > 配置文件 > 默认值。
 
 ## 命令树总览
 
 ```
 adex
 ├── init                      # 绑定 API Key（一次性）
-├── ks                        # 快手广告数据
+├── ks                        # 快手广告数据 → adex-ks Skill
 │   ├── accounts              # 广告账户列表
 │   ├── campaigns             # 广告计划列表 / top / get
 │   ├── units                 # 广告组列表 / top / get
@@ -81,7 +97,7 @@ adex
 │   ├── creative-reports      # 创意报表 daily / summary
 │   ├── report-metric-meta    # 报表指标元数据
 │   └── dashboard             # 租户级概览
-├── oe                        # 巨量引擎广告数据
+├── oe                        # 巨量引擎广告数据 → adex-oe Skill
 │   ├── accounts              # 广告账户列表
 │   ├── projects              # 项目列表 / top / get
 │   ├── units                 # 单元列表 / top / get
@@ -91,8 +107,8 @@ adex
 │   ├── report-metric-meta    # 报表指标元数据
 │   ├── dashboard             # 租户级概览
 │   └── account-budget-vs-actual # 预算 vs 实际消耗
-├── tenant                    # 租户列表
-├── user                      # 当前用户信息
+├── tenant                    # 租户列表 → 本 Skill
+├── user                      # 当前用户信息 → 本 Skill
 └── skills                    # 嵌入式 Skill 内容
     ├── list                  # 列出所有 Skill
     └── read                  # 读取 Skill 内容
@@ -102,21 +118,21 @@ adex
 
 以下 flags 在大多数命令中通用：
 
-| Flag | 说明 | 默认值 |
-|------|------|--------|
-| `--tenant` | 租户 ID（大多数命令必需） | — |
-| `--page-size` | 每页条数 | 20 |
-| `--page-token` | 指定页的游标 token | — |
-| `--page-all` | 聚合所有页 | false |
-| `--order-by` | 排序字段 | 因命令而异 |
-| `--order-desc` | 降序排序 | true |
-| `--range` | 相对日期范围（如 7d/4w/1m） | — |
-| `--begin` | 起始日期（YYYY-MM-DD） | — |
-| `--end` | 结束日期（YYYY-MM-DD） | — |
-| `--jq` | jq 表达式过滤 JSON 输出 | — |
-| `--format` | 输出格式：json / pretty / table | json |
-| `--dry-run` | 打印请求但不执行 | false |
-| `--base-url` | 覆盖 API base URL | — |
+| Flag | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `--tenant` | int | — | 租户 ID（大多数命令必需，`report-metric-meta` / `tenant` / `user` 除外） |
+| `--page-size` | int | 20 | 每页条数 |
+| `--page-token` | string | — | 指定页的游标 token |
+| `--page-all` | bool | false | 聚合所有页（自动翻页直到 `hasMore=false`） |
+| `--order-by` | string | 因命令而异 | 排序字段 |
+| `--order-desc` | bool | true | 降序排序 |
+| `--range` | string | — | 相对日期范围（如 `7d` / `4w` / `1m`），优先于 `--begin` / `--end` |
+| `--begin` | string | — | 起始日期（YYYY-MM-DD） |
+| `--end` | string | — | 结束日期（YYYY-MM-DD） |
+| `--jq` | string | — | jq 表达式过滤 JSON 输出 |
+| `--format` | enum | `json` | 输出格式：`json` / `pretty` / `table` |
+| `--dry-run` | bool | false | 打印请求路径和参数到 stderr，不实际调用 API |
+| `--base-url` | string | — | 覆盖 API base URL |
 
 ## 分页
 
@@ -126,16 +142,29 @@ adex
 # 单页查询
 adex ks accounts --tenant 6 --page-size 20
 
-# 翻页（透传上一次响应的 next_page_token）
+# 翻页（透传上一次响应的 nextPageToken）
 adex ks accounts --tenant 6 --page-token "abc123"
 
-# 聚合所有页（自动翻页直到 has_more=false）
+# 聚合所有页（自动翻页直到 hasMore=false）
 adex ks accounts --tenant 6 --page-all
 ```
 
+响应结构（列表接口统一）：
+
+```json
+{
+  "hasMore": true,
+  "nextPageToken": "abc123",
+  "items": [...]
+}
+```
+
+- `hasMore` 为 `true` 时，用 `nextPageToken` 的值传给 `--page-token` 获取下一页
+- `--page-all` 会自动翻页并合并所有 `items`，大量数据时注意耗时
+
 ## 日期范围
 
-报表和 dashboard 命令支持灵活的日期范围指定：
+报表、Top-N 和 dashboard 命令支持灵活的日期范围指定：
 
 ```bash
 # 相对范围（7d=7天, 4w=4周, 1m=1月）
@@ -147,6 +176,17 @@ adex ks dashboard --tenant 6 --begin 2026-06-01 --end 2026-06-30
 # --range 优先于 --begin/--end
 ```
 
+### 支持的相对范围格式
+
+| 格式 | 含义 | 示例 |
+|------|------|------|
+| `<N>d` | 最近 N 天（含今天） | `7d` = 最近 7 天 |
+| `<N>w` | 最近 N 周（含今天） | `4w` = 最近 4 周（28 天） |
+| `<N>m` | 最近 N 个月（含今天） | `1m` = 最近 1 个月 |
+
+> 范围以**今天**为结束日期，向前推算。例如 `7d` 表示 `[今天-6, 今天]` 共 7 天。
+> `--range` 优先于 `--begin` / `--end`；两者都不传时，行为因命令而异（daily 可选，summary / top / dashboard 必需）。
+
 ## jq 过滤
 
 所有命令支持 `--jq` 对 JSON 输出进行过滤：
@@ -157,20 +197,27 @@ adex ks accounts --tenant 6 --page-all --jq '.items[].advertiserId'
 
 # 提取单个字段
 adex user --jq '.username'
+
+# 提取前 5 条的项目名
+adex oe projects --tenant 6 --page-size 5 --jq '.items[].name'
 ```
 
 ## 输出格式
 
 通过 `--format` 标志控制：
 
-- `json`（默认）：紧凑 JSON
-- `pretty`：格式化 JSON
-- `table`：表格输出
+| 格式 | 说明 |
+|------|------|
+| `json`（默认） | 紧凑 JSON，适合管道处理 |
+| `pretty` | 格式化 JSON，适合人工阅读 |
+| `table` | 表格输出，适合快速浏览 |
 
 ```bash
 adex ks accounts --tenant 6 --format table
 adex ks dashboard --tenant 6 --range 30d --format pretty
 ```
+
+> `--format table` 的列定义因命令而异，详见各 Skill 的 Table 列定义部分。
 
 ## Dry-Run
 
@@ -180,26 +227,47 @@ adex ks dashboard --tenant 6 --range 30d --format pretty
 adex ks accounts --tenant 6 --dry-run
 ```
 
+用于调试请求结构、验证参数是否正确。
+
 ## 错误处理
 
-错误以 JSON 信封格式输出到 stderr，包含 `type`、`subtype`、`message` 字段：
+错误以 JSON 信封格式输出到 stderr，包含 `type`、`subtype`、`message` 字段，部分错误还包含 `param`（出错的参数名）和 `hint`（修复建议）：
 
 ```json
-{"ok":false,"error":{"type":"validation","subtype":"invalid_argument","message":"--tenant must be a positive integer"}}
+{
+  "ok": false,
+  "error": {
+    "type": "validation",
+    "subtype": "invalid_argument",
+    "message": "--tenant must be a positive integer",
+    "param": "--tenant"
+  }
+}
 ```
 
-| Exit Code | Category | Description |
-|-----------|----------|-------------|
-| 0 | — | Success |
-| 2 | validation | Invalid input arguments |
-| 3 | unauthorized | Authentication failure |
-| 4 | network | Network/transport error |
-| 5 | api | API returned non-2xx |
-| 1 | internal | Unexpected internal error |
+### 错误分类
+
+| Exit Code | type | subtype | 说明 | 常见原因 |
+|-----------|------|---------|------|----------|
+| 0 | — | — | 成功 | — |
+| 2 | `validation` | `invalid_argument` | 参数校验失败 | `--tenant` 缺失或非正整数、日期格式错误 |
+| 2 | `validation` | `missing_config` | 配置缺失 | 未执行 `adex init` 绑定 API Key |
+| 3 | `unauthorized` | `auth_required` | 认证失败 | API Key 无效或过期 |
+| 4 | `network` | `network_transport` | 网络错误 | 无法连接 API 服务器、DNS 解析失败 |
+| 5 | `api` | `api_error` | API 返回非 2xx | 服务端错误、权限不足、资源不存在 |
+| 1 | `internal` | `unknown` | 内部错误 | 意外异常，通常是 bug |
+
+### 错误处理建议
+
+- `validation` → 检查 `param` 字段指向的 flag，按 `hint` 修正
+- `missing_config` → 执行 `adex init --authorization "Bearer <key>"`
+- `unauthorized` → API Key 可能过期，重新执行 `adex init`
+- `network` → 检查网络连接和 `--base-url` 是否正确
+- `api` → 查看返回的 HTTP `code` 和 `message`，可能是权限不足或资源不存在
 
 ## tenant — 租户列表
 
-不需要 `--tenant` flag。支持名称模糊匹配和状态精确过滤。
+不需要 `--tenant` flag。支持名称模糊匹配和状态精确过滤。详见 [`tenant`](references/adex-shared-tenant.md)。
 
 ```bash
 # 列出所有租户
@@ -215,34 +283,6 @@ adex tenant --status active --page-size 50
 adex tenant --page-all --jq '.items[].id'
 ```
 
-| Flag | 说明 |
-|------|------|
-| `--name` | 租户名称模糊匹配（留空=不过滤） |
-| `--status` | 状态精确匹配：active / disabled（留空=不过滤） |
-| `--page-size` | 每页条数（默认 20，最大 200） |
-| `--page-token` | 游标分页 token |
-| `--page-all` | 聚合所有页 |
-| `--jq` | jq 表达式过滤输出 |
-
-### 响应结构
-
-```json
-{
-  "hasMore": true,
-  "nextPageToken": "abc123",
-  "items": [
-    {
-      "id": 1,
-      "name": "Acme Corp",
-      "status": "active",
-      "createdBy": 100,
-      "createdAt": "2026-01-01T00:00:00Z",
-      "updatedAt": "2026-06-01T00:00:00Z"
-    }
-  ]
-}
-```
-
 ### Table 列
 
 | 列 | 字段 |
@@ -256,7 +296,7 @@ adex tenant --page-all --jq '.items[].id'
 
 ## user — 当前用户信息
 
-不需要 `--tenant` flag。通过 Bearer API Key 自动解析当前用户。
+不需要 `--tenant` flag。通过 Bearer API Key 自动解析当前用户。详见 [`user`](references/adex-shared-user.md)。
 
 ```bash
 # JSON 输出（默认）
@@ -265,23 +305,8 @@ adex user
 # 表格输出
 adex user --format table
 
-# 提取单个字段
-adex user --jq '.username'
+# 提取当前租户 ID（用于其他命令的 --tenant 参数）
 adex user --jq '.currentTenantId'
-```
-
-### 响应结构
-
-```json
-{
-  "id": 100,
-  "username": "admin",
-  "name": "管理员",
-  "status": "active",
-  "currentTenantId": 6,
-  "createdAt": "2026-01-01T00:00:00Z",
-  "updatedAt": "2026-06-01T00:00:00Z"
-}
 ```
 
 ### Table 列
@@ -296,20 +321,50 @@ adex user --jq '.currentTenantId'
 | Created At | `createdAt` |
 | Updated At | `updatedAt` |
 
-## 常见用法
+## 常见工作流
+
+### 工作流 1：首次使用
 
 ```bash
-# 验证 API Key 是否有效
+# 1. 安装 CLI
+npm install -g @gmvstudio/adex-cli
+
+# 2. 绑定 API Key
+adex init --authorization "Bearer adex_c93462599a6246a89f55a11b024b1a1a"
+
+# 3. 验证
 adex user
 
-# 查看当前租户 ID（用于其他命令的 --tenant 参数）
+# 4. 获取租户 ID
+adex user --jq '.currentTenantId'
+# 或
+adex tenant --format table
+```
+
+### 工作流 2：查找正确的租户 ID
+
+```bash
+# 方法 A：从当前用户信息获取
 adex user --jq '.currentTenantId'
 
-# 列出所有活跃租户
-adex tenant --status active --page-all --format table
+# 方法 B：列出所有租户
+adex tenant --format table
 
-# 查找特定租户
-adex tenant --name "Acme" --format table
+# 方法 C：按名称搜索
+adex tenant --name "品牌" --format table
+```
+
+### 工作流 3：调试请求
+
+```bash
+# 用 --dry-run 查看请求路径和参数
+adex ks accounts --tenant 6 --dry-run
+
+# 用 --format pretty 查看完整响应
+adex ks dashboard --tenant 6 --range 30d --format pretty
+
+# 用 --jq 提取特定字段
+adex ks accounts --tenant 6 --page-size 3 --jq '.items[0]'
 ```
 
 ## Skill 路由
@@ -318,4 +373,10 @@ adex tenant --name "Acme" --format table
 |----------|-------------|
 | 快手广告数据查询 | [`adex-ks`](../adex-ks/SKILL.md) |
 | 巨量引擎广告数据查询 | [`adex-oe`](../adex-oe/SKILL.md) |
-| 安装、配置、共享 flags、租户管理、用户信息 | 本 Skill |
+| 安装、配置、认证、共享 flags、租户管理、用户信息 | 本 Skill |
+
+## 不在本 skill 范围
+
+- 快手广告数据查询（账户、计划、组、创意、报表、排名） → [`../adex-ks/SKILL.md`](../adex-ks/SKILL.md)
+- 巨量引擎广告数据查询（账户、项目、单元、报表、排名、预算对比） → [`../adex-oe/SKILL.md`](../adex-oe/SKILL.md)
+- 创建 / 修改 / 删除广告投放对象 → 本 CLI 仅提供查询功能，不支持写入操作
