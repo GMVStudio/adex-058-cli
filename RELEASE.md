@@ -308,8 +308,7 @@ Skills 文件托管在阿里云 OSS 上，供 `npx skills add` 通过 well-known
       ├── index.json
       ├── adex-shared/SKILL.md
       ├── adex-ks/SKILL.md
-      ├── adex-oe/SKILL.md
-      └── adex-tenant-user/SKILL.md
+      └── adex-oe/SKILL.md
            │
            ▼
     用户 / AI Agent 运行:

@@ -7,7 +7,7 @@
 - `adex user` command — get current authenticated user info
 - `adex init` command — bind API credentials (one-time setup)
 - `adex oe` command group — Oceanengine (巨量) advertising data: accounts, projects, units, reports, metric meta, dashboard, budget-vs-actual
-- Embedded skills expanded: `adex-ks`, `adex-oe`, `adex-tenant-user` (full command coverage)
+- Embedded skills expanded: `adex-ks`, `adex-oe` (full command coverage)
 - `--jq` flag for jq expression filtering on all commands
 - `--page-all` flag for automatic multi-page aggregation
 - `--range` / `--begin` / `--end` flexible date range specification
