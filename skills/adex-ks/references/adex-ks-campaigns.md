@@ -63,7 +63,7 @@ adex ks campaigns --tenant 6 --page-all --jq '.items[].campaignId'
 adex ks campaigns top --tenant 6 --range 30d --metric charge --limit 10
 
 # 按转化数排名 Top 20
-adex ks campaigns top --tenant 6 --range 7d --metric convert_cnt --limit 20
+adex ks campaigns top --tenant 6 --range 7d --metric conversion_num --limit 20
 
 # 按广告主筛选后排名
 adex ks campaigns top --tenant 6 --range 30d --metric charge --advertiser 1234567890 --limit 10
@@ -80,7 +80,7 @@ adex ks campaigns top --tenant 6 --begin 2026-06-01 --end 2026-06-30 --metric ch
 | Flag | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
 | `--advertiser` | string | — | 广告主 ID 过滤 |
-| `--metric` | string | `charge` | 排名指标（`charge` / `convert_cnt` / `active` ...） |
+| `--metric` | string | `charge` | 排名指标（`charge` / `conversion_num` / `active` ...） |
 | `--source` | string | — | 数据源过滤 |
 | `--limit` | int | 20 | 返回行数（最大 100） |
 | `--order-desc` | bool | true | 降序（true=Top 消耗最多优先） |
@@ -144,7 +144,7 @@ adex ks campaigns get 9899931248 --tenant 6 --jq '.campaignName'
 
 - **查看所有启用计划**：`--put-status 1 --format table`
 - **找消耗最高的计划**：`top --range 30d --metric charge --limit 10`
-- **找转化最好的计划**：`top --range 7d --metric convert_cnt --limit 20`
+- **找转化最好的计划**：`top --range 7d --metric conversion_num --limit 20`
 - **查看计划完整信息**：`get <campaign_id> --format pretty`
 - **获取计划 ID 列表**：`--page-all --jq '.items[].campaignId'` 供后续 `units` 命令使用
 

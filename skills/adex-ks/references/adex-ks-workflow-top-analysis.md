@@ -111,8 +111,8 @@ adex ks creative-reports summary --tenant 6 --range 30d --group-by creative_id -
 adex ks report-metric-meta --level campaign --enabled 1 --jq '.items[].field'
 
 # 用转化指标排名
-adex ks campaigns top --tenant 6 --range 30d --metric convert_cnt --limit 10
-adex ks campaign-reports summary --tenant 6 --range 30d --group-by campaign_id --order-by convert_cnt --order-desc
+adex ks campaigns top --tenant 6 --range 30d --metric conversion_num --limit 10
+adex ks campaign-reports summary --tenant 6 --range 30d --group-by campaign_id --order-by conversion_num --order-desc
 ```
 
 ## 变体：按特定广告主分析

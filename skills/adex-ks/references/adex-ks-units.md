@@ -68,7 +68,7 @@ adex ks units top --tenant 6 --range 30d --metric charge --limit 20
 # 按转化数排名
 adex ks units top --tenant 6 --range 7d --metric conversion_num --limit 20
 
-# 在特定计划下排名
+# 在特定广告主下排名
 adex ks units top --tenant 6 --range 30d --metric charge --advertiser 1234567890 --limit 10
 
 # 升序排名（消耗最少的组）

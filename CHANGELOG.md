@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.3.0] - 2026-07-01
+## [0.2.4] - 2026-07-01
 
 ### Added
 - `adex tenant` command — list tenants with name/status filters and pagination
@@ -24,7 +24,7 @@
 - README updated with complete command tree, skills table, and architecture diagram
 - `runSingle` extended to accept table columns for single-object commands
 
-## [0.2.0] - 2026-06-27
+## [0.2.3] - 2026-06-27
 
 ### Added
 - npm distribution via `@gmvstudio/adex-cli` package

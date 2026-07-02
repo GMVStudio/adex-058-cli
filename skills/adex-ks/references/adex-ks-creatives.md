@@ -71,7 +71,7 @@ adex ks creatives --tenant 6 --unit 29638466721 --page-all --jq '.items[].creati
 adex ks creatives top --tenant 6 --range 30d --metric charge --limit 10
 
 # 按转化数排名
-adex ks creatives top --tenant 6 --range 7d --metric convert_cnt --limit 20
+adex ks creatives top --tenant 6 --range 7d --metric conversion_num --limit 20
 
 # 在特定广告主下排名
 adex ks creatives top --tenant 6 --range 30d --metric charge --advertiser 1234567890 --limit 10
@@ -82,7 +82,7 @@ adex ks creatives top --tenant 6 --range 30d --metric charge --advertiser 123456
 | Flag | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
 | `--advertiser` | string | — | 广告主 ID 过滤 |
-| `--metric` | string | `charge` | 排名指标（`charge` / `convert_cnt` / `active` ...） |
+| `--metric` | string | `charge` | 排名指标（`charge` / `conversion_num` / `active` ...） |
 | `--source` | string | — | 数据源过滤 |
 | `--limit` | int | 20 | 返回行数（最大 100） |
 | `--order-desc` | bool | true | 降序（true=Top 值最大优先） |
