@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.2.6] - 2026-07-02
+
+### Added
+- `ADEX_CONFIG_DIR` env var — override config directory for sandbox/CI environments
+- `ADEX_AUTHORIZATION` env var documented in root help text and error hints
+- Config dir fallback to `.adex` when `UserHomeDir()` returns empty
+- Actionable recovery hints on config save failures (mention `ADEX_CONFIG_DIR` and env var alternatives)
+- Test asserting hint mentions `ADEX_AUTHORIZATION` for sandbox recovery
+- Test asserting config save errors include `ADEX_CONFIG_DIR` hint and preserve cause
+
+### Fixed
+- `fallbackFullInstall` now installs only official skills via `InstallSkill` instead of blindly calling `InstallAllSkills`
+- Error wrapping in `skillscheck/state.go` uses `%w: %w` for proper error chain preservation
+- `resolveExe` moved to platform-specific files (was incorrectly in generic `updater.go`)
+- Removed stale `-g` flag from `npx skills add` hint in update command
+- CI workflow version pins updated
+
 ## [0.2.5] - 2026-07-02
 
 ### Added
