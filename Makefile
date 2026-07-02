@@ -5,7 +5,7 @@ DATE     := $(shell date +%Y-%m-%d)
 LDFLAGS  := -s -w -X $(MODULE)/internal/build.Version=$(VERSION) -X $(MODULE)/internal/build.Date=$(DATE)
 PREFIX   ?= /usr/local
 
-.PHONY: all build vet fmt-check test unit-test lint tidy-check install uninstall clean npm-publish
+.PHONY: all build vet fmt-check test unit-test lint tidy-check install uninstall clean npm-publish oss-sync
 
 all: test
 
@@ -52,3 +52,6 @@ clean:
 
 npm-publish:
 	npm publish --access public
+
+oss-sync:
+	./scripts/oss-sync.sh

@@ -6,7 +6,7 @@ const { execFileSync, execFile } = require("child_process");
 const p = require("@clack/prompts");
 
 const PKG = "@gmvstudio/adex-cli";
-const SKILLS_REPO = "https://open.feishu.cn";
+const SKILLS_REPO = "https://adex-skills.oss-cn-hangzhou.aliyuncs.com";
 const SKILLS_REPO_FALLBACK = "GMVStudio/adex-058-cli";
 const isWindows = process.platform === "win32";
 

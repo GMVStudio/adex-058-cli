@@ -6,8 +6,10 @@ import (
 	"os"
 
 	"github.com/gmvstudio/adex-cli/errs"
+	"github.com/gmvstudio/adex-cli/internal/build"
 	"github.com/gmvstudio/adex-cli/internal/client"
 	"github.com/gmvstudio/adex-cli/internal/config"
+	"github.com/gmvstudio/adex-cli/internal/skillscheck"
 	"github.com/spf13/cobra"
 )
 
@@ -47,6 +49,7 @@ func NewRootCmd(f *Factory) *cobra.Command {
 	root.AddCommand(newTenantCmd(f))
 	root.AddCommand(newUserCmd(f))
 	root.AddCommand(newSkillCmd(f))
+	root.AddCommand(newUpdateCmd(f))
 
 	return root
 }
@@ -59,6 +62,8 @@ func Execute() int {
 		Out:    os.Stdout,
 		ErrOut: os.Stderr,
 	}
+
+	skillscheck.Init(build.Version)
 
 	root := NewRootCmd(f)
 

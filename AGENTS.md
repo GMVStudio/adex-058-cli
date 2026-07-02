@@ -43,9 +43,12 @@ make tidy-check   # fails if go.mod/go.sum are not tidy
 | `errs/errs.go` | Typed error taxonomy + JSON envelope + exit codes |
 | `internal/client/client.go` | HTTP client: `Do`, `DoTyped`, typed error classification |
 | `internal/config/config.go` | Config load/save (file + env overlay) |
+| `internal/selfupdate/` | Installation detection, npm update, skills sync via npx, binary replacement |
+| `internal/skillscheck/` | Skills version check, stale notice, incremental sync planning, state persistence |
 | `internal/daterange/` | `--range` / `--begin` / `--end` resolution |
 | `internal/output/` | `--format` (json/pretty/table) and `--jq` rendering |
 | `internal/paginate/` | `--page-all` token aggregation |
+| `internal/vfs/` | Filesystem abstraction (`vfs.Default` / `vfs.OS`); test-mockable |
 
 ## Code conventions
 
@@ -83,6 +86,34 @@ table summary lines, warnings, and error envelopes go to `f.ErrOut`. Never
 write diagnostics to stdout — it corrupts `--jq` and pipe chains. Do not call
 `os.Stdout` / `os.Stderr` directly in command or output code; thread the
 `Factory` writers instead.
+
+### Use `vfs.*` instead of `os.*` for filesystem access
+
+All filesystem operations (ReadFile, WriteFile, MkdirAll, Stat, Remove, Rename,
+Executable, EvalSymlinks, UserHomeDir) must go through `internal/vfs` via
+`vfs.Default`. This enables test mocking without touching the real disk.
+
+**Never** import `os` for file I/O in `internal/` or `cmd/` packages. The only
+acceptable `os` usage is `os.Getenv` (environment variable reads) and
+`os/exec` (subprocess execution). If a new filesystem operation is needed,
+extend the `vfs.FS` interface and `vfs.OS` implementation first.
+
+### Production-grade requirements
+
+This CLI ships to real users and AI agents in production. Code must be:
+
+- **Testable**: every behavior change ships with a test. Use `vfs.Default`
+  reassignment or override fields (e.g. `SkillsCommandOverride`) to inject
+  fakes — never make real network or subprocess calls in unit tests.
+- **Cross-platform**: all platform-specific code uses `//go:build` constraints
+  (`updater_unix.go`, `updater_windows.go`). Verify with `GOOS=windows go
+  build ./...` before PR.
+- **Timeout-bounded**: every network call and subprocess invocation must have
+  a `context.WithTimeout`. Never block indefinitely.
+- **Error-preserving**: use `.WithCause(err)` on typed errors so
+  `errors.Is` / `errors.As` keep working through the error chain.
+- **No panics in production paths**: recover from unexpected states with
+  typed errors, not panics.
 
 ### Adding a command
 

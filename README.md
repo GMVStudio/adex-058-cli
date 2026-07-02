@@ -52,7 +52,7 @@ adex ks dashboard --tenant 6
 npm install -g @gmvstudio/adex-cli
 
 # 安装 CLI SKILL（必需）
-npx -y skills add https://open.feishu.cn --skill -y
+npx -y skills add https://adex-skills.oss-cn-hangzhou.aliyuncs.com -g -y
 ```
 
 **Step 2 — Configure API endpoint**

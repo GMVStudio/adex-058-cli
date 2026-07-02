@@ -21,7 +21,7 @@ metadata:
 npm install -g @gmvstudio/adex-cli
 
 # 安装 CLI SKILL（必需）
-npx -y skills add https://open.feishu.cn --skill -y
+npx -y skills add https://adex-skills.oss-cn-hangzhou.aliyuncs.com -g -y
 ```
 
 ### 从源码安装

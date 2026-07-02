@@ -13,7 +13,10 @@ type FS interface {
 	MkdirAll(path string, perm fs.FileMode) error
 	Stat(name string) (fs.FileInfo, error)
 	Remove(name string) error
+	Rename(oldpath, newpath string) error
 	UserHomeDir() (string, error)
+	Executable() (string, error)
+	EvalSymlinks(path string) (string, error)
 }
 
 // Default is the process-wide filesystem. Reassign in tests if needed.
