@@ -12,19 +12,19 @@
 
 ```bash
 # 基本列表
-adex oe projects --tenant 6 --page-size 20
+adex oe projects --page-size 20
 
 # 按操作状态筛选（ENABLE=启用）
-adex oe projects --tenant 6 --opt-status ENABLE --format table
+adex oe projects --opt-status ENABLE --format table
 
 # 按广告主筛选
-adex oe projects --tenant 6 --advertiser 1866874042754522 --format table
+adex oe projects --advertiser 1866874042754522 --format table
 
 # 按项目名模糊匹配
-adex oe projects --tenant 6 --name "品牌" --format table
+adex oe projects --name "品牌" --format table
 
 # 聚合所有页
-adex oe projects --tenant 6 --page-all --jq '.items[].projectId'
+adex oe projects --page-all --jq '.items[].projectId'
 ```
 
 ### 列表 Flags
@@ -41,7 +41,7 @@ adex oe projects --tenant 6 --page-all --jq '.items[].projectId'
 
 ### 列表共享 Flags
 
-`--tenant`（必需）、`--page-size`、`--page-token`、`--page-all`、`--order-by`（默认 `id`）、`--order-desc`、`--jq`、`--format`、`--dry-run`
+`--tenant`（可选）、`--page-size`、`--page-token`、`--page-all`、`--order-by`（默认 `id`）、`--order-desc`、`--jq`、`--format`、`--dry-run`
 
 ### Table 列
 
@@ -62,19 +62,19 @@ adex oe projects --tenant 6 --page-all --jq '.items[].projectId'
 
 ```bash
 # 按消耗排名 Top 10
-adex oe projects top --tenant 6 --range 30d --metric charge --limit 10
+adex oe projects top --range 30d --metric charge --limit 10
 
 # 按转化数排名 Top 20
-adex oe projects top --tenant 6 --range 7d --metric convert_cnt --limit 20
+adex oe projects top --range 7d --metric convert_cnt --limit 20
 
 # 按广告主筛选后排名
-adex oe projects top --tenant 6 --range 30d --metric charge --advertiser 1866874042754522 --limit 10
+adex oe projects top --range 30d --metric charge --advertiser 1866874042754522 --limit 10
 
 # 升序排名（消耗最少的项目）
-adex oe projects top --tenant 6 --range 30d --metric charge --order-desc=false --limit 10
+adex oe projects top --range 30d --metric charge --order-desc=false --limit 10
 
 # 显式日期范围
-adex oe projects top --tenant 6 --begin 2026-06-01 --end 2026-06-30 --metric charge --limit 10
+adex oe projects top --begin 2026-06-01 --end 2026-06-30 --metric charge --limit 10
 ```
 
 ### Top Flags
@@ -120,13 +120,13 @@ adex oe projects top --tenant 6 --begin 2026-06-01 --end 2026-06-30 --metric cha
 
 ```bash
 # 查看项目详情
-adex oe projects get 7650479670059647030 --tenant 6
+adex oe projects get 7650479670059647030
 
 # pretty 格式输出
-adex oe projects get 7650479670059647030 --tenant 6 --format pretty
+adex oe projects get 7650479670059647030 --format pretty
 
 # 提取特定字段
-adex oe projects get 7650479670059647030 --tenant 6 --jq '.name'
+adex oe projects get 7650479670059647030 --jq '.name'
 ```
 
 ### 详情参数
@@ -134,7 +134,7 @@ adex oe projects get 7650479670059647030 --tenant 6 --jq '.name'
 | 参数 | 位置 | 必填 | 说明 |
 |------|------|------|------|
 | `<project_id>` | positional | 是 | 项目 ID（路径参数） |
-| `--tenant` | flag | 是 | 租户 ID |
+| `--tenant` | flag | 否 | 租户 ID（可选；缺省使用默认租户） |
 | `--jq` | flag | 否 | jq 表达式过滤输出 |
 | `--format` | flag | 否 | 输出格式（默认 `json`） |
 

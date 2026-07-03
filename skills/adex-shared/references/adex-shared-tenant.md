@@ -74,7 +74,7 @@ adex tenant --dry-run
 
 ## 使用场景
 
-- **切换默认租户**：`adex tenant use 6` 设定默认租户，后续命令无需 `--tenant`
+- **切换默认租户**：`adex tenant use <ID>` 设定默认租户，后续命令无需 `--tenant`
 - **获取租户 ID**：`--format table` 查看所有租户及其 ID
 - **搜索特定租户**：`--name "关键词"` 按名称模糊匹配
 - **筛选活跃租户**：`--status active` 只看状态为 active 的租户
@@ -91,10 +91,10 @@ adex tenant --dry-run
 
 ```bash
 # 设定默认租户
-adex tenant use 6
+adex tenant use <ID>
 
 # 切换到其他租户
-adex tenant use 8
+adex tenant use <ID>
 ```
 
 设定后，所有支持 `--tenant` 的命令会自动使用该租户，无需每次传入 `--tenant`。

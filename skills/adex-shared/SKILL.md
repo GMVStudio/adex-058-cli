@@ -14,12 +14,14 @@ metadata:
 
 > **大多数命令支持 `--tenant`（可选）。** 通过 `adex init --tenant <ID>` 或 `adex tenant use <ID>` 设定默认租户后，后续命令无需再传 `--tenant`。仅在需要切换到其他租户时临时传入。
 
+**CRITICAL — 租户选择规则：** 当用户未设定默认租户且未明确指定租户时，必须先执行 `adex tenant --page-all --format table` 列出租户，**将结果展示给用户并由用户选择**，再执行 `adex tenant use <用户选择的ID>`。**禁止 AI 自动选择租户。**
+
 ## 快速决策
 
 - 用户要**安装 / 更新 adex CLI** → 见 [安装](#安装) 或 [更新检查](#更新检查)
-- 用户要**绑定 API Key / 初始化配置** → `adex init --authorization "Bearer adex_xxx"`，然后 `adex tenant --page-all` 列出租户，再 `adex tenant use <ID>`，见 [初始化配置](#初始化配置)
+- 用户要**绑定 API Key / 初始化配置** → `adex init --authorization "Bearer adex_xxx"`，然后 `adex tenant --page-all --format table` 列出租户**展示给用户选择**，再 `adex tenant use <用户选择的ID>`，见 [初始化配置](#初始化配置)
 - 用户要**验证 API Key 是否有效** → `adex user`，见 [`user`](references/adex-shared-user.md)
-- 用户要**切换默认租户** → `adex tenant use 8`，见 [`tenant use`](references/adex-shared-tenant.md)
+- 用户要**切换默认租户** → `adex tenant use <ID>`，见 [`tenant use`](references/adex-shared-tenant.md)
 - 用户要**查看当前租户 ID** → `adex user --jq '.currentTenantId'`，见 [`user`](references/adex-shared-user.md)
 - 用户要**列出 / 搜索租户** → `adex tenant --name "关键词" --format table`，见 [`tenant`](references/adex-shared-tenant.md)
 - 用户要**查看所有可用命令** → `adex --help` 或见 [命令树总览](#命令树总览)
@@ -93,17 +95,19 @@ CI 环境自动跳过通知。
 # 步骤 1：绑定 API Key
 adex init --authorization "Bearer adex_c93462599a6246a89f55a11b024b1a1a"
 
-# 步骤 2：列出可用租户，找到目标租户 ID
+# 步骤 2：列出可用租户
 adex tenant --page-all --format table
 
-# 步骤 3：设定默认租户
-adex tenant use 6
+# 步骤 3：由用户选择租户后设定（禁止 AI 自动选择）
+adex tenant use <用户选择的ID>
 ```
+
+**CRITICAL — 步骤 2 和 3 之间，必须将租户列表展示给用户，由用户决定使用哪个租户。禁止 AI 自动选择租户。**
 
 完成后，后续所有命令自动使用该租户，无需再传 `--tenant`。
 
-> 如果已知租户 ID，步骤 1 可直接带上 `--tenant`：
-> `adex init --authorization "Bearer adex_xxx" --tenant 6`，跳过步骤 2 和 3。
+> 如果用户已知租户 ID，步骤 1 可直接带上 `--tenant`：
+> `adex init --authorization "Bearer adex_xxx" --tenant <ID>`，跳过步骤 2 和 3。
 
 也可以传入裸 key（自动补 Bearer 前缀）：
 
@@ -195,13 +199,13 @@ adex
 
 ```bash
 # 单页查询
-adex ks accounts --tenant 6 --page-size 20
+adex ks accounts --page-size 20
 
 # 翻页（透传上一次响应的 nextPageToken）
-adex ks accounts --tenant 6 --page-token "abc123"
+adex ks accounts --page-token "abc123"
 
 # 聚合所有页（自动翻页直到 hasMore=false）
-adex ks accounts --tenant 6 --page-all
+adex ks accounts --page-all
 ```
 
 响应结构（列表接口统一）：
@@ -223,10 +227,10 @@ adex ks accounts --tenant 6 --page-all
 
 ```bash
 # 相对范围（7d=7天, 4w=4周, 1m=1月）
-adex ks dashboard --tenant 6 --range 30d
+adex ks dashboard --range 30d
 
 # 显式日期
-adex ks dashboard --tenant 6 --begin 2026-06-01 --end 2026-06-30
+adex ks dashboard --begin 2026-06-01 --end 2026-06-30
 
 # --range 优先于 --begin/--end
 ```
@@ -248,13 +252,13 @@ adex ks dashboard --tenant 6 --begin 2026-06-01 --end 2026-06-30
 
 ```bash
 # 提取所有 advertiserId
-adex ks accounts --tenant 6 --page-all --jq '.items[].advertiserId'
+adex ks accounts --page-all --jq '.items[].advertiserId'
 
 # 提取单个字段
 adex user --jq '.username'
 
 # 提取前 5 条的项目名
-adex oe projects --tenant 6 --page-size 5 --jq '.items[].name'
+adex oe projects --page-size 5 --jq '.items[].name'
 ```
 
 ## 输出格式
@@ -268,8 +272,8 @@ adex oe projects --tenant 6 --page-size 5 --jq '.items[].name'
 | `table` | 表格输出，适合快速浏览 |
 
 ```bash
-adex ks accounts --tenant 6 --format table
-adex ks dashboard --tenant 6 --range 30d --format pretty
+adex ks accounts --format table
+adex ks dashboard --range 30d --format pretty
 ```
 
 > `--format table` 的列定义因命令而异，详见各 Skill 的 Table 列定义部分。
@@ -279,7 +283,7 @@ adex ks dashboard --tenant 6 --range 30d --format pretty
 `--dry-run` 打印请求路径和参数到 stderr，不实际调用 API：
 
 ```bash
-adex ks accounts --tenant 6 --dry-run
+adex ks accounts --dry-run
 ```
 
 用于调试请求结构、验证参数是否正确。
@@ -338,7 +342,7 @@ adex tenant --status active --page-size 50
 adex tenant --page-all --jq '.items[].id'
 
 # 设定默认租户（后续命令无需 --tenant）
-adex tenant use 6
+adex tenant use <ID>
 ```
 
 ### Table 列
@@ -393,8 +397,8 @@ adex init --authorization "Bearer adex_c93462599a6246a89f55a11b024b1a1a"
 # 3. 列出租户，找到目标租户 ID
 adex tenant --page-all --format table
 
-# 4. 设定默认租户
-adex tenant use 6
+# 4. 设定默认租户（由用户选择，禁止 AI 自动选择）
+adex tenant use <ID>
 
 # 后续命令无需 --tenant
 adex ks accounts
@@ -408,9 +412,9 @@ adex oe dashboard --range 30d
 adex tenant --format table
 
 # 切换默认租户
-adex tenant use 8
+adex tenant use <ID>
 
-# 后续命令自动使用租户 8
+# 后续命令自动使用新租户
 adex ks accounts
 ```
 
@@ -418,13 +422,13 @@ adex ks accounts
 
 ```bash
 # 用 --dry-run 查看请求路径和参数
-adex ks accounts --tenant 6 --dry-run
+adex ks accounts --dry-run
 
 # 用 --format pretty 查看完整响应
-adex ks dashboard --tenant 6 --range 30d --format pretty
+adex ks dashboard --range 30d --format pretty
 
 # 用 --jq 提取特定字段
-adex ks accounts --tenant 6 --page-size 3 --jq '.items[0]'
+adex ks accounts --page-size 3 --jq '.items[0]'
 ```
 
 ## Skill 路由

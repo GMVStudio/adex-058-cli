@@ -99,8 +99,8 @@ adex oe report-metric-meta --level account --enabled 1 --format table
 
 2. 用字段名作为报表的 `--order-by` 或 Top-N 的 `--metric`：
    ```bash
-   adex oe project-reports summary --tenant 6 --range 30d --group-by project_id --order-by charge --order-desc
-   adex oe projects top --tenant 6 --range 30d --metric charge --limit 10
+   adex oe project-reports summary --range 30d --group-by project_id --order-by charge --order-desc
+   adex oe projects top --range 30d --metric charge --limit 10
    ```
 
 ## 注意事项

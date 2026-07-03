@@ -17,7 +17,7 @@
 先用 `dashboard` 快速了解整体投放情况：
 
 ```bash
-adex oe dashboard --tenant 6 --range 30d
+adex oe dashboard --range 30d
 ```
 
 关注返回结果中的：
@@ -30,13 +30,13 @@ adex oe dashboard --tenant 6 --range 30d
 查看账户层级的日报表，了解消耗趋势：
 
 ```bash
-adex oe account-reports daily --tenant 6 --range 30d --format table
+adex oe account-reports daily --range 30d --format table
 ```
 
 如果需要按小时粒度查看某一天的波动：
 
 ```bash
-adex oe account-reports daily --tenant 6 --range 1d --stat-hour 12 --format table
+adex oe account-reports daily --range 1d --stat-hour 12 --format table
 ```
 
 ## 步骤 3：项目 Top-N 排名
@@ -44,7 +44,7 @@ adex oe account-reports daily --tenant 6 --range 1d --stat-hour 12 --format tabl
 找出消耗最高的项目：
 
 ```bash
-adex oe projects top --tenant 6 --range 30d --metric charge --limit 10
+adex oe projects top --range 30d --metric charge --limit 10
 ```
 
 返回结果中 `groupKey` 是项目 ID，`groupName` 是项目名称，`charge` 是总消耗。
@@ -55,10 +55,10 @@ adex oe projects top --tenant 6 --range 30d --metric charge --limit 10
 
 ```bash
 # 方法 A：查看该项目下的单元列表
-adex oe units --tenant 6 --project <PROJECT_ID> --format table
+adex oe units --project <PROJECT_ID> --format table
 
 # 方法 B：直接看单元级 Top-N（不限定项目）
-adex oe units top --tenant 6 --range 30d --metric charge --limit 20
+adex oe units top --range 30d --metric charge --limit 20
 ```
 
 ## 步骤 5：查看明细日报表
@@ -67,10 +67,10 @@ adex oe units top --tenant 6 --range 30d --metric charge --limit 20
 
 ```bash
 # 项目日报表
-adex oe project-reports daily --tenant 6 --range 30d --project <PROJECT_ID> --format table
+adex oe project-reports daily --range 30d --project <PROJECT_ID> --format table
 
 # 单元日报表
-adex oe unit-reports daily --tenant 6 --range 30d --promotion <PROMOTION_ID> --format table
+adex oe unit-reports daily --range 30d --promotion <PROMOTION_ID> --format table
 ```
 
 ## 步骤 6：汇总对比
@@ -79,10 +79,10 @@ adex oe unit-reports daily --tenant 6 --range 30d --promotion <PROMOTION_ID> --f
 
 ```bash
 # 项目汇总排名
-adex oe project-reports summary --tenant 6 --range 30d --group-by project_id --order-by charge --order-desc
+adex oe project-reports summary --range 30d --group-by project_id --order-by charge --order-desc
 
 # 单元汇总排名
-adex oe unit-reports summary --tenant 6 --range 30d --group-by promotion_id --order-by charge --order-desc
+adex oe unit-reports summary --range 30d --group-by promotion_id --order-by charge --order-desc
 ```
 
 ## 步骤 7：预算 vs 实际消耗
@@ -91,10 +91,10 @@ adex oe unit-reports summary --tenant 6 --range 30d --group-by promotion_id --or
 
 ```bash
 # 全部账户
-adex oe account-budget-vs-actual --tenant 6 --range 30d --format table
+adex oe account-budget-vs-actual --range 30d --format table
 
 # 单个账户
-adex oe account-budget-vs-actual --tenant 6 --advertiser <ADVERTISER_ID> --range 30d
+adex oe account-budget-vs-actual --advertiser <ADVERTISER_ID> --range 30d
 ```
 
 ## 变体：按转化指标分析
@@ -106,8 +106,8 @@ adex oe account-budget-vs-actual --tenant 6 --advertiser <ADVERTISER_ID> --range
 adex oe report-metric-meta --level project --enabled 1 --jq '.items[].field'
 
 # 用转化指标排名
-adex oe projects top --tenant 6 --range 30d --metric convert_cnt --limit 10
-adex oe project-reports summary --tenant 6 --range 30d --group-by project_id --order-by convert_cnt --order-desc
+adex oe projects top --range 30d --metric convert_cnt --limit 10
+adex oe project-reports summary --range 30d --group-by project_id --order-by convert_cnt --order-desc
 ```
 
 ## 变体：按特定广告主分析
@@ -115,34 +115,34 @@ adex oe project-reports summary --tenant 6 --range 30d --group-by project_id --o
 如果用户只关注某个广告主的数据，全程加 `--advertiser`：
 
 ```bash
-adex oe dashboard --tenant 6 --range 30d
-adex oe projects top --tenant 6 --range 30d --metric charge --advertiser 1866874042754522 --limit 10
-adex oe project-reports summary --tenant 6 --range 30d --group-by project_id --advertiser 1866874042754522
+adex oe dashboard --range 30d
+adex oe projects top --range 30d --metric charge --advertiser 1866874042754522 --limit 10
+adex oe project-reports summary --range 30d --group-by project_id --advertiser 1866874042754522
 ```
 
 ## 完整示例
 
 ```bash
 # 1. 大盘
-adex oe dashboard --tenant 6 --range 30d
+adex oe dashboard --range 30d
 
 # 2. 账户趋势
-adex oe account-reports daily --tenant 6 --range 30d --format table
+adex oe account-reports daily --range 30d --format table
 
 # 3. 项目 Top 10
-adex oe projects top --tenant 6 --range 30d --metric charge --limit 10
+adex oe projects top --range 30d --metric charge --limit 10
 
 # 4. 下钻 Top 项目的单元
-adex oe units --tenant 6 --project 7650479670059647030 --format table
+adex oe units --project 7650479670059647030 --format table
 
 # 5. Top 项目日报表
-adex oe project-reports daily --tenant 6 --range 30d --project 7650479670059647030 --format table
+adex oe project-reports daily --range 30d --project 7650479670059647030 --format table
 
 # 6. 汇总对比
-adex oe project-reports summary --tenant 6 --range 30d --group-by project_id --order-by charge --order-desc
+adex oe project-reports summary --range 30d --group-by project_id --order-by charge --order-desc
 
 # 7. 预算使用情况
-adex oe account-budget-vs-actual --tenant 6 --range 30d --format table
+adex oe account-budget-vs-actual --range 30d --format table
 ```
 
 ## 参考

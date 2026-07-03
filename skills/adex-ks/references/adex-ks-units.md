@@ -12,22 +12,22 @@
 
 ```bash
 # 基本列表
-adex ks units --tenant 6 --page-size 20
+adex ks units --page-size 20
 
 # 按计划 ID 筛选（最常见用法）
-adex ks units --tenant 6 --campaign 9899931248 --format table
+adex ks units --campaign 9899931248 --format table
 
 # 按广告主筛选
-adex ks units --tenant 6 --advertiser 1234567890 --format table
+adex ks units --advertiser 1234567890 --format table
 
 # 按组名模糊匹配
-adex ks units --tenant 6 --unit-name "信息流" --format table
+adex ks units --unit-name "信息流" --format table
 
 # 按投放状态筛选
-adex ks units --tenant 6 --put-status 1 --format table
+adex ks units --put-status 1 --format table
 
 # 聚合所有页
-adex ks units --tenant 6 --campaign 9899931248 --page-all --jq '.items[].unitId'
+adex ks units --campaign 9899931248 --page-all --jq '.items[].unitId'
 ```
 
 ### 列表 Flags
@@ -43,7 +43,7 @@ adex ks units --tenant 6 --campaign 9899931248 --page-all --jq '.items[].unitId'
 
 ### 列表共享 Flags
 
-`--tenant`（必需）、`--page-size`、`--page-token`、`--page-all`、`--order-by`（默认 `id`）、`--order-desc`、`--jq`、`--format`、`--dry-run`
+`--tenant`（可选）、`--page-size`、`--page-token`、`--page-all`、`--order-by`（默认 `id`）、`--order-desc`、`--jq`、`--format`、`--dry-run`
 
 ### Table 列
 
@@ -63,16 +63,16 @@ adex ks units --tenant 6 --campaign 9899931248 --page-all --jq '.items[].unitId'
 
 ```bash
 # 按消耗排名 Top 20
-adex ks units top --tenant 6 --range 30d --metric charge --limit 20
+adex ks units top --range 30d --metric charge --limit 20
 
 # 按转化数排名
-adex ks units top --tenant 6 --range 7d --metric conversion_num --limit 20
+adex ks units top --range 7d --metric conversion_num --limit 20
 
 # 在特定广告主下排名
-adex ks units top --tenant 6 --range 30d --metric charge --advertiser 1234567890 --limit 10
+adex ks units top --range 30d --metric charge --advertiser 1234567890 --limit 10
 
 # 升序排名（消耗最少的组）
-adex ks units top --tenant 6 --range 30d --metric charge --order-desc=false --limit 10
+adex ks units top --range 30d --metric charge --order-desc=false --limit 10
 ```
 
 ### Top Flags
@@ -111,13 +111,13 @@ adex ks units top --tenant 6 --range 30d --metric charge --order-desc=false --li
 
 ```bash
 # 查看组详情
-adex ks units get 29638466721 --tenant 6
+adex ks units get 29638466721
 
 # pretty 格式输出
-adex ks units get 29638466721 --tenant 6 --format pretty
+adex ks units get 29638466721 --format pretty
 
 # 提取特定字段
-adex ks units get 29638466721 --tenant 6 --jq '.unitName'
+adex ks units get 29638466721 --jq '.unitName'
 ```
 
 ### 详情参数
@@ -125,7 +125,7 @@ adex ks units get 29638466721 --tenant 6 --jq '.unitName'
 | 参数 | 位置 | 必填 | 说明 |
 |------|------|------|------|
 | `<unit_id>` | positional | 是 | 组 ID（路径参数） |
-| `--tenant` | flag | 是 | 租户 ID |
+| `--tenant` | flag | 否 | 租户 ID（可选；缺省使用默认租户） |
 | `--jq` | flag | 否 | jq 表达式过滤输出 |
 | `--format` | flag | 否 | 输出格式（默认 `json`） |
 

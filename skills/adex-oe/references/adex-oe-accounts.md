@@ -8,22 +8,22 @@
 
 ```bash
 # 基本列表
-adex oe accounts --tenant 6 --page-size 20
+adex oe accounts --page-size 20
 
 # 按余额降序排列，表格输出
-adex oe accounts --tenant 6 --order-by balance --order-desc --format table
+adex oe accounts --order-by balance --order-desc --format table
 
 # 聚合所有页，提取广告主 ID
-adex oe accounts --tenant 6 --page-all --jq '.items[].advertiserId'
+adex oe accounts --page-all --jq '.items[].advertiserId'
 
 # 按账户名模糊匹配
-adex oe accounts --tenant 6 --account-name "品牌" --format table
+adex oe accounts --account-name "品牌" --format table
 
 # 按授权状态和投放状态筛选
-adex oe accounts --tenant 6 --auth-status active --delivery-status active --format table
+adex oe accounts --auth-status active --delivery-status active --format table
 
 # 预览请求但不执行
-adex oe accounts --tenant 6 --dry-run
+adex oe accounts --dry-run
 ```
 
 ## Flags
@@ -44,7 +44,7 @@ adex oe accounts --tenant 6 --dry-run
 
 | Flag | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
-| `--tenant` | int | — | 租户 ID（**必需**） |
+| `--tenant` | int | — | 租户 ID（可选；缺省使用 `adex tenant use` 设定的默认租户） |
 | `--page-size` | int | 20 | 每页条数 |
 | `--page-token` | string | — | 游标分页 token |
 | `--page-all` | bool | false | 聚合所有页 |

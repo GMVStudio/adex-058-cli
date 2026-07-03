@@ -14,22 +14,22 @@
 
 ```bash
 # 基本列表
-adex oe units --tenant 6 --page-size 20
+adex oe units --page-size 20
 
 # 按项目 ID 筛选（最常见用法）
-adex oe units --tenant 6 --project 7650479670059647030 --format table
+adex oe units --project 7650479670059647030 --format table
 
 # 按广告主筛选
-adex oe units --tenant 6 --advertiser 1866874042754522 --format table
+adex oe units --advertiser 1866874042754522 --format table
 
 # 按单元名模糊匹配
-adex oe units --tenant 6 --name "信息流" --format table
+adex oe units --name "信息流" --format table
 
 # 按操作状态筛选
-adex oe units --tenant 6 --opt-status ENABLE --format table
+adex oe units --opt-status ENABLE --format table
 
 # 聚合所有页
-adex oe units --tenant 6 --project 7650479670059647030 --page-all --jq '.items[].promotionId'
+adex oe units --project 7650479670059647030 --page-all --jq '.items[].promotionId'
 ```
 
 ### 列表 Flags
@@ -46,7 +46,7 @@ adex oe units --tenant 6 --project 7650479670059647030 --page-all --jq '.items[]
 
 ### 列表共享 Flags
 
-`--tenant`（必需）、`--page-size`、`--page-token`、`--page-all`、`--order-by`（默认 `id`）、`--order-desc`、`--jq`、`--format`、`--dry-run`
+`--tenant`（可选）、`--page-size`、`--page-token`、`--page-all`、`--order-by`（默认 `id`）、`--order-desc`、`--jq`、`--format`、`--dry-run`
 
 ### Table 列
 
@@ -67,16 +67,16 @@ adex oe units --tenant 6 --project 7650479670059647030 --page-all --jq '.items[]
 
 ```bash
 # 按消耗排名 Top 20
-adex oe units top --tenant 6 --range 30d --metric charge --limit 20
+adex oe units top --range 30d --metric charge --limit 20
 
 # 按转化数排名
-adex oe units top --tenant 6 --range 7d --metric convert_cnt --limit 20
+adex oe units top --range 7d --metric convert_cnt --limit 20
 
 # 在特定广告主下排名
-adex oe units top --tenant 6 --range 30d --metric charge --advertiser 1866874042754522 --limit 10
+adex oe units top --range 30d --metric charge --advertiser 1866874042754522 --limit 10
 
 # 升序排名（消耗最少的单元）
-adex oe units top --tenant 6 --range 30d --metric charge --order-desc=false --limit 10
+adex oe units top --range 30d --metric charge --order-desc=false --limit 10
 ```
 
 ### Top Flags
@@ -115,13 +115,13 @@ adex oe units top --tenant 6 --range 30d --metric charge --order-desc=false --li
 
 ```bash
 # 查看单元详情
-adex oe units get 7650483929670156288 --tenant 6
+adex oe units get 7650483929670156288
 
 # pretty 格式输出
-adex oe units get 7650483929670156288 --tenant 6 --format pretty
+adex oe units get 7650483929670156288 --format pretty
 
 # 提取特定字段
-adex oe units get 7650483929670156288 --tenant 6 --jq '.name'
+adex oe units get 7650483929670156288 --jq '.name'
 ```
 
 ### 详情参数
@@ -129,7 +129,7 @@ adex oe units get 7650483929670156288 --tenant 6 --jq '.name'
 | 参数 | 位置 | 必填 | 说明 |
 |------|------|------|------|
 | `<promotion_id>` | positional | 是 | 单元（promotion）ID（路径参数） |
-| `--tenant` | flag | 是 | 租户 ID |
+| `--tenant` | flag | 否 | 租户 ID（可选；缺省使用默认租户） |
 | `--jq` | flag | 否 | jq 表达式过滤输出 |
 | `--format` | flag | 否 | 输出格式（默认 `json`） |
 

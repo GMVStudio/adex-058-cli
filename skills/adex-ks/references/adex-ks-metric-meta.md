@@ -105,8 +105,8 @@ adex ks report-metric-meta --level account --enabled 1 --format table
 
 2. 用字段名作为报表的 `--order-by` 或 Top-N 的 `--metric`：
    ```bash
-   adex ks campaign-reports summary --tenant 6 --range 30d --group-by campaign_id --order-by charge --order-desc
-   adex ks campaigns top --tenant 6 --range 30d --metric charge --limit 10
+   adex ks campaign-reports summary --range 30d --group-by campaign_id --order-by charge --order-desc
+   adex ks campaigns top --range 30d --metric charge --limit 10
    ```
 
 ## 参考

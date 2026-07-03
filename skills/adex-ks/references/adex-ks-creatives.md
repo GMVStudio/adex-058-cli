@@ -14,22 +14,22 @@
 
 ```bash
 # 基本列表
-adex ks creatives --tenant 6 --page-size 20
+adex ks creatives --page-size 20
 
 # 按组 ID 筛选（最常见用法）
-adex ks creatives --tenant 6 --unit 29638466721 --format table
+adex ks creatives --unit 29638466721 --format table
 
 # 按计划 ID 筛选
-adex ks creatives --tenant 6 --campaign 9899931248 --format table
+adex ks creatives --campaign 9899931248 --format table
 
 # 按创意名模糊匹配
-adex ks creatives --tenant 6 --creative-name "视频" --format table
+adex ks creatives --creative-name "视频" --format table
 
 # 按创意类型筛选
-adex ks creatives --tenant 6 --creative-type "VIDEO" --format table
+adex ks creatives --creative-type "VIDEO" --format table
 
 # 聚合所有页
-adex ks creatives --tenant 6 --unit 29638466721 --page-all --jq '.items[].creativeId'
+adex ks creatives --unit 29638466721 --page-all --jq '.items[].creativeId'
 ```
 
 ### 列表 Flags
@@ -47,7 +47,7 @@ adex ks creatives --tenant 6 --unit 29638466721 --page-all --jq '.items[].creati
 
 ### 列表共享 Flags
 
-`--tenant`（必需）、`--page-size`、`--page-token`、`--page-all`、`--order-by`（默认 `id`）、`--order-desc`、`--jq`、`--format`、`--dry-run`
+`--tenant`（可选）、`--page-size`、`--page-token`、`--page-all`、`--order-by`（默认 `id`）、`--order-desc`、`--jq`、`--format`、`--dry-run`
 
 ### Table 列
 
@@ -68,13 +68,13 @@ adex ks creatives --tenant 6 --unit 29638466721 --page-all --jq '.items[].creati
 
 ```bash
 # 按消耗排名 Top 10
-adex ks creatives top --tenant 6 --range 30d --metric charge --limit 10
+adex ks creatives top --range 30d --metric charge --limit 10
 
 # 按转化数排名
-adex ks creatives top --tenant 6 --range 7d --metric conversion_num --limit 20
+adex ks creatives top --range 7d --metric conversion_num --limit 20
 
 # 在特定广告主下排名
-adex ks creatives top --tenant 6 --range 30d --metric charge --advertiser 1234567890 --limit 10
+adex ks creatives top --range 30d --metric charge --advertiser 1234567890 --limit 10
 ```
 
 ### Top Flags
@@ -115,13 +115,13 @@ adex ks creatives top --tenant 6 --range 30d --metric charge --advertiser 123456
 
 ```bash
 # 查看创意详情
-adex ks creatives get p:29637782154 --tenant 6
+adex ks creatives get p:29637782154
 
 # pretty 格式输出
-adex ks creatives get p:29637782154 --tenant 6 --format pretty
+adex ks creatives get p:29637782154 --format pretty
 
 # 提取特定字段
-adex ks creatives get p:29637782154 --tenant 6 --jq '.creativeName'
+adex ks creatives get p:29637782154 --jq '.creativeName'
 ```
 
 ### 详情参数
@@ -129,7 +129,7 @@ adex ks creatives get p:29637782154 --tenant 6 --jq '.creativeName'
 | 参数 | 位置 | 必填 | 说明 |
 |------|------|------|------|
 | `<biz_key>` | positional | 是 | 创意业务键（路径参数，格式如 `p:29637782154`） |
-| `--tenant` | flag | 是 | 租户 ID |
+| `--tenant` | flag | 否 | 租户 ID（可选；缺省使用默认租户） |
 | `--jq` | flag | 否 | jq 表达式过滤输出 |
 | `--format` | flag | 否 | 输出格式（默认 `json`） |
 

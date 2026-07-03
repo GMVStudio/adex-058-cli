@@ -12,19 +12,19 @@
 
 ```bash
 # 基本列表
-adex ks campaigns --tenant 6 --page-size 20
+adex ks campaigns --page-size 20
 
 # 按投放状态筛选（1=启用）
-adex ks campaigns --tenant 6 --put-status 1 --format table
+adex ks campaigns --put-status 1 --format table
 
 # 按广告主筛选
-adex ks campaigns --tenant 6 --advertiser 1234567890 --format table
+adex ks campaigns --advertiser 1234567890 --format table
 
 # 按计划名模糊匹配
-adex ks campaigns --tenant 6 --campaign-name "品牌" --format table
+adex ks campaigns --campaign-name "品牌" --format table
 
 # 聚合所有页
-adex ks campaigns --tenant 6 --page-all --jq '.items[].campaignId'
+adex ks campaigns --page-all --jq '.items[].campaignId'
 ```
 
 ### 列表 Flags
@@ -40,7 +40,7 @@ adex ks campaigns --tenant 6 --page-all --jq '.items[].campaignId'
 
 ### 列表共享 Flags
 
-`--tenant`（必需）、`--page-size`、`--page-token`、`--page-all`、`--order-by`（默认 `id`）、`--order-desc`、`--jq`、`--format`、`--dry-run`
+`--tenant`（可选）、`--page-size`、`--page-token`、`--page-all`、`--order-by`（默认 `id`）、`--order-desc`、`--jq`、`--format`、`--dry-run`
 
 ### Table 列
 
@@ -60,19 +60,19 @@ adex ks campaigns --tenant 6 --page-all --jq '.items[].campaignId'
 
 ```bash
 # 按消耗排名 Top 10
-adex ks campaigns top --tenant 6 --range 30d --metric charge --limit 10
+adex ks campaigns top --range 30d --metric charge --limit 10
 
 # 按转化数排名 Top 20
-adex ks campaigns top --tenant 6 --range 7d --metric conversion_num --limit 20
+adex ks campaigns top --range 7d --metric conversion_num --limit 20
 
 # 按广告主筛选后排名
-adex ks campaigns top --tenant 6 --range 30d --metric charge --advertiser 1234567890 --limit 10
+adex ks campaigns top --range 30d --metric charge --advertiser 1234567890 --limit 10
 
 # 升序排名（消耗最少的计划）
-adex ks campaigns top --tenant 6 --range 30d --metric charge --order-desc=false --limit 10
+adex ks campaigns top --range 30d --metric charge --order-desc=false --limit 10
 
 # 显式日期范围
-adex ks campaigns top --tenant 6 --begin 2026-06-01 --end 2026-06-30 --metric charge --limit 10
+adex ks campaigns top --begin 2026-06-01 --end 2026-06-30 --metric charge --limit 10
 ```
 
 ### Top Flags
@@ -118,13 +118,13 @@ adex ks campaigns top --tenant 6 --begin 2026-06-01 --end 2026-06-30 --metric ch
 
 ```bash
 # 查看计划详情
-adex ks campaigns get 9899931248 --tenant 6
+adex ks campaigns get 9899931248
 
 # pretty 格式输出
-adex ks campaigns get 9899931248 --tenant 6 --format pretty
+adex ks campaigns get 9899931248 --format pretty
 
 # 提取特定字段
-adex ks campaigns get 9899931248 --tenant 6 --jq '.campaignName'
+adex ks campaigns get 9899931248 --jq '.campaignName'
 ```
 
 ### 详情参数
@@ -132,7 +132,7 @@ adex ks campaigns get 9899931248 --tenant 6 --jq '.campaignName'
 | 参数 | 位置 | 必填 | 说明 |
 |------|------|------|------|
 | `<campaign_id>` | positional | 是 | 计划 ID（路径参数） |
-| `--tenant` | flag | 是 | 租户 ID |
+| `--tenant` | flag | 否 | 租户 ID（可选；缺省使用默认租户） |
 | `--jq` | flag | 否 | jq 表达式过滤输出 |
 | `--format` | flag | 否 | 输出格式（默认 `json`） |
 

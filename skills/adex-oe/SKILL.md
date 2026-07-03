@@ -14,6 +14,8 @@ metadata:
 
 > **所有命令支持 `--tenant`（可选）。** 通过 `adex init --tenant <ID>` 或 `adex tenant use <ID>` 设定默认租户后，后续命令无需再传 `--tenant`。`report-metric-meta` 不需要租户。
 
+**CRITICAL — 未设定默认租户时，禁止 AI 自动选择租户。** 必须先回到 [`adex-shared`](../adex-shared/SKILL.md) 执行 `adex tenant --page-all --format table`，**展示租户列表让用户选择**，再 `adex tenant use <用户选择的ID>`。
+
 ## 快速决策
 
 - 用户要**看整体投放概览 / 大盘数据** → `adex oe dashboard --tenant <ID> --range 30d`，详见 [`dashboard`](references/adex-oe-dashboard.md)
@@ -81,7 +83,7 @@ adex oe project-reports daily --range 30d --project <PROJECT_ID> --format table
 adex oe report-metric-meta --level project --enabled 1 --page-size 50
 
 # 2. 用返回的 field 名称作为 --order-by 或 --metric 参数
-adex oe project-reports summary --tenant 6 --range 30d --group-by project_id --order-by charge --order-desc
+adex oe project-reports summary --range 30d --group-by project_id --order-by charge --order-desc
 ```
 
 ### 工作流 3：按层级筛选下钻

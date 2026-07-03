@@ -10,29 +10,29 @@
 
 ```bash
 # 全部账户的预算使用情况
-adex oe account-budget-vs-actual --tenant 6 --range 30d
+adex oe account-budget-vs-actual --range 30d
 
 # 表格输出，直观对比
-adex oe account-budget-vs-actual --tenant 6 --range 30d --format table
+adex oe account-budget-vs-actual --range 30d --format table
 
 # 显式日期范围
-adex oe account-budget-vs-actual --tenant 6 --begin 2026-06-01 --end 2026-06-30 --format table
+adex oe account-budget-vs-actual --begin 2026-06-01 --end 2026-06-30 --format table
 
 # 单个账户的预算使用情况
-adex oe account-budget-vs-actual --tenant 6 --advertiser 1866874042754522 --range 30d
+adex oe account-budget-vs-actual --advertiser 1866874042754522 --range 30d
 
 # 提取预算使用率
-adex oe account-budget-vs-actual --tenant 6 --range 30d --jq '.items[].budgetUsageRate'
+adex oe account-budget-vs-actual --range 30d --jq '.items[].budgetUsageRate'
 
 # 预览请求但不执行
-adex oe account-budget-vs-actual --tenant 6 --range 30d --dry-run
+adex oe account-budget-vs-actual --range 30d --dry-run
 ```
 
 ## Flags
 
 | Flag | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
-| `--tenant` | int | — | 租户 ID（**必需**） |
+| `--tenant` | int | — | 租户 ID（可选；缺省使用 `adex tenant use` 设定的默认租户） |
 | `--advertiser` | string | — | 广告主 ID 过滤（单个账户） |
 | `--range` | string | — | 相对日期范围如 `7d` / `4w` / `1m`（**必需**） |
 | `--begin` | string | — | 起始日期（YYYY-MM-DD，与 `--end` 配合） |

@@ -16,22 +16,22 @@
 
 ```bash
 # 账户日报表 — 最近 30 天
-adex oe account-reports daily --tenant 6 --range 30d --page-size 20
+adex oe account-reports daily --range 30d --page-size 20
 
 # 项目日报表 — 显式日期范围
-adex oe project-reports daily --tenant 6 --begin 2026-07-01 --end 2026-07-31 --format table
+adex oe project-reports daily --begin 2026-07-01 --end 2026-07-31 --format table
 
 # 按广告主筛选
-adex oe account-reports daily --tenant 6 --range 7d --advertiser 1866874042754522 --format table
+adex oe account-reports daily --range 7d --advertiser 1866874042754522 --format table
 
 # 按项目 ID 筛选
-adex oe project-reports daily --tenant 6 --range 30d --project 7650479670059647030 --format table
+adex oe project-reports daily --range 30d --project 7650479670059647030 --format table
 
 # 按小时粒度查看
-adex oe account-reports daily --tenant 6 --range 7d --stat-hour 12 --format table
+adex oe account-reports daily --range 7d --stat-hour 12 --format table
 
 # 聚合所有页
-adex oe account-reports daily --tenant 6 --range 30d --page-all --jq '.items[].charge'
+adex oe account-reports daily --range 30d --page-all --jq '.items[].charge'
 ```
 
 ### Daily 共享 Flags
@@ -90,19 +90,19 @@ adex oe account-reports daily --tenant 6 --range 30d --page-all --jq '.items[].c
 
 ```bash
 # 账户汇总 — 单行总计
-adex oe account-reports summary --tenant 6 --range 30d
+adex oe account-reports summary --range 30d
 
 # 项目汇总 — 按项目 ID 分组
-adex oe project-reports summary --tenant 6 --range 30d --group-by project_id --order-by charge --order-desc
+adex oe project-reports summary --range 30d --group-by project_id --order-by charge --order-desc
 
 # 单元汇总 — 按单元 ID 分组
-adex oe unit-reports summary --tenant 6 --range 30d --group-by promotion_id --order-by charge --order-desc
+adex oe unit-reports summary --range 30d --group-by promotion_id --order-by charge --order-desc
 
 # 按广告主筛选
-adex oe project-reports summary --tenant 6 --range 30d --group-by project_id --advertiser 1866874042754522
+adex oe project-reports summary --range 30d --group-by project_id --advertiser 1866874042754522
 
 # 显式日期范围
-adex oe account-reports summary --tenant 6 --begin 2026-06-01 --end 2026-06-30
+adex oe account-reports summary --begin 2026-06-01 --end 2026-06-30
 ```
 
 ### Summary 共享 Flags

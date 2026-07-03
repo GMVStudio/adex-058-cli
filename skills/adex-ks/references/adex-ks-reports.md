@@ -17,22 +17,22 @@
 
 ```bash
 # 账户日报表 — 最近 30 天
-adex ks account-reports daily --tenant 6 --range 30d --page-size 20
+adex ks account-reports daily --range 30d --page-size 20
 
 # 计划日报表 — 显式日期范围
-adex ks campaign-reports daily --tenant 6 --begin 2026-07-01 --end 2026-07-31 --format table
+adex ks campaign-reports daily --begin 2026-07-01 --end 2026-07-31 --format table
 
 # 按广告主筛选
-adex ks account-reports daily --tenant 6 --range 7d --advertiser 1234567890 --format table
+adex ks account-reports daily --range 7d --advertiser 1234567890 --format table
 
 # 按计划 ID 筛选
-adex ks campaign-reports daily --tenant 6 --range 30d --campaign 9899931248 --format table
+adex ks campaign-reports daily --range 30d --campaign 9899931248 --format table
 
 # 按小时粒度查看
-adex ks account-reports daily --tenant 6 --range 7d --stat-hour 12 --format table
+adex ks account-reports daily --range 7d --stat-hour 12 --format table
 
 # 聚合所有页
-adex ks account-reports daily --tenant 6 --range 30d --page-all --jq '.items[].charge'
+adex ks account-reports daily --range 30d --page-all --jq '.items[].charge'
 ```
 
 ### Daily 共享 Flags
@@ -94,22 +94,22 @@ adex ks account-reports daily --tenant 6 --range 30d --page-all --jq '.items[].c
 
 ```bash
 # 账户汇总 — 单行总计
-adex ks account-reports summary --tenant 6 --range 30d
+adex ks account-reports summary --range 30d
 
 # 计划汇总 — 按计划 ID 分组
-adex ks campaign-reports summary --tenant 6 --range 30d --group-by campaign_id --order-by charge --order-desc
+adex ks campaign-reports summary --range 30d --group-by campaign_id --order-by charge --order-desc
 
 # 组汇总 — 按组 ID 分组
-adex ks unit-reports summary --tenant 6 --range 30d --group-by unit_id --order-by charge --order-desc
+adex ks unit-reports summary --range 30d --group-by unit_id --order-by charge --order-desc
 
 # 创意汇总 — 按创意 ID 分组
-adex ks creative-reports summary --tenant 6 --range 30d --group-by creative_id --order-by charge --order-desc
+adex ks creative-reports summary --range 30d --group-by creative_id --order-by charge --order-desc
 
 # 按广告主筛选
-adex ks campaign-reports summary --tenant 6 --range 30d --group-by campaign_id --advertiser 1234567890
+adex ks campaign-reports summary --range 30d --group-by campaign_id --advertiser 1234567890
 
 # 显式日期范围
-adex ks account-reports summary --tenant 6 --begin 2026-06-01 --end 2026-06-30
+adex ks account-reports summary --begin 2026-06-01 --end 2026-06-30
 ```
 
 ### Summary 共享 Flags

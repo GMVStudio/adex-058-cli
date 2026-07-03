@@ -16,7 +16,7 @@
 先用 `dashboard` 快速了解整体投放情况：
 
 ```bash
-adex ks dashboard --tenant 6 --range 30d
+adex ks dashboard --range 30d
 ```
 
 关注返回结果中的：
@@ -29,13 +29,13 @@ adex ks dashboard --tenant 6 --range 30d
 查看账户层级的日报表，了解消耗趋势：
 
 ```bash
-adex ks account-reports daily --tenant 6 --range 30d --format table
+adex ks account-reports daily --range 30d --format table
 ```
 
 如果需要按小时粒度查看某一天的波动：
 
 ```bash
-adex ks account-reports daily --tenant 6 --range 1d --stat-hour 12 --format table
+adex ks account-reports daily --range 1d --stat-hour 12 --format table
 ```
 
 ## 步骤 3：计划 Top-N 排名
@@ -43,7 +43,7 @@ adex ks account-reports daily --tenant 6 --range 1d --stat-hour 12 --format tabl
 找出消耗最高的计划：
 
 ```bash
-adex ks campaigns top --tenant 6 --range 30d --metric charge --limit 10
+adex ks campaigns top --range 30d --metric charge --limit 10
 ```
 
 返回结果中 `groupKey` 是计划 ID，`groupName` 是计划名称，`charge` 是总消耗。
@@ -54,10 +54,10 @@ adex ks campaigns top --tenant 6 --range 30d --metric charge --limit 10
 
 ```bash
 # 方法 A：查看该计划下的组列表
-adex ks units --tenant 6 --campaign <CAMPAIGN_ID> --format table
+adex ks units --campaign <CAMPAIGN_ID> --format table
 
 # 方法 B：直接看组级 Top-N（不限定计划）
-adex ks units top --tenant 6 --range 30d --metric charge --limit 20
+adex ks units top --range 30d --metric charge --limit 20
 ```
 
 ## 步骤 5：下钻到创意级别
@@ -66,10 +66,10 @@ adex ks units top --tenant 6 --range 30d --metric charge --limit 20
 
 ```bash
 # 查看该组下的创意列表
-adex ks creatives --tenant 6 --unit <UNIT_ID> --format table
+adex ks creatives --unit <UNIT_ID> --format table
 
 # 或直接看创意级 Top-N
-adex ks creatives top --tenant 6 --range 30d --metric charge --limit 10
+adex ks creatives top --range 30d --metric charge --limit 10
 ```
 
 ## 步骤 6：查看明细日报表
@@ -78,13 +78,13 @@ adex ks creatives top --tenant 6 --range 30d --metric charge --limit 10
 
 ```bash
 # 计划日报表
-adex ks campaign-reports daily --tenant 6 --range 30d --campaign <CAMPAIGN_ID> --format table
+adex ks campaign-reports daily --range 30d --campaign <CAMPAIGN_ID> --format table
 
 # 组日报表
-adex ks unit-reports daily --tenant 6 --range 30d --unit <UNIT_ID> --format table
+adex ks unit-reports daily --range 30d --unit <UNIT_ID> --format table
 
 # 创意日报表
-adex ks creative-reports daily --tenant 6 --range 30d --creative <CREATIVE_ID> --format table
+adex ks creative-reports daily --range 30d --creative <CREATIVE_ID> --format table
 ```
 
 ## 步骤 7：汇总对比
@@ -93,13 +93,13 @@ adex ks creative-reports daily --tenant 6 --range 30d --creative <CREATIVE_ID> -
 
 ```bash
 # 计划汇总排名
-adex ks campaign-reports summary --tenant 6 --range 30d --group-by campaign_id --order-by charge --order-desc
+adex ks campaign-reports summary --range 30d --group-by campaign_id --order-by charge --order-desc
 
 # 组汇总排名
-adex ks unit-reports summary --tenant 6 --range 30d --group-by unit_id --order-by charge --order-desc
+adex ks unit-reports summary --range 30d --group-by unit_id --order-by charge --order-desc
 
 # 创意汇总排名
-adex ks creative-reports summary --tenant 6 --range 30d --group-by creative_id --order-by charge --order-desc
+adex ks creative-reports summary --range 30d --group-by creative_id --order-by charge --order-desc
 ```
 
 ## 变体：按转化指标分析
@@ -111,8 +111,8 @@ adex ks creative-reports summary --tenant 6 --range 30d --group-by creative_id -
 adex ks report-metric-meta --level campaign --enabled 1 --jq '.items[].field'
 
 # 用转化指标排名
-adex ks campaigns top --tenant 6 --range 30d --metric conversion_num --limit 10
-adex ks campaign-reports summary --tenant 6 --range 30d --group-by campaign_id --order-by conversion_num --order-desc
+adex ks campaigns top --range 30d --metric conversion_num --limit 10
+adex ks campaign-reports summary --range 30d --group-by campaign_id --order-by conversion_num --order-desc
 ```
 
 ## 变体：按特定广告主分析
@@ -120,34 +120,34 @@ adex ks campaign-reports summary --tenant 6 --range 30d --group-by campaign_id -
 如果用户只关注某个广告主的数据，全程加 `--advertiser`：
 
 ```bash
-adex ks dashboard --tenant 6 --range 30d
-adex ks campaigns top --tenant 6 --range 30d --metric charge --advertiser 1234567890 --limit 10
-adex ks campaign-reports summary --tenant 6 --range 30d --group-by campaign_id --advertiser 1234567890
+adex ks dashboard --range 30d
+adex ks campaigns top --range 30d --metric charge --advertiser 1234567890 --limit 10
+adex ks campaign-reports summary --range 30d --group-by campaign_id --advertiser 1234567890
 ```
 
 ## 完整示例
 
 ```bash
 # 1. 大盘
-adex ks dashboard --tenant 6 --range 30d
+adex ks dashboard --range 30d
 
 # 2. 账户趋势
-adex ks account-reports daily --tenant 6 --range 30d --format table
+adex ks account-reports daily --range 30d --format table
 
 # 3. 计划 Top 10
-adex ks campaigns top --tenant 6 --range 30d --metric charge --limit 10
+adex ks campaigns top --range 30d --metric charge --limit 10
 
 # 4. 下钻 Top 计划的组
-adex ks units --tenant 6 --campaign 9899931248 --format table
+adex ks units --campaign 9899931248 --format table
 
 # 5. 下钻 Top 组的创意
-adex ks creatives --tenant 6 --unit 29638466721 --format table
+adex ks creatives --unit 29638466721 --format table
 
 # 6. Top 计划日报表
-adex ks campaign-reports daily --tenant 6 --range 30d --campaign 9899931248 --format table
+adex ks campaign-reports daily --range 30d --campaign 9899931248 --format table
 
 # 7. 汇总对比
-adex ks campaign-reports summary --tenant 6 --range 30d --group-by campaign_id --order-by charge --order-desc
+adex ks campaign-reports summary --range 30d --group-by campaign_id --order-by charge --order-desc
 ```
 
 ## 参考

@@ -10,32 +10,32 @@
 
 ```bash
 # 最近 30 天概览
-adex ks dashboard --tenant 6 --range 30d
+adex ks dashboard --range 30d
 
 # 显式日期范围
-adex ks dashboard --tenant 6 --begin 2026-06-01 --end 2026-06-30 --ranking-limit 10
+adex ks dashboard --begin 2026-06-01 --end 2026-06-30 --ranking-limit 10
 
 # 最近 7 天概览，排名 Top 20
-adex ks dashboard --tenant 6 --range 7d --ranking-limit 20
+adex ks dashboard --range 7d --ranking-limit 20
 
 # 按数据源筛选
-adex ks dashboard --tenant 6 --range 30d --source "ks"
+adex ks dashboard --range 30d --source "ks"
 
 # pretty 格式输出
-adex ks dashboard --tenant 6 --range 30d --format pretty
+adex ks dashboard --range 30d --format pretty
 
 # 提取消耗汇总
-adex ks dashboard --tenant 6 --range 30d --jq '.charge'
+adex ks dashboard --range 30d --jq '.charge'
 
 # 预览请求但不执行
-adex ks dashboard --tenant 6 --range 30d --dry-run
+adex ks dashboard --range 30d --dry-run
 ```
 
 ## Flags
 
 | Flag | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
-| `--tenant` | int | — | 租户 ID（**必需**） |
+| `--tenant` | int | — | 租户 ID（可选；缺省使用 `adex tenant use` 设定的默认租户） |
 | `--source` | string | — | 数据源过滤 |
 | `--ranking-limit` | int | 10 | 账户排名数量（最大 100） |
 | `--range` | string | — | 相对日期范围如 `7d` / `4w` / `1m`（**必需**） |
