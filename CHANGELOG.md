@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.2.7] - 2026-07-03
+
+### Added
+- `adex tenant use <ID>` command — set a default tenant so `--tenant` is no longer required on every command
+- `--tenant` flag on `adex init` — optionally set the default tenant during initial credential binding
+- `TenantID` field in config (`~/.adex/config.json`) with `ADEX_TENANT_ID` env var override
+- `Factory.resolveTenant` — resolves `--tenant` flag with fallback to config default, replacing the hard-required `requireTenant`
+- Skills updated with 3-step init workflow and `tenant use` documentation
+
+### Changed
+- `--tenant` flag is now optional on all KS/OE commands (was previously required); falls back to config default tenant
+- Help text and examples for `adex ks`, `adex oe`, and report commands updated to omit `--tenant` when default is set
+- `adex init` output includes `tenant_id` when set, or a `next_step` hint when no default tenant is configured
+- `adex-shared` skill: init flow rewritten as 3-step process, tenant reference expanded with `tenant use` section, user reference updated
+
 ## [0.2.6] - 2026-07-02
 
 ### Added
