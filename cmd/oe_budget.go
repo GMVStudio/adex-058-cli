@@ -18,7 +18,7 @@ Examples:
   adex oe account-budget-vs-actual --tenant 6 --begin 2026-06-01 --end 2026-06-30 --format table
   adex oe account-budget-vs-actual --tenant 6 --advertiser 1866874042754522 --range 30d`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			tenant, err := requireTenant(cmd)
+			tenant, err := f.resolveTenant(cmd)
 			if err != nil {
 				return err
 			}

@@ -67,14 +67,13 @@ adex user --dry-run
 ## 使用场景
 
 - **验证 API Key**：`adex user` 能正常返回说明 API Key 有效
-- **获取租户 ID**：`--jq '.currentTenantId'` 提取当前租户 ID，用于 ks/oe 命令的 `--tenant` 参数
 - **查看用户信息**：`--format table` 或 `--format pretty` 查看完整用户信息
 - **检查用户状态**：`--jq '.status'` 确认账户是否活跃
 
 ## 注意事项
 
 - 此命令返回的是单个对象，不是列表，因此**不支持** `--page-size` / `--page-token` / `--page-all`
-- `currentTenantId` 是最常用的字段，作为其他命令 `--tenant` 参数的来源
+- `currentTenantId` 可作为参考，但推荐使用 `adex tenant use <ID>` 设定默认租户
 - 如果 API Key 无效或过期，会返回 `unauthorized` 错误（exit code 3）
 
 ## 参考

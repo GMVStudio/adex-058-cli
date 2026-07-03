@@ -19,7 +19,7 @@ Examples:
   adex oe units top --tenant 6 --range 30d --metric charge --limit 10
   adex oe units get 7650483929670156288 --tenant 6`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			tenant, err := requireTenant(cmd)
+			tenant, err := f.resolveTenant(cmd)
 			if err != nil {
 				return err
 			}

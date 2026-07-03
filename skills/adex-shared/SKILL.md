@@ -12,13 +12,14 @@ metadata:
 
 **CRITICAL — 本 Skill 是 adex-ks 和 adex-oe 的前置必读。** 安装、认证、共享 flags（分页、日期范围、jq、输出格式、错误处理）全部在此文档中。ks/oe Skill 不重复这些内容。
 
-> **大多数命令需要 `--tenant`。** 如果不知道租户 ID，先执行 `adex user --jq '.currentTenantId'` 或 `adex tenant --format table` 查询。
+> **大多数命令支持 `--tenant`（可选）。** 通过 `adex init --tenant <ID>` 或 `adex tenant use <ID>` 设定默认租户后，后续命令无需再传 `--tenant`。仅在需要切换到其他租户时临时传入。
 
 ## 快速决策
 
 - 用户要**安装 / 更新 adex CLI** → 见 [安装](#安装) 或 [更新检查](#更新检查)
-- 用户要**绑定 API Key / 初始化配置** → `adex init --authorization "Bearer adex_xxx"`，见 [初始化配置](#初始化配置)
+- 用户要**绑定 API Key / 初始化配置** → `adex init --authorization "Bearer adex_xxx"`，然后 `adex tenant --page-all` 列出租户，再 `adex tenant use <ID>`，见 [初始化配置](#初始化配置)
 - 用户要**验证 API Key 是否有效** → `adex user`，见 [`user`](references/adex-shared-user.md)
+- 用户要**切换默认租户** → `adex tenant use 8`，见 [`tenant use`](references/adex-shared-tenant.md)
 - 用户要**查看当前租户 ID** → `adex user --jq '.currentTenantId'`，见 [`user`](references/adex-shared-user.md)
 - 用户要**列出 / 搜索租户** → `adex tenant --name "关键词" --format table`，见 [`tenant`](references/adex-shared-tenant.md)
 - 用户要**查看所有可用命令** → `adex --help` 或见 [命令树总览](#命令树总览)
@@ -86,11 +87,23 @@ CI 环境自动跳过通知。
 
 ## 初始化配置
 
-首次使用前，必须通过 `adex init` 绑定 API Key：
+首次使用前，必须完成以下 3 步：
 
 ```bash
+# 步骤 1：绑定 API Key
 adex init --authorization "Bearer adex_c93462599a6246a89f55a11b024b1a1a"
+
+# 步骤 2：列出可用租户，找到目标租户 ID
+adex tenant --page-all --format table
+
+# 步骤 3：设定默认租户
+adex tenant use 6
 ```
+
+完成后，后续所有命令自动使用该租户，无需再传 `--tenant`。
+
+> 如果已知租户 ID，步骤 1 可直接带上 `--tenant`：
+> `adex init --authorization "Bearer adex_xxx" --tenant 6`，跳过步骤 2 和 3。
 
 也可以传入裸 key（自动补 Bearer 前缀）：
 
@@ -100,15 +113,27 @@ adex init --authorization adex_c93462599a6246a89f55a11b024b1a1a --base-url http:
 
 配置写入 `~/.adex/config.json`（0600 权限）。
 
+### 切换默认租户
+
+```bash
+# 设定或切换默认租户
+adex tenant use 8
+```
+
+切换后所有命令自动使用该租户，无需再传 `--tenant`。
+
 ### 环境变量覆盖
 
 | 变量 | 默认值 | 说明 |
 |------|--------|------|
 | `ADEX_API_BASE_URL` | `http://47.99.131.55:8000` | API base URL |
 | `ADEX_AUTHORIZATION` | — | API key（自动去 Bearer 前缀） |
+| `ADEX_TENANT_ID` | — | 默认租户 ID（覆盖配置文件中的值） |
 | `ADEX_CONFIG_DIR` | `~/.adex` | 配置目录（测试用） |
 
-优先级：`--base-url` 标志 > 环境变量 > 配置文件 > 默认值。
+优先级：`--tenant` 标志 > `ADEX_TENANT_ID` 环境变量 > 配置文件中的 `tenant_id` > 报错。
+
+优先级（base-url）：`--base-url` 标志 > 环境变量 > 配置文件 > 默认值。
 
 ## 命令树总览
 
@@ -136,7 +161,7 @@ adex
 │   ├── report-metric-meta    # 报表指标元数据
 │   ├── dashboard             # 租户级概览
 │   └── account-budget-vs-actual # 预算 vs 实际消耗
-├── tenant                    # 租户列表 → 本 Skill
+├── tenant                    # 租户列表 / tenant use → 本 Skill
 ├── user                      # 当前用户信息 → 本 Skill
 ├── update                    # 更新 CLI 和 Skill
 └── skills                    # 嵌入式 Skill 内容
@@ -150,7 +175,7 @@ adex
 
 | Flag | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
-| `--tenant` | int | — | 租户 ID（大多数命令必需，`report-metric-meta` / `tenant` / `user` 除外） |
+| `--tenant` | int | — | 租户 ID（可选；缺省使用 `adex tenant use` 设定的默认租户，`report-metric-meta` / `tenant` / `user` 不需要） |
 | `--page-size` | int | 20 | 每页条数 |
 | `--page-token` | string | — | 指定页的游标 token |
 | `--page-all` | bool | false | 聚合所有页（自动翻页直到 `hasMore=false`） |
@@ -295,7 +320,7 @@ adex ks accounts --tenant 6 --dry-run
 - `network` → 检查网络连接和 `--base-url` 是否正确
 - `api` → 查看返回的 HTTP `code` 和 `message`，可能是权限不足或资源不存在
 
-## tenant — 租户列表
+## tenant — 租户列表 / 切换默认租户
 
 不需要 `--tenant` flag。支持名称模糊匹配和状态精确过滤。详见 [`tenant`](references/adex-shared-tenant.md)。
 
@@ -311,6 +336,9 @@ adex tenant --status active --page-size 50
 
 # 聚合所有页
 adex tenant --page-all --jq '.items[].id'
+
+# 设定默认租户（后续命令无需 --tenant）
+adex tenant use 6
 ```
 
 ### Table 列
@@ -353,7 +381,7 @@ adex user --jq '.currentTenantId'
 
 ## 常见工作流
 
-### 工作流 1：首次使用
+### 工作流 1：首次使用（3 步初始化）
 
 ```bash
 # 1. 安装 CLI
@@ -362,26 +390,28 @@ npm install -g @gmvstudio/adex-cli
 # 2. 绑定 API Key
 adex init --authorization "Bearer adex_c93462599a6246a89f55a11b024b1a1a"
 
-# 3. 验证
-adex user
+# 3. 列出租户，找到目标租户 ID
+adex tenant --page-all --format table
 
-# 4. 获取租户 ID
-adex user --jq '.currentTenantId'
-# 或
-adex tenant --format table
+# 4. 设定默认租户
+adex tenant use 6
+
+# 后续命令无需 --tenant
+adex ks accounts
+adex oe dashboard --range 30d
 ```
 
-### 工作流 2：查找正确的租户 ID
+### 工作流 2：切换默认租户
 
 ```bash
-# 方法 A：从当前用户信息获取
-adex user --jq '.currentTenantId'
-
-# 方法 B：列出所有租户
+# 查看可用租户
 adex tenant --format table
 
-# 方法 C：按名称搜索
-adex tenant --name "品牌" --format table
+# 切换默认租户
+adex tenant use 8
+
+# 后续命令自动使用租户 8
+adex ks accounts
 ```
 
 ### 工作流 3：调试请求

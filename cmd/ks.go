@@ -11,7 +11,7 @@ func newKsCmd(f *Factory) *cobra.Command {
 daily/summary reports, top-N rankings, metric metadata, and dashboards.
 
 Common flags (shared across commands):
-  --tenant       tenant ID (required for most commands)
+  --tenant       tenant ID (optional; uses default from 'adex tenant use')
   --page-size    page size (default 20)
   --page-token   fetch a specific page
   --page-all     aggregate every page
@@ -23,10 +23,10 @@ Common flags (shared across commands):
   --format       json (default) | pretty | table
 
 Examples:
-  adex ks accounts --tenant 6 --page-size 20
-  adex ks campaign-reports summary --tenant 6 --range 30d --group-by campaign_id
-  adex ks campaigns top --tenant 6 --range 30d --metric charge --limit 10
-  adex ks dashboard --tenant 6 --range 30d`,
+  adex ks accounts --page-size 20
+  adex ks campaign-reports summary --range 30d --group-by campaign_id
+  adex ks campaigns top --range 30d --metric charge --limit 10
+  adex ks dashboard --range 30d`,
 	}
 
 	cmd.AddCommand(

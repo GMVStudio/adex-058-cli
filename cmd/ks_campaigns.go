@@ -17,7 +17,7 @@ Examples:
   adex ks campaigns top --tenant 6 --range 30d --metric charge --limit 10
   adex ks campaigns get 9899931248 --tenant 6`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			tenant, err := requireTenant(cmd)
+			tenant, err := f.resolveTenant(cmd)
 			if err != nil {
 				return err
 			}

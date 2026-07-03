@@ -12,8 +12,7 @@ metadata:
 
 **CRITICAL — 开始前 MUST 先用 Read 工具读取 [`../adex-shared/SKILL.md`](../adex-shared/SKILL.md)，其中包含安装、认证、共享 flags（分页、日期范围、jq、输出格式、错误处理）。**
 
-> **所有命令都需要 `--tenant`，除了 `report-metric-meta`。**
-> 如果不知道租户 ID，先执行 `adex user --jq '.currentTenantId'` 或 `adex tenant --format table` 查询。
+> **所有命令支持 `--tenant`（可选）。** 通过 `adex init --tenant <ID>` 或 `adex tenant use <ID>` 设定默认租户后，后续命令无需再传 `--tenant`。`report-metric-meta` 不需要租户。
 
 ## 快速决策
 
@@ -59,16 +58,16 @@ metadata:
 
 ```bash
 # 1. 看大盘概览（账户统计 + 消耗汇总 + 账户排名）
-adex oe dashboard --tenant 6 --range 30d
+adex oe dashboard --range 30d
 
 # 2. 看账户日报表趋势
-adex oe account-reports daily --tenant 6 --range 30d --format table
+adex oe account-reports daily --range 30d --format table
 
 # 3. 看消耗 Top-N 项目
-adex oe projects top --tenant 6 --range 30d --metric charge --limit 10
+adex oe projects top --range 30d --metric charge --limit 10
 
 # 4. 对 Top 项目下钻看日报表
-adex oe project-reports daily --tenant 6 --range 30d --project <PROJECT_ID> --format table
+adex oe project-reports daily --range 30d --project <PROJECT_ID> --format table
 ```
 
 详见 [Top-N 分析工作流](references/adex-oe-workflow-top-analysis.md)。
@@ -91,10 +90,10 @@ adex oe project-reports summary --tenant 6 --range 30d --group-by project_id --o
 
 ```bash
 # 1. 查项目列表
-adex oe projects --tenant 6 --opt-status ENABLE --format table
+adex oe projects --opt-status ENABLE --format table
 
 # 2. 用项目 ID 筛选单元列表
-adex oe units --tenant 6 --project <PROJECT_ID> --format table
+adex oe units --project <PROJECT_ID> --format table
 ```
 
 ### 工作流 4：预算 vs 实际消耗对比
@@ -103,10 +102,10 @@ adex oe units --tenant 6 --project <PROJECT_ID> --format table
 
 ```bash
 # 全部账户的预算使用情况
-adex oe account-budget-vs-actual --tenant 6 --range 30d --format table
+adex oe account-budget-vs-actual --range 30d --format table
 
 # 单个账户的预算使用情况
-adex oe account-budget-vs-actual --tenant 6 --advertiser 1866874042754522 --range 30d
+adex oe account-budget-vs-actual --advertiser 1866874042754522 --range 30d
 ```
 
 ## 资源层级关系
@@ -131,7 +130,7 @@ adex oe account-budget-vs-actual --tenant 6 --advertiser 1866874042754522 --rang
 
 | Flag | 说明 | 默认值 |
 |------|------|--------|
-| `--tenant` | 租户 ID（必需，`report-metric-meta` 除外） | — |
+| `--tenant` | 租户 ID（可选；缺省使用 `adex tenant use` 设定的默认租户） | — |
 | `--page-size` | 每页条数 | 20 |
 | `--page-token` | 指定页游标 | — |
 | `--page-all` | 聚合所有页 | false |

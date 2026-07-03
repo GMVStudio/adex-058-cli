@@ -21,10 +21,10 @@ import (
 // of re-declaring the same flags in each RunE.
 // ---------------------------------------------------------------------------
 
-// addTenantFlag registers the shared, required --tenant flag.
+// addTenantFlag registers the shared --tenant flag (optional).
+// When not provided, the default tenant from config is used.
 func addTenantFlag(cmd *cobra.Command) {
-	cmd.Flags().Int("tenant", 0, "tenant ID (required)")
-	_ = cmd.MarkFlagRequired("tenant")
+	cmd.Flags().Int("tenant", 0, "tenant ID (optional; uses default from 'adex tenant use' or config)")
 }
 
 // addPagingFlags registers shared pagination flags.
@@ -56,14 +56,22 @@ func addJQFlag(cmd *cobra.Command) {
 // Flag resolution helpers
 // ---------------------------------------------------------------------------
 
-// requireTenant reads and validates the --tenant flag.
-func requireTenant(cmd *cobra.Command) (int, error) {
+// resolveTenant reads --tenant flag; when not set, falls back to the
+// default tenant ID stored in config (set via 'adex init --tenant' or
+// 'adex tenant use <id>').
+func (f *Factory) resolveTenant(cmd *cobra.Command) (int, error) {
 	tenant, _ := cmd.Flags().GetInt("tenant")
-	if tenant <= 0 {
-		return 0, errs.NewValidationError(errs.SubtypeInvalidArgument,
-			"--tenant must be a positive integer").WithParam("--tenant")
+	if tenant > 0 {
+		return tenant, nil
 	}
-	return tenant, nil
+	if f.Config.TenantID > 0 {
+		return f.Config.TenantID, nil
+	}
+	return 0, errs.NewValidationError(errs.SubtypeInvalidArgument,
+		"no tenant specified and no default tenant configured").
+		WithParam("--tenant").
+		WithHint("run 'adex tenant --page-all' to list available tenants, " +
+			"then 'adex tenant use <ID>' to set a default tenant")
 }
 
 // applyPaging writes the page_size query param from flags. The page token is

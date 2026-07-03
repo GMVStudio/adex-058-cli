@@ -16,7 +16,7 @@ Examples:
   adex ks accounts --tenant 6 --order-by balance --order-desc --format table
   adex ks accounts --tenant 6 --page-all --jq '.items[].advertiserId'`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			tenant, err := requireTenant(cmd)
+			tenant, err := f.resolveTenant(cmd)
 			if err != nil {
 				return err
 			}

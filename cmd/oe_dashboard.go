@@ -16,7 +16,7 @@ Examples:
   adex oe dashboard --tenant 6 --range 30d
   adex oe dashboard --tenant 6 --begin 2026-06-01 --end 2026-06-30`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			tenant, err := requireTenant(cmd)
+			tenant, err := f.resolveTenant(cmd)
 			if err != nil {
 				return err
 			}

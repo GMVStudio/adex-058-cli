@@ -25,6 +25,8 @@ type Config struct {
 	BaseURL string `json:"base_url,omitempty"`
 	// Authorization is the API key (without the "Bearer " prefix).
 	Authorization string `json:"authorization,omitempty"`
+	// TenantID is the default tenant used when --tenant is not passed.
+	TenantID int `json:"tenant_id,omitempty"`
 }
 
 // Dir returns the config directory, honoring ADEX_CONFIG_DIR for tests,
@@ -61,6 +63,9 @@ func Load() *Config {
 			if fromFile.Authorization != "" {
 				cfg.Authorization = fromFile.Authorization
 			}
+			if fromFile.TenantID > 0 {
+				cfg.TenantID = fromFile.TenantID
+			}
 		}
 	}
 
@@ -69,6 +74,11 @@ func Load() *Config {
 	}
 	if v := os.Getenv("ADEX_AUTHORIZATION"); v != "" {
 		cfg.Authorization = NormalizeToken(v)
+	}
+	if v := os.Getenv("ADEX_TENANT_ID"); v != "" {
+		if n, err := strconv.Atoi(v); err == nil && n > 0 {
+			cfg.TenantID = n
+		}
 	}
 	return cfg
 }

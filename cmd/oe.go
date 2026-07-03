@@ -12,7 +12,7 @@ daily/summary reports, top-N rankings, metric metadata, dashboards, and
 budget-vs-actual comparison.
 
 Common flags (shared across commands):
-  --tenant       tenant ID (required for most commands)
+  --tenant       tenant ID (optional; uses default from 'adex tenant use')
   --page-size    page size (default 20)
   --page-token   fetch a specific page
   --page-all     aggregate every page
@@ -24,11 +24,11 @@ Common flags (shared across commands):
   --format       json (default) | pretty | table
 
 Examples:
-  adex oe projects --tenant 6 --page-size 20
-  adex oe project-reports summary --tenant 6 --range 30d --group-by project_id
-  adex oe units top --tenant 6 --range 30d --metric convert_cnt --limit 20
-  adex oe dashboard --tenant 6 --range 30d
-  adex oe account-budget-vs-actual --tenant 6 --range 30d`,
+  adex oe projects --page-size 20
+  adex oe project-reports summary --range 30d --group-by project_id
+  adex oe units top --range 30d --metric convert_cnt --limit 20
+  adex oe dashboard --range 30d
+  adex oe account-budget-vs-actual --range 30d`,
 	}
 
 	cmd.AddCommand(

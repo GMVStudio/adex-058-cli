@@ -17,7 +17,7 @@ Examples:
   adex ks units top --tenant 6 --range 30d --metric conversion_num --limit 20
   adex ks units get 29638466721 --tenant 6`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			tenant, err := requireTenant(cmd)
+			tenant, err := f.resolveTenant(cmd)
 			if err != nil {
 				return err
 			}

@@ -17,7 +17,7 @@ Examples:
   adex oe projects top --tenant 6 --range 30d --metric charge --limit 10
   adex oe projects get 7650479670059647030 --tenant 6`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			tenant, err := requireTenant(cmd)
+			tenant, err := f.resolveTenant(cmd)
 			if err != nil {
 				return err
 			}

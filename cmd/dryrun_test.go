@@ -84,12 +84,12 @@ func TestDryRunDateRangeResolved(t *testing.T) {
 	}
 }
 
-// TestNonPositiveTenantIsValidationError asserts the requireTenant guard
-// rejects a non-positive --tenant with a typed error naming the param.
-func TestNonPositiveTenantIsValidationError(t *testing.T) {
-	res := runCmd(t, "ks", "accounts", "--tenant", "0", "--dry-run")
+// TestNoTenantIsFailedPrecondition asserts the resolveTenant guard
+// rejects a missing --tenant (and no config default) with a typed error.
+func TestNoTenantIsFailedPrecondition(t *testing.T) {
+	res := runCmd(t, "ks", "accounts", "--dry-run")
 	if res.ExecErr == nil {
-		t.Fatal("expected an error when --tenant is 0")
+		t.Fatal("expected an error when --tenant is missing and no config default")
 	}
 	var ve *errs.ValidationError
 	if !errors.As(res.ExecErr, &ve) {
@@ -100,18 +100,23 @@ func TestNonPositiveTenantIsValidationError(t *testing.T) {
 	}
 }
 
-// TestMissingRequiredFlagWrapped asserts cobra's required-flag error is
-// surfaced (and, via handleError, rendered as a validation envelope).
-func TestMissingRequiredFlagWrapped(t *testing.T) {
-	res := runCmd(t, "ks", "accounts", "--dry-run")
-	if res.ExecErr == nil {
-		t.Fatal("expected a required-flag error when --tenant is missing")
-	}
-	// The raw cobra error is untyped; handleError promotes it to validation.
+// TestConfigTenantFallback asserts that when --tenant is not passed,
+// the config default tenant is used.
+func TestConfigTenantFallback(t *testing.T) {
 	var out, errOut bytes.Buffer
-	code := handleError(newTestFactory(&out, &errOut), res.ExecErr)
-	if code != errs.ExitCodeForCategory(errs.CategoryValidation) {
-		t.Errorf("exit code = %d, want validation exit code", code)
+	f := &Factory{
+		Config: &config.Config{BaseURL: "http://test.local", Authorization: "adex_test", TenantID: 6},
+		Out:    &out,
+		ErrOut: &errOut,
+	}
+	root := NewRootCmd(f)
+	root.SetOut(&out)
+	root.SetErr(&errOut)
+	root.SetArgs([]string{"ks", "accounts", "--dry-run"})
+
+	err := root.Execute()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
 	}
 }
 

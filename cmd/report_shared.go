@@ -22,7 +22,7 @@ Examples:
   adex ` + platform + ` ` + resource + ` top --tenant 6 --range 30d --metric charge --limit 10
   adex ` + platform + ` ` + resource + ` top --tenant 6 --range 30d --metric charge --order-desc=false --limit 5`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			tenant, err := requireTenant(cmd)
+			tenant, err := f.resolveTenant(cmd)
 			if err != nil {
 				return err
 			}
@@ -77,7 +77,7 @@ Examples:
 				return errs.NewValidationError(errs.SubtypeInvalidArgument,
 					"%s is required", idName).WithParam(idName)
 			}
-			tenant, err := requireTenant(cmd)
+			tenant, err := f.resolveTenant(cmd)
 			if err != nil {
 				return err
 			}
@@ -110,7 +110,7 @@ Examples:
   adex ` + platform + ` ` + resource + ` daily --tenant 6 --range 30d --page-size 20
   adex ` + platform + ` ` + resource + ` daily --tenant 6 --begin 2026-07-01 --end 2026-07-31 --format table`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			tenant, err := requireTenant(cmd)
+			tenant, err := f.resolveTenant(cmd)
 			if err != nil {
 				return err
 			}
@@ -168,7 +168,7 @@ Examples:
   adex ` + platform + ` ` + resource + ` summary --tenant 6 --range 30d
   adex ` + platform + ` ` + resource + ` summary --tenant 6 --range 30d --group-by ` + groupHint + ` --order-by charge --order-desc`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			tenant, err := requireTenant(cmd)
+			tenant, err := f.resolveTenant(cmd)
 			if err != nil {
 				return err
 			}

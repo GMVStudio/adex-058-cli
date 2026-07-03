@@ -12,8 +12,7 @@ metadata:
 
 **CRITICAL — 开始前 MUST 先用 Read 工具读取 [`../adex-shared/SKILL.md`](../adex-shared/SKILL.md)，其中包含安装、认证、共享 flags（分页、日期范围、jq、输出格式、错误处理）。**
 
-> **所有命令都需要 `--tenant`，除了 `report-metric-meta`。**  
-> 如果不知道租户 ID，先执行 `adex user --jq '.currentTenantId'` 或 `adex tenant --format table` 查询。
+> **所有命令支持 `--tenant`（可选）。** 通过 `adex init --tenant <ID>` 或 `adex tenant use <ID>` 设定默认租户后，后续命令无需再传 `--tenant`。`report-metric-meta` 不需要租户。
 
 ## 快速决策
 
@@ -62,16 +61,16 @@ metadata:
 
 ```bash
 # 1. 看大盘概览（账户统计 + 消耗汇总 + 账户排名）
-adex ks dashboard --tenant 6 --range 30d
+adex ks dashboard --range 30d
 
 # 2. 看账户日报表趋势
-adex ks account-reports daily --tenant 6 --range 30d --format table
+adex ks account-reports daily --range 30d --format table
 
 # 3. 看消耗 Top-N 计划
-adex ks campaigns top --tenant 6 --range 30d --metric charge --limit 10
+adex ks campaigns top --range 30d --metric charge --limit 10
 
 # 4. 对 Top 计划下钻看日报表
-adex ks campaign-reports daily --tenant 6 --range 30d --campaign <CAMPAIGN_ID> --format table
+adex ks campaign-reports daily --range 30d --campaign <CAMPAIGN_ID> --format table
 ```
 
 详见 [Top-N 分析工作流](references/adex-ks-workflow-top-analysis.md)。
@@ -94,13 +93,13 @@ adex ks campaign-reports summary --tenant 6 --range 30d --group-by campaign_id -
 
 ```bash
 # 1. 查计划列表
-adex ks campaigns --tenant 6 --put-status 1 --format table
+adex ks campaigns --put-status 1 --format table
 
 # 2. 用计划 ID 筛选组列表
-adex ks units --tenant 6 --campaign <CAMPAIGN_ID> --format table
+adex ks units --campaign <CAMPAIGN_ID> --format table
 
 # 3. 用组 ID 筛选创意列表
-adex ks creatives --tenant 6 --unit <UNIT_ID> --format table
+adex ks creatives --unit <UNIT_ID> --format table
 ```
 
 ## 资源层级关系
@@ -124,7 +123,7 @@ adex ks creatives --tenant 6 --unit <UNIT_ID> --format table
 
 | Flag | 说明 | 默认值 |
 |------|------|--------|
-| `--tenant` | 租户 ID（必需，`report-metric-meta` 除外） | — |
+| `--tenant` | 租户 ID（可选；缺省使用 `adex tenant use` 设定的默认租户） | — |
 | `--page-size` | 每页条数 | 20 |
 | `--page-token` | 指定页游标 | — |
 | `--page-all` | 聚合所有页 | false |
