@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.8] - 2026-07-03
+
+### Fixed
+- Removed all hardcoded tenant IDs from skill docs across 20 skill files — replaced with `<ID>` placeholders
+- Added CRITICAL tenant selection directive in `adex-shared`, `adex-ks`, and `adex-oe` SKILL.md requiring AI to list tenants and let user choose, never auto-select
+- Updated `--tenant` flag descriptions from "required" to "optional" in all reference flag tables and detail parameter tables
+
 ## [0.2.7] - 2026-07-03
 
 ### Added
